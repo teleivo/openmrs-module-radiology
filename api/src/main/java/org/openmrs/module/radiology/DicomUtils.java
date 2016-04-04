@@ -15,10 +15,7 @@ import org.dcm4che2.data.DicomElement;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.SpecificCharacterSet;
 import org.dcm4che2.data.Tag;
-import org.openmrs.Order;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
-import org.openmrs.module.radiology.hl7.CommonOrderPriority;
 import org.openmrs.module.radiology.hl7.message.RadiologyORMO01;
 
 import ca.uhn.hl7v2.HL7Exception;
@@ -28,6 +25,7 @@ import ca.uhn.hl7v2.HL7Exception;
  * create and send HL7 order messages for RadiologyOrder's
  */
 public class DicomUtils {
+	
 	
 	private static final Logger log = Logger.getLogger(DicomUtils.class);
 	
@@ -40,12 +38,12 @@ public class DicomUtils {
 	
 	/**
 	 * <p>
-	 * Updates the PerformedStatus of an existing Study in the database to the Performed Procedure Step Status of a given
-	 * DicomObject containing a DICOM N-CREATE/N-SET command
+	 * Updates the PerformedStatus of an existing Study in the database to the Performed Procedure
+	 * Step Status of a given DicomObject containing a DICOM N-CREATE/N-SET command
 	 * </p>
 	 * 
 	 * @param mppsObject the DICOM MPPS object containing a DICOM N-CREATE/N-SET command with DICOM
-	 *        tag Performed Procedure Step Status
+	 *            tag Performed Procedure Step Status
 	 * @should set performed status of an existing study in database to performed procedure step
 	 *         status IN_PROGRESS of given mpps object
 	 * @should set performed status of an existing study in database to performed procedure step
@@ -59,12 +57,12 @@ public class DicomUtils {
 			final String studyInstanceUid = getStudyInstanceUidFromMpps(mppsObject);
 			
 			final String performedProcedureStepStatusString = getPerformedProcedureStepStatus(mppsObject);
-			final PerformedProcedureStepStatus performedProcedureStepStatus = PerformedProcedureStepStatus.getMatchForDisplayName(performedProcedureStepStatusString);
+			final PerformedProcedureStepStatus performedProcedureStepStatus = PerformedProcedureStepStatus
+				.getMatchForDisplayName(performedProcedureStepStatusString);
 			
 			radiologyService().updateStudyPerformedStatus(studyInstanceUid, performedProcedureStepStatus);
-			log.info("Received Update from dcm4chee. Updating Performed Procedure Step Status for study :"
-					+ studyInstanceUid + " to Status : "
-					+ PerformedProcedureStepStatus.getNameOrUnknown(performedProcedureStepStatus));
+			log.info("Received Update from dcm4chee. Updating Performed Procedure Step Status for study :" + studyInstanceUid
+					+ " to Status : " + PerformedProcedureStepStatus.getNameOrUnknown(performedProcedureStepStatus));
 		}
 		catch (NumberFormatException e) {
 			log.error("Number can not be parsed");
@@ -126,8 +124,8 @@ public class DicomUtils {
 			return null;
 		}
 		
-		final String performedProcedureStepStatus = performedProcedureStepStatusElement.getValueAsString(
-			specificCharacterSet, 0);
+		final String performedProcedureStepStatus = performedProcedureStepStatusElement
+			.getValueAsString(specificCharacterSet, 0);
 		
 		return performedProcedureStepStatus;
 	}
@@ -153,15 +151,8 @@ public class DicomUtils {
 	public static String createHL7Message(RadiologyOrder radiologyOrder, OrderRequest orderRequest) {
 		String encodedHL7OrmMessage = null;
 		
-		final MwlStatus mwlstatus = radiologyOrder.getStudy()
-				.getMwlStatus();
-		final CommonOrderOrderControl commonOrderOrderControl = getCommonOrderControlFrom(mwlstatus, orderRequest);
-		
-		final CommonOrderPriority orderPriority = getCommonOrderPriorityFrom(radiologyOrder.getUrgency());
-		
 		try {
-			final RadiologyORMO01 radiologyOrderMessage = new RadiologyORMO01(radiologyOrder, commonOrderOrderControl,
-					orderPriority);
+			final RadiologyORMO01 radiologyOrderMessage = new RadiologyORMO01(radiologyOrder);
 			encodedHL7OrmMessage = radiologyOrderMessage.encode();
 			log.info("Created HL7 ORM^O01 message \n" + encodedHL7OrmMessage);
 		}
@@ -173,73 +164,6 @@ public class DicomUtils {
 			log.error(e.getMessage(), e);
 		}
 		return encodedHL7OrmMessage;
-	}
-	
-	/**
-	 * Get the HL7 Order Control Code component used in an HL7 common order segment (ORC-1 field)
-	 * given the mwlstatus and orderRequest.
-	 * 
-	 * @param mwlstatus mwlstatus of a study
-	 * @param orderRequest
-	 * @should return hl7 order control given mwlstatus and orderrequest
-	 */
-	public static CommonOrderOrderControl getCommonOrderControlFrom(MwlStatus mwlstatus, OrderRequest orderRequest) {
-		CommonOrderOrderControl result = null;
-		
-		switch (orderRequest) {
-			case Save_Order:
-				if (mwlstatus == MwlStatus.DEFAULT || mwlstatus == MwlStatus.SAVE_ERR) {
-					result = CommonOrderOrderControl.NEW_ORDER;
-				} else {
-					result = CommonOrderOrderControl.CHANGE_ORDER;
-				}
-				break;
-			case Void_Order:
-				result = CommonOrderOrderControl.CANCEL_ORDER;
-				break;
-			case Unvoid_Order:
-				result = CommonOrderOrderControl.NEW_ORDER;
-				break;
-			case Discontinue_Order:
-				result = CommonOrderOrderControl.CANCEL_ORDER;
-				break;
-			case Undiscontinue_Order:
-				result = CommonOrderOrderControl.NEW_ORDER;
-				break;
-			default:
-				break;
-		}
-		return result;
-	}
-	
-	/**
-	 * Get the HL7 Priority component of Quantity/Timing (ORC-7) field included in an HL7 version
-	 * 2.3.1 Common Order segment given the Order Urgency.
-	 * 
-	 * @param urgency order urgency
-	 * @return string representation of hl7 common order priority mapping to order urgency
-	 * @should return hl7 common order priority given order urgency
-	 * @should return default hl7 common order priority given null
-	 */
-	public static CommonOrderPriority getCommonOrderPriorityFrom(Order.Urgency urgency) {
-		CommonOrderPriority result = null;
-		
-		if (urgency == null) {
-			result = CommonOrderPriority.ROUTINE;
-		} else {
-			switch (urgency) {
-				case STAT:
-					result = CommonOrderPriority.STAT;
-					break;
-				case ROUTINE:
-					result = CommonOrderPriority.ROUTINE;
-					break;
-				case ON_SCHEDULED_DATE:
-					result = CommonOrderPriority.TIMING_CRITICAL;
-					break;
-			}
-		}
-		return result;
 	}
 	
 	// Send HL7 ORU message to dcm4chee.

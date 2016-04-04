@@ -43,8 +43,6 @@ import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.module.radiology.DicomUtils.OrderRequest;
-import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
-import org.openmrs.module.radiology.hl7.CommonOrderPriority;
 import org.openmrs.test.BaseContextSensitiveTest;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +62,7 @@ import ca.uhn.hl7v2.util.Terser;
  * Tests {@link DicomUtils}
  */
 public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
+	
 	
 	private static final String STUDIES_TEST_DATASET = "org/openmrs/module/radiology/include/RadiologyServiceComponentTestDataset.xml";
 	
@@ -94,8 +93,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	@Before
 	public void runBeforeEachTest() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET,
-				DICOM_SPECIFIC_CHARACTER_SET));
+		administrationService.saveGlobalProperty(
+			new GlobalProperty(RadiologyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET, DICOM_SPECIFIC_CHARACTER_SET));
 		
 		executeDataSet(STUDIES_TEST_DATASET);
 	}
@@ -106,8 +105,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	 * Step Status; IN PROGRESS = Started but not complete
 	 * 
 	 * @see {@link DicomUtils#updateStudyPerformedStatusByMpps(DicomObject)}
-	 * @verifies should set performed status of an existing study in database to performed procedure step status IN_PROGRESS
-	 *           of given dicom object
+	 * @verifies should set performed status of an existing study in database to performed procedure
+	 *           step status IN_PROGRESS of given dicom object
 	 */
 	@Test
 	public void updateStudyPerformedStatusByMpps_shouldSetPerformedStatusOfAnExistingStudyInDatabaseToPerformedProcedureStepStatusIN_PROGRESSOfGivenDicomObject()
@@ -118,8 +117,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomObjectNCreate = getDicomNCreate(studyToBeUpdated, radiologyOrder);
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
-				temporaryMwlFolder.getAbsolutePath()));
+		administrationService
+			.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR, temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
 		
@@ -149,17 +148,17 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		String studyID = String.valueOf(study.getStudyId());
 		String studyInstanceUID = study.getStudyInstanceUid();
 		String modality = study.getModality()
-				.name();
+			.name();
 		
 		String accessionNumber = radiologyOrder.getAccessionNumber();
 		String scheduledProcedureStepDescription = radiologyOrder.getInstructions();
 		
 		Patient patient = radiologyOrder.getPatient();
 		String patientName = patient.getPersonName()
-				.getFullName()
-				.replace(' ', '^');
+			.getFullName()
+			.replace(' ', '^');
 		String patientID = patient.getPatientIdentifier()
-				.getIdentifier();
+			.getIdentifier();
 		String issuerOfPatientID = "";
 		String patientBirthDate = new SimpleDateFormat("yyyyMMdd").format(patient.getBirthdate());
 		
@@ -212,8 +211,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	 * Procedure Step Status; DISCONTINUED = Canceled or unsuccessfully terminated
 	 * 
 	 * @see {@link DicomUtils#updateStudyPerformedStatusByMPPS(DicomObject)}
-	 * @verifies should set the performed status of an existing study in the database to DISCONTINUED given a dicom object
-	 *           containing command N-CREATE
+	 * @verifies should set the performed status of an existing study in the database to
+	 *           DISCONTINUED given a dicom object containing command N-CREATE
 	 */
 	@Test
 	public void updateStudyPerformedStatusByMPPS_shouldUpdateThePerformedStatusOfAnExistingStudyInTheDatabaseBasedOnADicomObject()
@@ -224,8 +223,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomObjectNCreate = getDicomNSet(studyToBeUpdated, radiologyOrder, "DISCONTINUED");
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
-				temporaryMwlFolder.getAbsolutePath()));
+		administrationService
+			.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR, temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
 		
@@ -239,7 +238,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	 * @param study study for which the DicomObject will be created
 	 * @param radiologyOrder order associated with given study
 	 * @param performedProcedureStatus DICOM Performed Procedure Step Status either DISCONTINUED or
-	 *        COMPLETED
+	 *            COMPLETED
 	 */
 	DicomObject getDicomNSet(Study study, Order radiologyOrder, String performedProcedureStatus) {
 		
@@ -259,7 +258,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		dicomObject.putString(Tag.PerformedProcedureStepEndTime, VR.TM, performedProcedureStepEndTime);
 		dicomObject.putString(Tag.PerformedProcedureStepStatus, VR.CS, performedProcedureStatus);
 		String retrieveAETitle = dicomObject.get(Tag.PerformedStationAETitle)
-				.getValueAsString(specificCharacterSet, 0);
+			.getValueAsString(specificCharacterSet, 0);
 		
 		BasicDicomObject performedSeriesSequence = new BasicDicomObject();
 		performedSeriesSequence.putString(Tag.PerformingPhysicianName, VR.PN, performingPhysicianName);
@@ -281,8 +280,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	 * Step Status; COMPLETED
 	 * 
 	 * @see {@link DicomUtils#updateStudyPerformedStatusByMpps(DicomObject)}
-	 * @verifies should set the performed status of an existing study in the database to COMPLETED given a dicom object
-	 *           containing command N-CREATE
+	 * @verifies should set the performed status of an existing study in the database to COMPLETED
+	 *           given a dicom object containing command N-CREATE
 	 */
 	@Test
 	public void updateStudyPerformedStatusByMpps_shouldUpdateThePerformedStatusOfAnExistingStudyInTheDatabaseBasedOnADicomObjectCompleted()
@@ -293,8 +292,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomObjectNCreate = getDicomNSet(studyToBeUpdated, radiologyOrder, "COMPLETED");
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
-				temporaryMwlFolder.getAbsolutePath()));
+		administrationService
+			.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR, temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
 		
@@ -315,8 +314,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		dicomObjectNCreate.remove(Tag.ScheduledStepAttributesSequence);
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
-				temporaryMwlFolder.getAbsolutePath()));
+		administrationService
+			.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR, temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
 		
@@ -341,7 +340,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * @see {@link DicomUtils#getStudyInstanceUidFromMpps(DicomObject)}
-	 * @verifies should return null given dicom mpps object without scheduled step attributes sequence
+	 * @verifies should return null given dicom mpps object without scheduled step attributes
+	 *           sequence
 	 */
 	@Test
 	public void getStudyInstanceUidFromMpps_shouldReturnNullGivenDicomMppsObjectWithoutScheduledStepAttributesSequence() {
@@ -358,8 +358,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * @see {@link DicomUtils#getStudyInstanceUidFromMpps(DicomObject)}
-	 * @verifies should return null given dicom mpps object with scheduled step attributes sequence missing study instance
-	 *           uid tag
+	 * @verifies should return null given dicom mpps object with scheduled step attributes sequence
+	 *           missing study instance uid tag
 	 */
 	@Test
 	public void getStudyInstanceUidFromMpps_shouldReturnNullGivenDicomMppsObjectWithScheduledStepAttributesSequenceMissingStudyInstanceUidTag() {
@@ -369,8 +369,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomMpps = getDicomNCreate(study, radiologyOrder);
 		
 		dicomMpps.get(Tag.ScheduledStepAttributesSequence)
-				.getDicomObject()
-				.remove(Tag.StudyInstanceUID);
+			.getDicomObject()
+			.remove(Tag.StudyInstanceUID);
 		
 		String studyInstanceUid = DicomUtils.getStudyInstanceUidFromMpps(dicomMpps);
 		
@@ -475,8 +475,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * @see {@link DicomUtils#createHL7Message(RadiologyOrder, OrderRequest)}
-	 * @verifies should return encoded HL7 ORMO01 message string with new order control given study with mwlstatus default
-	 *           and save order request
+	 * @verifies should return encoded HL7 ORMO01 message string with new order control given study
+	 *           with mwlstatus default and save order request
 	 */
 	@Test
 	public void createHL7Message_shouldReturnEncodedHL7ORMO01MessageStringWithNewOrderControlGivenStudyWithMwlstatusDefaultAndSaveOrderRequest()
@@ -490,10 +490,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		String saveOrderHL7String = DicomUtils.createHL7Message(radiologyOrder, DicomUtils.OrderRequest.Save_Order);
 		
 		assertThat(saveOrderHL7String, startsWith("MSH|^~\\&|OpenMRSRadiologyModule|OpenMRS|||"));
-		assertThat(
-			saveOrderHL7String,
-			endsWith("||ORM^O01||P|2.3.1\r"
-					+ "PID|||100||Doe^John^Francis||19500401000000|M\r"
+		assertThat(saveOrderHL7String,
+			endsWith("||ORM^O01||P|2.3.1\r" + "PID|||100||Doe^John^Francis||19500401000000|M\r"
 					+ "ORC|NW|ORD-20|||||^^^20150204143500^^T\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
@@ -505,86 +503,91 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		// MSH segment
 		MSH msh = ormMsg.getMSH();
 		assertThat(msh.getVersionID()
-				.getVersionID()
-				.getValue(), is("2.3.1"));
+			.getVersionID()
+			.getValue(), is("2.3.1"));
 		assertThat(msh.getMessageType()
-				.getMessageType()
-				.getValue(), is("ORM"));
+			.getMessageType()
+			.getValue(), is("ORM"));
 		assertThat(msh.getMessageType()
-				.getTriggerEvent()
-				.getValue(), is("O01"));
+			.getTriggerEvent()
+			.getValue(), is("O01"));
 		assertThat(msh.getSendingApplication()
-				.getNamespaceID()
-				.getValue(), is("OpenMRSRadiologyModule"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRSRadiologyModule"));
 		assertThat(msh.getSendingFacility()
-				.getNamespaceID()
-				.getValue(), is("OpenMRS"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRS"));
 		assertThat(msh.getProcessingID()
-				.getProcessingID()
-				.getValue(), is("P"));
+			.getProcessingID()
+			.getValue(), is("P"));
 		
 		// PID segment
 		Patient expectedPatient = radiologyOrder.getPatient();
 		PID pid = ormMsg.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-				.getPID();
+			.getPID();
 		assertThat(pid.getPatientIdentifierList(0)
-				.getID()
-				.getValue(), is(expectedPatient.getPatientIdentifier()
+			.getID()
+			.getValue(),
+			is(expectedPatient.getPatientIdentifier()
 				.getIdentifier()));
 		assertThat(pid.getDateTimeOfBirth()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
 		assertThat(pid.getSex()
-				.getValue(), is(expectedPatient.getGender()));
+			.getValue(), is(expectedPatient.getGender()));
 		assertThat(pid.getPatientName(0)
-				.getFamilyLastName()
-				.getFamilyName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getFamilyLastName()
+			.getFamilyName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getFamilyName()));
 		assertThat(pid.getPatientName(0)
-				.getMiddleInitialOrName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getMiddleInitialOrName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getMiddleName()));
 		assertThat(pid.getPatientName(0)
-				.getGivenName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getGivenName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getGivenName()));
 		
 		// ORC segment
 		ORC orc = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC();
+			.getORC();
 		assertThat(orc.getOrderControl()
-				.getValue(), is("NW"));
+			.getValue(), is("NW"));
 		assertThat(orc.getPlacerOrderNumber()
-				.getEntityIdentifier()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getEntityIdentifier()
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(orc.getOrderStatus()
-				.getValue(), is(nullValue()));
+			.getValue(), is(nullValue()));
 		assertThat(orc.getQuantityTiming()
-				.getStartDateTime()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
+			.getStartDateTime()
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
 		assertThat(orc.getQuantityTiming()
-				.getPriority()
-				.getValue(), is("T"));
+			.getPriority()
+			.getValue(), is("T"));
 		
 		// OBR segment
 		OBR obr = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-				.getOBR();
+			.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+			.getOBR();
 		assertThat(obr.getUniversalServiceID()
-				.getAlternateText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getAlternateText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		assertThat(obr.getPlacerField2()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(obr.getFillerField1()
-				.getValue(), is(String.valueOf(study.getStudyId())));
+			.getValue(), is(String.valueOf(study.getStudyId())));
 		assertThat(obr.getDiagnosticServSectID()
-				.getValue(), is(study.getModality()
+			.getValue(),
+			is(study.getModality()
 				.name()));
 		assertThat(obr.getProcedureCode()
-				.getText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		
 		// ZDS Segment
 		Terser terser = new Terser(ormMsg);
@@ -596,8 +599,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * @see {@link DicomUtils#createHL7Message(RadiologyOrder, OrderRequest)}
-	 * @verifies should return encoded HL7 ORMO01 message string with cancel order control given study with mwlstatus default
-	 *           and void order request
+	 * @verifies should return encoded HL7 ORMO01 message string with cancel order control given
+	 *           study with mwlstatus default and void order request
 	 */
 	@Test
 	public void createHL7Message_shouldReturnEncodedHL7ORMO01MessageStringWithCancelOrderControlGivenStudyWithMwlstatusDefaultAndVoidOrderRequest()
@@ -611,10 +614,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		String saveOrderHL7String = DicomUtils.createHL7Message(radiologyOrder, DicomUtils.OrderRequest.Void_Order);
 		
 		assertThat(saveOrderHL7String, startsWith("MSH|^~\\&|OpenMRSRadiologyModule|OpenMRS|||"));
-		assertThat(
-			saveOrderHL7String,
-			endsWith("||ORM^O01||P|2.3.1\r"
-					+ "PID|||100||Doe^John^Francis||19500401000000|M\r"
+		assertThat(saveOrderHL7String,
+			endsWith("||ORM^O01||P|2.3.1\r" + "PID|||100||Doe^John^Francis||19500401000000|M\r"
 					+ "ORC|CA|ORD-20|||||^^^20150204143500^^T\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
@@ -626,86 +627,91 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		// MSH segment
 		MSH msh = ormMsg.getMSH();
 		assertThat(msh.getVersionID()
-				.getVersionID()
-				.getValue(), is("2.3.1"));
+			.getVersionID()
+			.getValue(), is("2.3.1"));
 		assertThat(msh.getMessageType()
-				.getMessageType()
-				.getValue(), is("ORM"));
+			.getMessageType()
+			.getValue(), is("ORM"));
 		assertThat(msh.getMessageType()
-				.getTriggerEvent()
-				.getValue(), is("O01"));
+			.getTriggerEvent()
+			.getValue(), is("O01"));
 		assertThat(msh.getSendingApplication()
-				.getNamespaceID()
-				.getValue(), is("OpenMRSRadiologyModule"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRSRadiologyModule"));
 		assertThat(msh.getSendingFacility()
-				.getNamespaceID()
-				.getValue(), is("OpenMRS"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRS"));
 		assertThat(msh.getProcessingID()
-				.getProcessingID()
-				.getValue(), is("P"));
+			.getProcessingID()
+			.getValue(), is("P"));
 		
 		// PID segment
 		Patient expectedPatient = radiologyOrder.getPatient();
 		PID pid = ormMsg.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-				.getPID();
+			.getPID();
 		assertThat(pid.getPatientIdentifierList(0)
-				.getID()
-				.getValue(), is(expectedPatient.getPatientIdentifier()
+			.getID()
+			.getValue(),
+			is(expectedPatient.getPatientIdentifier()
 				.getIdentifier()));
 		assertThat(pid.getDateTimeOfBirth()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
 		assertThat(pid.getSex()
-				.getValue(), is(expectedPatient.getGender()));
+			.getValue(), is(expectedPatient.getGender()));
 		assertThat(pid.getPatientName(0)
-				.getFamilyLastName()
-				.getFamilyName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getFamilyLastName()
+			.getFamilyName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getFamilyName()));
 		assertThat(pid.getPatientName(0)
-				.getMiddleInitialOrName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getMiddleInitialOrName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getMiddleName()));
 		assertThat(pid.getPatientName(0)
-				.getGivenName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getGivenName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getGivenName()));
 		
 		// ORC segment
 		ORC orc = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC();
+			.getORC();
 		assertThat(orc.getOrderControl()
-				.getValue(), is("CA"));
+			.getValue(), is("CA"));
 		assertThat(orc.getPlacerOrderNumber()
-				.getEntityIdentifier()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getEntityIdentifier()
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(orc.getOrderStatus()
-				.getValue(), is(nullValue()));
+			.getValue(), is(nullValue()));
 		assertThat(orc.getQuantityTiming()
-				.getStartDateTime()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
+			.getStartDateTime()
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
 		assertThat(orc.getQuantityTiming()
-				.getPriority()
-				.getValue(), is("T"));
+			.getPriority()
+			.getValue(), is("T"));
 		
 		// OBR segment
 		OBR obr = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-				.getOBR();
+			.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+			.getOBR();
 		assertThat(obr.getUniversalServiceID()
-				.getAlternateText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getAlternateText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		assertThat(obr.getPlacerField2()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(obr.getFillerField1()
-				.getValue(), is(String.valueOf(study.getStudyId())));
+			.getValue(), is(String.valueOf(study.getStudyId())));
 		assertThat(obr.getDiagnosticServSectID()
-				.getValue(), is(study.getModality()
+			.getValue(),
+			is(study.getModality()
 				.name()));
 		assertThat(obr.getProcedureCode()
-				.getText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		
 		// ZDS Segment
 		Terser terser = new Terser(ormMsg);
@@ -717,8 +723,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * @see {@link DicomUtils#createHL7Message(RadiologyOrder, OrderRequest)}
-	 * @verifies should return encoded HL7 ORMO01 message string with change order control given study with mwlstatus save ok
-	 *           and save order request
+	 * @verifies should return encoded HL7 ORMO01 message string with change order control given
+	 *           study with mwlstatus save ok and save order request
 	 */
 	@Test
 	public void createHL7Message_shouldReturnEncodedHL7ORMO01MessageStringWithChangeOrderControlGivenStudyWithMwlstatusSaveOkAndSaveOrderRequest()
@@ -732,10 +738,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		String saveOrderHL7String = DicomUtils.createHL7Message(radiologyOrder, DicomUtils.OrderRequest.Save_Order);
 		
 		assertThat(saveOrderHL7String, startsWith("MSH|^~\\&|OpenMRSRadiologyModule|OpenMRS|||"));
-		assertThat(
-			saveOrderHL7String,
-			endsWith("||ORM^O01||P|2.3.1\r"
-					+ "PID|||100||Doe^John^Francis||19500401000000|M\r"
+		assertThat(saveOrderHL7String,
+			endsWith("||ORM^O01||P|2.3.1\r" + "PID|||100||Doe^John^Francis||19500401000000|M\r"
 					+ "ORC|XO|ORD-20|||||^^^20150204143500^^T\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
@@ -747,86 +751,91 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		// MSH segment
 		MSH msh = ormMsg.getMSH();
 		assertThat(msh.getVersionID()
-				.getVersionID()
-				.getValue(), is("2.3.1"));
+			.getVersionID()
+			.getValue(), is("2.3.1"));
 		assertThat(msh.getMessageType()
-				.getMessageType()
-				.getValue(), is("ORM"));
+			.getMessageType()
+			.getValue(), is("ORM"));
 		assertThat(msh.getMessageType()
-				.getTriggerEvent()
-				.getValue(), is("O01"));
+			.getTriggerEvent()
+			.getValue(), is("O01"));
 		assertThat(msh.getSendingApplication()
-				.getNamespaceID()
-				.getValue(), is("OpenMRSRadiologyModule"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRSRadiologyModule"));
 		assertThat(msh.getSendingFacility()
-				.getNamespaceID()
-				.getValue(), is("OpenMRS"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRS"));
 		assertThat(msh.getProcessingID()
-				.getProcessingID()
-				.getValue(), is("P"));
+			.getProcessingID()
+			.getValue(), is("P"));
 		
 		// PID segment
 		Patient expectedPatient = radiologyOrder.getPatient();
 		PID pid = ormMsg.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-				.getPID();
+			.getPID();
 		assertThat(pid.getPatientIdentifierList(0)
-				.getID()
-				.getValue(), is(expectedPatient.getPatientIdentifier()
+			.getID()
+			.getValue(),
+			is(expectedPatient.getPatientIdentifier()
 				.getIdentifier()));
 		assertThat(pid.getDateTimeOfBirth()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
 		assertThat(pid.getSex()
-				.getValue(), is(expectedPatient.getGender()));
+			.getValue(), is(expectedPatient.getGender()));
 		assertThat(pid.getPatientName(0)
-				.getFamilyLastName()
-				.getFamilyName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getFamilyLastName()
+			.getFamilyName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getFamilyName()));
 		assertThat(pid.getPatientName(0)
-				.getMiddleInitialOrName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getMiddleInitialOrName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getMiddleName()));
 		assertThat(pid.getPatientName(0)
-				.getGivenName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getGivenName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getGivenName()));
 		
 		// ORC segment
 		ORC orc = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC();
+			.getORC();
 		assertThat(orc.getOrderControl()
-				.getValue(), is("XO"));
+			.getValue(), is("XO"));
 		assertThat(orc.getPlacerOrderNumber()
-				.getEntityIdentifier()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getEntityIdentifier()
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(orc.getOrderStatus()
-				.getValue(), is(nullValue()));
+			.getValue(), is(nullValue()));
 		assertThat(orc.getQuantityTiming()
-				.getStartDateTime()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
+			.getStartDateTime()
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
 		assertThat(orc.getQuantityTiming()
-				.getPriority()
-				.getValue(), is("T"));
+			.getPriority()
+			.getValue(), is("T"));
 		
 		// OBR segment
 		OBR obr = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-				.getOBR();
+			.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+			.getOBR();
 		assertThat(obr.getUniversalServiceID()
-				.getAlternateText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getAlternateText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		assertThat(obr.getPlacerField2()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(obr.getFillerField1()
-				.getValue(), is(String.valueOf(study.getStudyId())));
+			.getValue(), is(String.valueOf(study.getStudyId())));
 		assertThat(obr.getDiagnosticServSectID()
-				.getValue(), is(study.getModality()
+			.getValue(),
+			is(study.getModality()
 				.name()));
 		assertThat(obr.getProcedureCode()
-				.getText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		
 		// ZDS Segment
 		Terser terser = new Terser(ormMsg);
@@ -835,69 +844,4 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		assertThat(terser.get("/.ZDS-1-3"), is("Application"));
 		assertThat(terser.get("/.ZDS-1-4"), is("DICOM"));
 	}
-	
-	/**
-	 * @see {@link DicomUtils#getCommonOrderPriorityFrom(Order.Urgency)}
-	 * @verifies should return hl7 common order priority given order urgency
-	 */
-	@Test
-	public void getCommonOrderPriorityFrom_shouldReturnHL7CommonOrderPriorityGivenOrderUrgency() {
-		
-		assertThat(DicomUtils.getCommonOrderPriorityFrom(Order.Urgency.STAT), is(CommonOrderPriority.STAT));
-		assertThat(DicomUtils.getCommonOrderPriorityFrom(Order.Urgency.ROUTINE), is(CommonOrderPriority.ROUTINE));
-		assertThat(DicomUtils.getCommonOrderPriorityFrom(Order.Urgency.ON_SCHEDULED_DATE),
-			is(CommonOrderPriority.TIMING_CRITICAL));
-	}
-	
-	/**
-	 * @see {@link DicomUtils#getCommonOrderPriorityFrom(Order.Urgency)}
-	 * @verifies should return default hl7 common order priority given null
-	 */
-	@Test
-	public void getCommonOrderPriorityFrom_shouldReturnDefaultHL7CommonOrderPriorityGivenNull() {
-		
-		assertThat(DicomUtils.getCommonOrderPriorityFrom(null), is(CommonOrderPriority.ROUTINE));
-	}
-	
-	/**
-	 * @see {@link DicomUtils#getCommonOrderControlFrom(MwlStatus, OrderRequest)}
-	 * @verifies should return hl7 order control given mwlstatus and orderrequest
-	 */
-	@Test
-	public void getCommonOrderControlFrom_shouldReturnHL7OrderControlGivenMwlstatusAndOrderRequest() {
-		
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Save_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.SAVE_ERR, DicomUtils.OrderRequest.Save_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.SAVE_OK, DicomUtils.OrderRequest.Save_Order),
-			is(CommonOrderOrderControl.CHANGE_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.UPDATE_OK, DicomUtils.OrderRequest.Save_Order),
-			is(CommonOrderOrderControl.CHANGE_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Void_Order),
-			is(CommonOrderOrderControl.CANCEL_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Void_Order),
-			is(CommonOrderOrderControl.CANCEL_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.SAVE_OK, DicomUtils.OrderRequest.Void_Order),
-			is(CommonOrderOrderControl.CANCEL_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Unvoid_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Unvoid_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.SAVE_OK, DicomUtils.OrderRequest.Unvoid_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Discontinue_Order),
-			is(CommonOrderOrderControl.CANCEL_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Discontinue_Order),
-			is(CommonOrderOrderControl.CANCEL_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.SAVE_OK, DicomUtils.OrderRequest.Discontinue_Order),
-			is(CommonOrderOrderControl.CANCEL_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Undiscontinue_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.DEFAULT, DicomUtils.OrderRequest.Undiscontinue_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-		assertThat(DicomUtils.getCommonOrderControlFrom(MwlStatus.SAVE_OK, DicomUtils.OrderRequest.Undiscontinue_Order),
-			is(CommonOrderOrderControl.NEW_ORDER));
-	}
-	
 }

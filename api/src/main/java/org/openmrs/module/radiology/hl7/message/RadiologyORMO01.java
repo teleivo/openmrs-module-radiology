@@ -11,6 +11,7 @@ package org.openmrs.module.radiology.hl7.message;
 
 import java.util.Date;
 
+import org.openmrs.Order;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
 import org.openmrs.module.radiology.hl7.CommonOrderPriority;
@@ -29,6 +30,7 @@ import ca.uhn.hl7v2.parser.PipeParser;
  * Translates a <code>RadiologyOrder</code> to an HL7 ORM^O01 message
  */
 public class RadiologyORMO01 {
+	
 	
 	private static final EncodingCharacters encodingCharacters = new EncodingCharacters('|', '^', '~', '\\', '&');
 	
@@ -50,17 +52,11 @@ public class RadiologyORMO01 {
 	 * Constructor for <code>RadiologyORMO01</code>
 	 * 
 	 * @param radiologyOrder radiology order
-	 * @param commonOrderOrderControl Order Control Code of Common Order (ORC) segment
-	 * @param commonOrderPriority Priority component of Common Order (ORC) segment attribute
-	 *        Quantity/Timing
 	 * @should create new radiology ormo01 object given all params
 	 * @should throw illegal argument exception given null as radiologyOrder
 	 * @should throw illegal argument exception if given radiology orders study is null
-	 * @should throw illegal argument exception given null as orderControlCode
-	 * @should throw illegal argument exception given null as orderControlPriority
 	 */
-	public RadiologyORMO01(RadiologyOrder radiologyOrder, CommonOrderOrderControl commonOrderOrderControl,
-		CommonOrderPriority commonOrderPriority) {
+	public RadiologyORMO01(RadiologyOrder radiologyOrder) {
 		
 		if (radiologyOrder == null) {
 			throw new IllegalArgumentException("radiologyOrder cannot be null.");
@@ -70,15 +66,76 @@ public class RadiologyORMO01 {
 			}
 		}
 		
-		if (commonOrderOrderControl == null) {
-			throw new IllegalArgumentException("orderControlCode cannot be null.");
-		} else if (commonOrderPriority == null) {
-			throw new IllegalArgumentException("orderControlPriority cannot be null.");
-		}
-		
 		this.radiologyOrder = radiologyOrder;
-		this.commonOrderControl = commonOrderOrderControl;
-		this.commonOrderPriority = commonOrderPriority;
+		this.commonOrderControl = RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction());
+		this.commonOrderPriority = RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(radiologyOrder.getUrgency());
+	}
+	
+	/**
+	 * Get the HL7 Order Control Code component used in an HL7 common order segment (ORC-1 field)
+	 * given the Order.Action.
+	 * 
+	 * @param orderAction Order.Action to be converted to CommonOrderOrderControl
+	 * @return CommonOrderOrderControl for given Order.Action
+	 * @should return new order given order action new
+	 * @should return cancel order given order action discontinue
+	 * @should return null given any other order action
+	 * @should return null given null
+	 */
+	public static CommonOrderOrderControl convertOrderActionToCommonOrderControl(Order.Action orderAction) {
+		final CommonOrderOrderControl result;
+		
+		if (orderAction == null) {
+			result = null;
+		} else {
+			switch (orderAction) {
+				case NEW:
+					result = CommonOrderOrderControl.NEW_ORDER;
+					break;
+				case DISCONTINUE:
+					result = CommonOrderOrderControl.CANCEL_ORDER;
+					break;
+				default:
+					result = null;
+					break;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Get the HL7 Priority component of Quantity/Timing (ORC-7) field included in an HL7 version
+	 * 2.3.1 Common Order segment given the Order.Urgency.
+	 * 
+	 * @param orderUrgency Order.Urgency to be converted to CommonOrderPriority
+	 * @return CommonOrderPriority for given Order.Urgency
+	 * @should return routine given null
+	 * @should return stat given order urgency stat
+	 * @should return routine given order urgency routine
+	 * @should return timing critical given order urgency on scheduled date
+	 */
+	public static CommonOrderPriority convertOrderUrgencyToCommonOrderPriority(Order.Urgency orderUrgency) {
+		final CommonOrderPriority result;
+		
+		if (orderUrgency == null) {
+			result = CommonOrderPriority.ROUTINE;
+		} else {
+			switch (orderUrgency) {
+				case STAT:
+					result = CommonOrderPriority.STAT;
+					break;
+				case ROUTINE:
+					result = CommonOrderPriority.ROUTINE;
+					break;
+				case ON_SCHEDULED_DATE:
+					result = CommonOrderPriority.TIMING_CRITICAL;
+					break;
+				default:
+					result = CommonOrderPriority.ROUTINE;
+					break;
+			}
+		}
+		return result;
 	}
 	
 	/**
@@ -108,14 +165,14 @@ public class RadiologyORMO01 {
 			orderMessageType, orderMessageTriggerEvent);
 		
 		RadiologyPID.populatePatientIdentifier(result.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-				.getPID(), radiologyOrder.getPatient());
+			.getPID(), radiologyOrder.getPatient());
 		
 		RadiologyORC.populateCommonOrder(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC(), radiologyOrder, commonOrderControl, commonOrderPriority);
+			.getORC(), radiologyOrder, commonOrderControl, commonOrderPriority);
 		
 		RadiologyOBR.populateObservationRequest(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-				.getOBR(), radiologyOrder);
+			.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+			.getOBR(), radiologyOrder);
 		
 		RadiologyZDS.populateZDSSegment(result.getZDS(), radiologyOrder.getStudy());
 		
