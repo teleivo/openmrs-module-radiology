@@ -33,6 +33,7 @@
 		<openMRSVersion>1.11.4</openMRSVersion>
 		<hapiVersion>2.0</hapiVersion>
 		<emr-apiVersion>1.13</emr-apiVersion>
+		<eventVersion>2.3</eventVersion>
 	</properties>
 
 	<dependencyManagement>
@@ -143,6 +144,24 @@
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>providermanagement-api</artifactId>
 			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs</groupId>
+			<artifactId>event-api</artifactId>
+			<version>${eventVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs</groupId>
+			<artifactId>event-api-1.x</artifactId>
+			<version>${eventVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs</groupId>
+			<artifactId>event-api-2.x</artifactId>
+			<version>${eventVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
