@@ -24,12 +24,12 @@ public class DicomUtils {
 	
 	private static final Logger log = Logger.getLogger(DicomUtils.class);
 	
+	private static RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
+		RadiologyProperties.class);
+	
 	private DicomUtils() {
 		// This class is a utility class which should not be instantiated
 	};
-	
-	private static RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
-		RadiologyProperties.class);
 	
 	/**
 	 * <p>
@@ -95,9 +95,7 @@ public class DicomUtils {
 			return null;
 		}
 		
-		final String studyInstanceUid = studyInstanceUidElement.getValueAsString(specificCharacterSet, 0);
-		
-		return studyInstanceUid;
+		return studyInstanceUidElement.getValueAsString(specificCharacterSet, 0);
 	}
 	
 	/**
@@ -119,10 +117,7 @@ public class DicomUtils {
 			return null;
 		}
 		
-		final String performedProcedureStepStatus = performedProcedureStepStatusElement.getValueAsString(
-			specificCharacterSet, 0);
-		
-		return performedProcedureStepStatus;
+		return performedProcedureStepStatusElement.getValueAsString(specificCharacterSet, 0);
 	}
 	
 	static RadiologyService radiologyService() {
