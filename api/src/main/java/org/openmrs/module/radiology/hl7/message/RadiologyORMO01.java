@@ -91,7 +91,7 @@ public class RadiologyORMO01 {
 	 * @throws HL7Exception
 	 * @should create ormo01 message
 	 */
-	private ORM_O01 createRadiologyORMO01Message() throws HL7Exception {
+	public ORM_O01 createRadiologyORMO01Message() throws HL7Exception {
 		
 		final ORM_O01 result = new ORM_O01();
 		

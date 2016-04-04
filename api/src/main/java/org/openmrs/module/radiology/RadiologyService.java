@@ -26,6 +26,7 @@ import org.openmrs.module.radiology.report.RadiologyReportStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.llp.LLPException;
 
 @Transactional
 public interface RadiologyService extends OpenmrsService {
@@ -141,8 +142,10 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should set radiology order study mwlstatus to in sync if hl7 message was successfully sent
 	 * @should set radiology order study mwlstatus to out of sync if hl7 message was not successfully sent
 	 * @throws HL7Exception
+	 * @throws LLPException
+	 * @throws NumberFormatException
 	 */
-	public boolean updateOrderInPacs(Order order) throws HL7Exception;
+	public boolean updateOrderInPacs(Order order) throws HL7Exception, NumberFormatException, LLPException;
 	
 	/**
 	 * Get Study by studyId

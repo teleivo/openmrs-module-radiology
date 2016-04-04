@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dcm4che.tool.hl7snd.HL7Snd;
 import org.openmrs.Encounter;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -24,7 +23,6 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.OrderContext;
 import org.openmrs.api.OrderService;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.radiology.DicomUtils;
 import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
@@ -35,12 +33,15 @@ import org.openmrs.module.radiology.Study;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.db.RadiologyReportDAO;
 import org.openmrs.module.radiology.db.StudyDAO;
+import org.openmrs.module.radiology.hl7.HL7Utils;
 import org.openmrs.module.radiology.hl7.message.RadiologyORMO01;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.llp.LLPException;
+import ca.uhn.hl7v2.model.v231.message.ORM_O01;
 
 class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyService {
 	
@@ -278,20 +279,16 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	@Override
-	public boolean updateOrderInPacs(Order order) throws HL7Exception {
-		final int HL7_SEND_SUCCESS = 1;
-		final int HL7_SEND_ERROR = 0;
-		final String hl7blob = new RadiologyORMO01(order).encode();
-		log.info("Created HL7 ORM^O01 message \n" + hl7blob);
-		
-		final String input[] = { "-c", radiologyProperties.getPacsAddress() + ":" + radiologyProperties.getPacsHL7Port(),
-				hl7blob };
-		final int status = HL7Snd.main(input);
+	public boolean updateOrderInPacs(Order order) throws HL7Exception, NumberFormatException, LLPException {
+		final ORM_O01 orderMessage = new RadiologyORMO01(order).createRadiologyORMO01Message();
+		// log.info("Created HL7 ORM^O01 message \n" + hl7blob);
+		final boolean status = HL7Utils.sendHL7Message(radiologyProperties.getPacsAddress(),
+			Integer.valueOf(radiologyProperties.getPacsHL7Port()), orderMessage);
 		
 		MwlStatus mwlStatus = null;
-		if (status == HL7_SEND_SUCCESS) {
+		if (status) {
 			mwlStatus = MwlStatus.IN_SYNC;
-		} else if (status == HL7_SEND_ERROR) {
+		} else {
 			mwlStatus = MwlStatus.OUT_OF_SYNC;
 		}
 		
@@ -304,7 +301,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		radiologyOrder.getStudy()
 				.setMwlStatus(mwlStatus);
 		saveStudy(radiologyOrder.getStudy());
-		return status == HL7_SEND_SUCCESS ? true : false;
+		return status;
 	}
 	
 	/**
