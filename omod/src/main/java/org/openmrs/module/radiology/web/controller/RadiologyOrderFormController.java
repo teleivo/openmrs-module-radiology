@@ -191,7 +191,7 @@ public class RadiologyOrderFormController {
 			try {
 				radiologyService.placeRadiologyOrder(radiologyOrder);
 				
-				if (radiologyService.sendModalityWorklist(radiologyOrder)) {
+				if (radiologyService.updateOrderInPacs(radiologyOrder)) {
 					request.getSession()
 							.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.saved");
 				} else {
@@ -246,7 +246,7 @@ public class RadiologyOrderFormController {
 				discontinuationOrder.getOrderer(), discontinuationOrder.getDateActivated(),
 				discontinuationOrder.getOrderReasonNonCoded());
 			
-			if (radiologyService.sendModalityWorklist(discontinuationOrder)) {
+			if (radiologyService.updateOrderInPacs(discontinuationOrder)) {
 				request.getSession()
 						.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.discontinuedSuccessfully");
 				modelAndView.setViewName("redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId="

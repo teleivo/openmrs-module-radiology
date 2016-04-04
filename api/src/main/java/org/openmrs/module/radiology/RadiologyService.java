@@ -131,7 +131,18 @@ public interface RadiologyService extends OpenmrsService {
 	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
 	
-	public boolean sendModalityWorklist(Order order) throws HL7Exception;
+	/**
+	 * Send HL7 order message to PACS for given order and update Study MwlStatus.
+	 * 
+	 * @param order order for which order message is sent
+	 * @return true if order message was sent successfully and false otherwise
+	 * @should return true if hl7 message was successfully sent
+	 * @should return false if hl7 message was not successfully sent
+	 * @should set radiology order study mwlstatus to in sync if hl7 message was successfully sent
+	 * @should set radiology order study mwlstatus to out of sync if hl7 message was not successfully sent
+	 * @throws HL7Exception
+	 */
+	public boolean updateOrderInPacs(Order order) throws HL7Exception;
 	
 	/**
 	 * Get Study by studyId

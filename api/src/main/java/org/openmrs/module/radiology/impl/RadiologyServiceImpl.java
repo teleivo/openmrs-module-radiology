@@ -278,7 +278,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	@Override
-	public boolean sendModalityWorklist(Order order) throws HL7Exception {
+	public boolean updateOrderInPacs(Order order) throws HL7Exception {
 		final int HL7_SEND_SUCCESS = 1;
 		final int HL7_SEND_ERROR = 0;
 		final String hl7blob = new RadiologyORMO01(order).encode();
