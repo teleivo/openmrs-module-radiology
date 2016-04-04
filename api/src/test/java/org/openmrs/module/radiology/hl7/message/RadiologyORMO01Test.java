@@ -48,7 +48,6 @@ import ca.uhn.hl7v2.parser.PipeParser;
  */
 public class RadiologyORMO01Test {
 	
-	
 	private static final EncodingCharacters encodingCharacters = new EncodingCharacters('|', '^', '~', '\\', '&');
 	
 	@Rule
@@ -159,8 +158,10 @@ public class RadiologyORMO01Test {
 		String encodedOrmMessage = radiologyOrderMessage.encode();
 		
 		assertThat(encodedOrmMessage, startsWith("MSH|^~\\&|OpenMRSRadiologyModule|OpenMRS|||"));
-		assertThat(encodedOrmMessage,
-			endsWith("||ORM^O01||P|2.3.1\r" + "PID|||100||Doe^John^Francis||19500401000000|M\r"
+		assertThat(
+			encodedOrmMessage,
+			endsWith("||ORM^O01||P|2.3.1\r"
+					+ "PID|||100||Doe^John^Francis||19500401000000|M\r"
 					+ "ORC|NW|ORD-20|||||^^^20150204143500^^S\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
@@ -182,8 +183,10 @@ public class RadiologyORMO01Test {
 		String encodedOrmMessage = PipeParser.encode(ormO01, encodingCharacters);
 		
 		assertThat(encodedOrmMessage, startsWith("MSH|^~\\&|OpenMRSRadiologyModule|OpenMRS|||"));
-		assertThat(encodedOrmMessage,
-			endsWith("||ORM^O01||P|2.3.1\r" + "PID|||100||Doe^John^Francis||19500401000000|M\r"
+		assertThat(
+			encodedOrmMessage,
+			endsWith("||ORM^O01||P|2.3.1\r"
+					+ "PID|||100||Doe^John^Francis||19500401000000|M\r"
 					+ "ORC|NW|ORD-20|||||^^^20150204143500^^S\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
@@ -219,8 +222,7 @@ public class RadiologyORMO01Test {
 	 * @verifies return cancel order given order action discontinue
 	 */
 	@Test
-	public void convertOrderActionToCommonOrderControl_shouldReturnCancelOrderGivenOrderActionDiscontinue()
-			throws Exception {
+	public void convertOrderActionToCommonOrderControl_shouldReturnCancelOrderGivenOrderActionDiscontinue() throws Exception {
 		
 		radiologyOrder.setAction(Order.Action.DISCONTINUE);
 		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction()),

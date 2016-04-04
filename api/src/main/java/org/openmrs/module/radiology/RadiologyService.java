@@ -18,7 +18,6 @@ import org.openmrs.Provider;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.api.OrderService;
-import org.openmrs.module.radiology.DicomUtils.OrderRequest;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.db.RadiologyReportDAO;
 import org.openmrs.module.radiology.db.StudyDAO;
@@ -130,7 +129,7 @@ public interface RadiologyService extends OpenmrsService {
 	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
 	
-	public void sendModalityWorklist(RadiologyOrder radiologyOrder, OrderRequest orderRequest);
+	public void sendModalityWorklist(RadiologyOrder radiologyOrder);
 	
 	/**
 	 * Get Study by studyId

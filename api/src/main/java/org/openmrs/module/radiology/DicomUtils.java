@@ -26,7 +26,6 @@ import ca.uhn.hl7v2.HL7Exception;
  */
 public class DicomUtils {
 	
-	
 	private static final Logger log = Logger.getLogger(DicomUtils.class);
 	
 	private DicomUtils() {
@@ -38,12 +37,12 @@ public class DicomUtils {
 	
 	/**
 	 * <p>
-	 * Updates the PerformedStatus of an existing Study in the database to the Performed Procedure
-	 * Step Status of a given DicomObject containing a DICOM N-CREATE/N-SET command
+	 * Updates the PerformedStatus of an existing Study in the database to the Performed Procedure Step Status of a given
+	 * DicomObject containing a DICOM N-CREATE/N-SET command
 	 * </p>
 	 * 
 	 * @param mppsObject the DICOM MPPS object containing a DICOM N-CREATE/N-SET command with DICOM
-	 *            tag Performed Procedure Step Status
+	 *        tag Performed Procedure Step Status
 	 * @should set performed status of an existing study in database to performed procedure step
 	 *         status IN_PROGRESS of given mpps object
 	 * @should set performed status of an existing study in database to performed procedure step
@@ -57,12 +56,12 @@ public class DicomUtils {
 			final String studyInstanceUid = getStudyInstanceUidFromMpps(mppsObject);
 			
 			final String performedProcedureStepStatusString = getPerformedProcedureStepStatus(mppsObject);
-			final PerformedProcedureStepStatus performedProcedureStepStatus = PerformedProcedureStepStatus
-				.getMatchForDisplayName(performedProcedureStepStatusString);
+			final PerformedProcedureStepStatus performedProcedureStepStatus = PerformedProcedureStepStatus.getMatchForDisplayName(performedProcedureStepStatusString);
 			
 			radiologyService().updateStudyPerformedStatus(studyInstanceUid, performedProcedureStepStatus);
-			log.info("Received Update from dcm4chee. Updating Performed Procedure Step Status for study :" + studyInstanceUid
-					+ " to Status : " + PerformedProcedureStepStatus.getNameOrUnknown(performedProcedureStepStatus));
+			log.info("Received Update from dcm4chee. Updating Performed Procedure Step Status for study :"
+					+ studyInstanceUid + " to Status : "
+					+ PerformedProcedureStepStatus.getNameOrUnknown(performedProcedureStepStatus));
 		}
 		catch (NumberFormatException e) {
 			log.error("Number can not be parsed");
@@ -124,14 +123,10 @@ public class DicomUtils {
 			return null;
 		}
 		
-		final String performedProcedureStepStatus = performedProcedureStepStatusElement
-			.getValueAsString(specificCharacterSet, 0);
+		final String performedProcedureStepStatus = performedProcedureStepStatusElement.getValueAsString(
+			specificCharacterSet, 0);
 		
 		return performedProcedureStepStatus;
-	}
-	
-	public enum OrderRequest {
-		Save_Order, Void_Order, Discontinue_Order, Undiscontinue_Order, Unvoid_Order;
 	}
 	
 	/**
@@ -139,7 +134,6 @@ public class DicomUtils {
 	 * Framework Volume 2.
 	 * 
 	 * @param radiologyOrder radiology order for which the order message is created
-	 * @param orderRequest OrderRequest specifying the action of the order message
 	 * @return encoded HL7 ORM^O01 message
 	 * @should return encoded HL7 ORMO01 message string with new order control given study with
 	 *         mwlstatus default and save order request
@@ -148,7 +142,7 @@ public class DicomUtils {
 	 * @should return encoded HL7 ORMO01 message string with change order control given study with
 	 *         mwlstatus save ok and save order request
 	 */
-	public static String createHL7Message(RadiologyOrder radiologyOrder, OrderRequest orderRequest) {
+	public static String createHL7Message(RadiologyOrder radiologyOrder) {
 		String encodedHL7OrmMessage = null;
 		
 		try {

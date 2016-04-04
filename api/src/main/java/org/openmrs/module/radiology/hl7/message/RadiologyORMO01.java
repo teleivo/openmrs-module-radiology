@@ -31,7 +31,6 @@ import ca.uhn.hl7v2.parser.PipeParser;
  */
 public class RadiologyORMO01 {
 	
-	
 	private static final EncodingCharacters encodingCharacters = new EncodingCharacters('|', '^', '~', '\\', '&');
 	
 	private static final String sendingApplication = "OpenMRSRadiologyModule";
@@ -165,14 +164,14 @@ public class RadiologyORMO01 {
 			orderMessageType, orderMessageTriggerEvent);
 		
 		RadiologyPID.populatePatientIdentifier(result.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-			.getPID(), radiologyOrder.getPatient());
+				.getPID(), radiologyOrder.getPatient());
 		
 		RadiologyORC.populateCommonOrder(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-			.getORC(), radiologyOrder, commonOrderControl, commonOrderPriority);
+				.getORC(), radiologyOrder, commonOrderControl, commonOrderPriority);
 		
 		RadiologyOBR.populateObservationRequest(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-			.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-			.getOBR(), radiologyOrder);
+				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+				.getOBR(), radiologyOrder);
 		
 		RadiologyZDS.populateZDSSegment(result.getZDS(), radiologyOrder.getStudy());
 		

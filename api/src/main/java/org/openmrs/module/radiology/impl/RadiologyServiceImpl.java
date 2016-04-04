@@ -24,7 +24,6 @@ import org.openmrs.api.OrderContext;
 import org.openmrs.api.OrderService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.radiology.DicomUtils;
-import org.openmrs.module.radiology.DicomUtils.OrderRequest;
 import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
@@ -275,59 +274,37 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	@Override
-	public void sendModalityWorklist(RadiologyOrder radiologyOrder, OrderRequest orderRequest) {
+	public void sendModalityWorklist(RadiologyOrder radiologyOrder) {
 		final int HL7_SEND_SUCCESS = 1;
 		final int HL7_SEND_ERROR = 0;
 		MwlStatus mwlStatus = radiologyOrder.getStudy()
 				.getMwlStatus();
-		final String hl7blob = DicomUtils.createHL7Message(radiologyOrder, orderRequest);
+		final String hl7blob = DicomUtils.createHL7Message(radiologyOrder);
 		final int status = DicomUtils.sendHL7Worklist(hl7blob);
 		
 		if (status == HL7_SEND_SUCCESS) {
-			switch (orderRequest) {
-				case Save_Order:
+			switch (radiologyOrder.getAction()) {
+				case NEW:
 					if (mwlStatus == MwlStatus.DEFAULT || mwlStatus == MwlStatus.SAVE_ERR) {
 						mwlStatus = MwlStatus.SAVE_OK;
-					} else {
-						mwlStatus = MwlStatus.UPDATE_OK;
 					}
 					break;
-				case Void_Order:
-					mwlStatus = MwlStatus.VOID_OK;
-					break;
-				case Unvoid_Order:
-					mwlStatus = MwlStatus.UNVOID_OK;
-					break;
-				case Discontinue_Order:
+				case DISCONTINUE:
 					mwlStatus = MwlStatus.DISCONTINUE_OK;
-					break;
-				case Undiscontinue_Order:
-					mwlStatus = MwlStatus.UNDISCONTINUE_OK;
 					break;
 				default:
 					break;
 			}
 			
 		} else if (status == HL7_SEND_ERROR) {
-			switch (orderRequest) {
-				case Save_Order:
+			switch (radiologyOrder.getAction()) {
+				case NEW:
 					if (mwlStatus == MwlStatus.DEFAULT || mwlStatus == MwlStatus.SAVE_ERR) {
 						mwlStatus = MwlStatus.SAVE_ERR;
-					} else {
-						mwlStatus = MwlStatus.UPDATE_ERR;
 					}
 					break;
-				case Void_Order:
-					mwlStatus = MwlStatus.VOID_ERR;
-					break;
-				case Unvoid_Order:
-					mwlStatus = MwlStatus.UNVOID_ERR;
-					break;
-				case Discontinue_Order:
+				case DISCONTINUE:
 					mwlStatus = MwlStatus.DISCONTINUE_ERR;
-					break;
-				case Undiscontinue_Order:
-					mwlStatus = MwlStatus.UNDISCONTINUE_ERR;
 					break;
 				default:
 					break;
