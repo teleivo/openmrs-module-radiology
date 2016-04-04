@@ -11,8 +11,6 @@ package org.openmrs.module.radiology.hl7.message;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -51,6 +49,7 @@ import ca.uhn.hl7v2.util.Terser;
  * Tests {@link RadiologyORMO01}
  */
 public class RadiologyORMO01Test {
+	
 	
 	private static final EncodingCharacters encodingCharacters = new EncodingCharacters('|', '^', '~', '\\', '&');
 	
@@ -134,7 +133,7 @@ public class RadiologyORMO01Test {
 	public void RadiologyORMO01_shouldThrowIllegalArgumentExceptionGivenNullAsRadiologyOrder() throws Exception {
 		
 		expectedException.expect(IllegalArgumentException.class);
-		expectedException.expectMessage(is("radiologyOrder cannot be null."));
+		expectedException.expectMessage(is("order cannot be null."));
 		new RadiologyORMO01(null);
 	}
 	
@@ -282,86 +281,91 @@ public class RadiologyORMO01Test {
 		// MSH segment
 		MSH msh = ormO01.getMSH();
 		assertThat(msh.getVersionID()
-				.getVersionID()
-				.getValue(), is("2.3.1"));
+			.getVersionID()
+			.getValue(), is("2.3.1"));
 		assertThat(msh.getMessageType()
-				.getMessageType()
-				.getValue(), is("ORM"));
+			.getMessageType()
+			.getValue(), is("ORM"));
 		assertThat(msh.getMessageType()
-				.getTriggerEvent()
-				.getValue(), is("O01"));
+			.getTriggerEvent()
+			.getValue(), is("O01"));
 		assertThat(msh.getSendingApplication()
-				.getNamespaceID()
-				.getValue(), is("OpenMRSRadiologyModule"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRSRadiologyModule"));
 		assertThat(msh.getSendingFacility()
-				.getNamespaceID()
-				.getValue(), is("OpenMRS"));
+			.getNamespaceID()
+			.getValue(), is("OpenMRS"));
 		assertThat(msh.getProcessingID()
-				.getProcessingID()
-				.getValue(), is("P"));
+			.getProcessingID()
+			.getValue(), is("P"));
 		
 		// PID segment
 		Patient expectedPatient = radiologyOrder.getPatient();
 		PID pid = ormO01.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-				.getPID();
+			.getPID();
 		assertThat(pid.getPatientIdentifierList(0)
-				.getID()
-				.getValue(), is(expectedPatient.getPatientIdentifier()
+			.getID()
+			.getValue(),
+			is(expectedPatient.getPatientIdentifier()
 				.getIdentifier()));
 		assertThat(pid.getDateTimeOfBirth()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
 		assertThat(pid.getSex()
-				.getValue(), is(expectedPatient.getGender()));
+			.getValue(), is(expectedPatient.getGender()));
 		assertThat(pid.getPatientName(0)
-				.getFamilyLastName()
-				.getFamilyName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getFamilyLastName()
+			.getFamilyName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getFamilyName()));
 		assertThat(pid.getPatientName(0)
-				.getMiddleInitialOrName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getMiddleInitialOrName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getMiddleName()));
 		assertThat(pid.getPatientName(0)
-				.getGivenName()
-				.getValue(), is(expectedPatient.getPersonName()
+			.getGivenName()
+			.getValue(),
+			is(expectedPatient.getPersonName()
 				.getGivenName()));
 		
 		// ORC segment
 		ORC orc = ormO01.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC();
+			.getORC();
 		assertThat(orc.getOrderControl()
-				.getValue(), is("NW"));
+			.getValue(), is("NW"));
 		assertThat(orc.getPlacerOrderNumber()
-				.getEntityIdentifier()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getEntityIdentifier()
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(orc.getOrderStatus()
-				.getValue(), is(nullValue()));
+			.getValue(), is(nullValue()));
 		assertThat(orc.getQuantityTiming()
-				.getStartDateTime()
-				.getTimeOfAnEvent()
-				.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
+			.getStartDateTime()
+			.getTimeOfAnEvent()
+			.getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
 		assertThat(orc.getQuantityTiming()
-				.getPriority()
-				.getValue(), is("T"));
+			.getPriority()
+			.getValue(), is("T"));
 		
 		// OBR segment
 		OBR obr = ormO01.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-				.getOBR();
+			.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+			.getOBR();
 		assertThat(obr.getUniversalServiceID()
-				.getAlternateText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getAlternateText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		assertThat(obr.getPlacerField2()
-				.getValue(), is(radiologyOrder.getOrderNumber()));
+			.getValue(), is(radiologyOrder.getOrderNumber()));
 		assertThat(obr.getFillerField1()
-				.getValue(), is(String.valueOf(study.getStudyId())));
+			.getValue(), is(String.valueOf(study.getStudyId())));
 		assertThat(obr.getDiagnosticServSectID()
-				.getValue(), is(study.getModality()
+			.getValue(),
+			is(study.getModality()
 				.name()));
 		assertThat(obr.getProcedureCode()
-				.getText()
-				.getValue(), is(radiologyOrder.getInstructions()));
+			.getText()
+			.getValue(), is(radiologyOrder.getInstructions()));
 		
 		// ZDS Segment
 		Terser terser = new Terser(ormO01);
@@ -376,7 +380,8 @@ public class RadiologyORMO01Test {
 	 * @verifies return cancel order given order action discontinue
 	 */
 	@Test
-	public void convertOrderActionToCommonOrderControl_shouldReturnCancelOrderGivenOrderActionDiscontinue() throws Exception {
+	public void convertOrderActionToCommonOrderControl_shouldReturnCancelOrderGivenOrderActionDiscontinue()
+			throws Exception {
 		
 		radiologyOrder.setAction(Order.Action.DISCONTINUE);
 		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction()),
@@ -397,36 +402,40 @@ public class RadiologyORMO01Test {
 	
 	/**
 	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies return null given any other order action
+	 * @verifies throw illegal argument exception given null
 	 */
 	@Test
-	public void convertOrderActionToCommonOrderControl_shouldReturnNullGivenAnyOtherOrderAction() throws Exception {
+	public void convertOrderActionToCommonOrderControl_shouldThrowIllegalArgumentExceptionGivenNull() throws Exception {
 		
-		radiologyOrder.setAction(Order.Action.RENEW);
-		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction()), is(nullValue()));
-		
-		radiologyOrder.setAction(Order.Action.REVISE);
-		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction()), is(nullValue()));
+		expectedException.expect(IllegalArgumentException.class);
+		expectedException.expectMessage(is("orderAction cannot be null."));
+		RadiologyORMO01.convertOrderActionToCommonOrderControl(null);
 	}
 	
 	/**
 	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies return new order for order action new
+	 * @verifies throw unsupported operation exception given order action renew
 	 */
 	@Test
-	public void convertOrderActionToCommonOrderControl_shouldReturnNewOrderForOrderActionNew() throws Exception {
+	public void convertOrderActionToCommonOrderControl_shouldThrowUnsupportedOperationExceptionGivenOrderActionRenew()
+			throws Exception {
 		
-		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(null), is(nullValue()));
+		expectedException.expect(UnsupportedOperationException.class);
+		expectedException.expectMessage(is("Order.Action 'RENEW' not supported, can only be NEW or DISCONTINUE."));
+		RadiologyORMO01.convertOrderActionToCommonOrderControl(Order.Action.RENEW);
 	}
 	
 	/**
 	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies return null given null
+	 * @verifies throw unsupported operation exception given order action revise
 	 */
 	@Test
-	public void convertOrderActionToCommonOrderControl_shouldReturnNullGivenNull() throws Exception {
+	public void convertOrderActionToCommonOrderControl_shouldThrowUnsupportedOperationExceptionGivenOrderActionRevise()
+			throws Exception {
 		
-		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(null), is(nullValue()));
+		expectedException.expect(UnsupportedOperationException.class);
+		expectedException.expectMessage(is("Order.Action 'REVISE' not supported, can only be NEW or DISCONTINUE."));
+		RadiologyORMO01.convertOrderActionToCommonOrderControl(Order.Action.REVISE);
 	}
 	
 	/**

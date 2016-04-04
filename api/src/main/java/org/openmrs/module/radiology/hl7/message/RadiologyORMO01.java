@@ -31,6 +31,7 @@ import ca.uhn.hl7v2.parser.PipeParser;
  */
 public class RadiologyORMO01 {
 	
+	
 	private static final EncodingCharacters encodingCharacters = new EncodingCharacters('|', '^', '~', '\\', '&');
 	
 	private static final String sendingApplication = "OpenMRSRadiologyModule";
@@ -52,22 +53,28 @@ public class RadiologyORMO01 {
 	 * 
 	 * @param radiologyOrder radiology order
 	 * @should create new radiology ormo01 object given all params
-	 * @should throw illegal argument exception given null as radiologyOrder
+	 * @should throw illegal argument exception given null
 	 * @should throw illegal argument exception if given radiology orders study is null
 	 */
-	public RadiologyORMO01(RadiologyOrder radiologyOrder) {
+	public RadiologyORMO01(Order order) {
 		
-		if (radiologyOrder == null) {
-			throw new IllegalArgumentException("radiologyOrder cannot be null.");
-		} else {
-			if (radiologyOrder.getStudy() == null) {
-				throw new IllegalArgumentException("radiologyOrder.study cannot be null.");
-			}
+		if (order == null) {
+			throw new IllegalArgumentException("order cannot be null.");
 		}
 		
-		this.radiologyOrder = radiologyOrder;
-		this.commonOrderControl = RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction());
-		this.commonOrderPriority = RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(radiologyOrder.getUrgency());
+		if (order instanceof RadiologyOrder) {
+			this.radiologyOrder = (RadiologyOrder) order;
+		} else {
+			this.radiologyOrder = (RadiologyOrder) order.getPreviousOrder();
+		}
+		
+		if (this.radiologyOrder.getStudy() == null) {
+			throw new IllegalArgumentException("radiologyOrder.study cannot be null.");
+		}
+		
+		this.commonOrderControl = RadiologyORMO01.convertOrderActionToCommonOrderControl(order.getAction());
+		this.commonOrderPriority = RadiologyORMO01
+			.convertOrderUrgencyToCommonOrderPriority(this.radiologyOrder.getUrgency());
 	}
 	
 	/**
@@ -76,28 +83,31 @@ public class RadiologyORMO01 {
 	 * 
 	 * @param orderAction Order.Action to be converted to CommonOrderOrderControl
 	 * @return CommonOrderOrderControl for given Order.Action
+	 * @throws IllegalArgumentException given null
+	 * @throws UnsupportedOperationException for Order.Action RENEW or REVISE
 	 * @should return new order given order action new
 	 * @should return cancel order given order action discontinue
-	 * @should return null given any other order action
-	 * @should return null given null
+	 * @should throw illegal argument exception given null
+	 * @should throw unsupported operation exception given order action renew
+	 * @should throw unsupported operation exception given order action revise
 	 */
 	public static CommonOrderOrderControl convertOrderActionToCommonOrderControl(Order.Action orderAction) {
 		final CommonOrderOrderControl result;
 		
 		if (orderAction == null) {
-			result = null;
-		} else {
-			switch (orderAction) {
-				case NEW:
-					result = CommonOrderOrderControl.NEW_ORDER;
-					break;
-				case DISCONTINUE:
-					result = CommonOrderOrderControl.CANCEL_ORDER;
-					break;
-				default:
-					result = null;
-					break;
-			}
+			throw new IllegalArgumentException("orderAction cannot be null.");
+		}
+		
+		switch (orderAction) {
+			case NEW:
+				result = CommonOrderOrderControl.NEW_ORDER;
+				break;
+			case DISCONTINUE:
+				result = CommonOrderOrderControl.CANCEL_ORDER;
+				break;
+			default:
+				throw new UnsupportedOperationException(
+						"Order.Action '" + orderAction + "' not supported, can only be NEW or DISCONTINUE.");
 		}
 		return result;
 	}
@@ -164,14 +174,14 @@ public class RadiologyORMO01 {
 			orderMessageType, orderMessageTriggerEvent);
 		
 		RadiologyPID.populatePatientIdentifier(result.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-				.getPID(), radiologyOrder.getPatient());
+			.getPID(), radiologyOrder.getPatient());
 		
 		RadiologyORC.populateCommonOrder(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC(), radiologyOrder, commonOrderControl, commonOrderPriority);
+			.getORC(), radiologyOrder, commonOrderControl, commonOrderPriority);
 		
 		RadiologyOBR.populateObservationRequest(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-				.getOBR(), radiologyOrder);
+			.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+			.getOBR(), radiologyOrder);
 		
 		RadiologyZDS.populateZDSSegment(result.getZDS(), radiologyOrder.getStudy());
 		
