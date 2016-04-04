@@ -563,7 +563,6 @@ public class RadiologyOrderFormControllerTest extends BaseContextMockTest {
 		mockRadiologyOrderToDiscontinue.getStudy()
 				.setMwlStatus(MwlStatus.DISCONTINUE_ERR);
 		String discontinueReason = "Wrong Procedure";
-		Date discontinueDate = new GregorianCalendar(2015, Calendar.JANUARY, 01).getTime();
 		
 		Order mockDiscontinuationOrder = new Order();
 		mockDiscontinuationOrder.setOrderId(2);
@@ -580,9 +579,9 @@ public class RadiologyOrderFormControllerTest extends BaseContextMockTest {
 		when(radiologyService.getRadiologyOrderByOrderId(mockRadiologyOrderToDiscontinue.getOrderId())).thenReturn(
 			mockRadiologyOrderToDiscontinue);
 		when(
-			orderService.discontinueOrder(mockRadiologyOrderToDiscontinue, discontinueReason, discontinueDate,
-				mockRadiologyOrderToDiscontinue.getOrderer(), mockRadiologyOrderToDiscontinue.getEncounter())).thenReturn(
-			mockDiscontinuationOrder);
+			radiologyService.discontinueRadiologyOrder(mockRadiologyOrderToDiscontinue,
+				mockDiscontinuationOrder.getOrderer(), mockDiscontinuationOrder.getDateActivated(),
+				mockDiscontinuationOrder.getOrderReasonNonCoded())).thenReturn(mockDiscontinuationOrder);
 		
 		BindingResult orderErrors = mock(BindingResult.class);
 		ModelAndView modelAndView = radiologyOrderFormController.postDiscontinueRadiologyOrder(mockRequest, null,

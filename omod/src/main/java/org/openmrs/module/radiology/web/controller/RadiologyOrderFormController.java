@@ -53,7 +53,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(RadiologyOrderFormController.RADIOLOGY_ORDER_FORM_REQUEST_MAPPING)
 public class RadiologyOrderFormController {
 	
-	
 	private static final Log log = LogFactory.getLog(RadiologyOrderFormController.class);
 	
 	protected static final String RADIOLOGY_ORDER_FORM_REQUEST_MAPPING = "/module/radiology/radiologyOrder.form";
@@ -194,9 +193,8 @@ public class RadiologyOrderFormController {
 				
 				radiologyService.sendModalityWorklist(radiologyOrder);
 				if (radiologyOrder.getStudy()
-						.getMwlStatus() == MwlStatus.SAVE_ERR
-						|| radiologyOrder.getStudy()
-								.getMwlStatus() == MwlStatus.UPDATE_ERR) {
+						.getMwlStatus() == MwlStatus.SAVE_ERR || radiologyOrder.getStudy()
+						.getMwlStatus() == MwlStatus.UPDATE_ERR) {
 					request.getSession()
 							.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.savedFailWorklist");
 				} else {
@@ -204,8 +202,8 @@ public class RadiologyOrderFormController {
 							.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.saved");
 				}
 				
-				modelAndView.setViewName(
-					"redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId=" + radiologyOrder.getOrderId());
+				modelAndView.setViewName("redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId="
+						+ radiologyOrder.getOrderId());
 			}
 			catch (Exception ex) {
 				request.getSession()
@@ -250,14 +248,15 @@ public class RadiologyOrderFormController {
 			discontinuationOrder = radiologyService.discontinueRadiologyOrder(radiologyOrderToDiscontinue,
 				discontinuationOrder.getOrderer(), discontinuationOrder.getDateActivated(),
 				discontinuationOrder.getOrderReasonNonCoded());
+			radiologyOrderToDiscontinue = (RadiologyOrder) discontinuationOrder.getPreviousOrder();
 			
 			radiologyService.sendModalityWorklist(radiologyOrderToDiscontinue);
 			if (radiologyOrderToDiscontinue.getStudy()
 					.getMwlStatus() == MwlStatus.DISCONTINUE_OK) {
 				request.getSession()
 						.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.discontinuedSuccessfully");
-				modelAndView.setViewName(
-					"redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId=" + discontinuationOrder.getOrderId());
+				modelAndView.setViewName("redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId="
+						+ discontinuationOrder.getOrderId());
 			} else {
 				request.getSession()
 						.setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "radiology.failWorklist");
