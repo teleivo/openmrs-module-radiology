@@ -14,7 +14,6 @@ import java.util.Date;
 import org.openmrs.Order;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
-import org.openmrs.module.radiology.hl7.CommonOrderPriority;
 import org.openmrs.module.radiology.hl7.HL7Utils;
 import org.openmrs.module.radiology.hl7.custommodel.v231.message.ORM_O01;
 import org.openmrs.module.radiology.hl7.segment.RadiologyMSH;
@@ -46,8 +45,6 @@ public class RadiologyORMO01 {
 	
 	private final CommonOrderOrderControl commonOrderControl;
 	
-	private final CommonOrderPriority commonOrderPriority;
-	
 	/**
 	 * Constructor for <code>RadiologyORMO01</code>
 	 * 
@@ -73,7 +70,6 @@ public class RadiologyORMO01 {
 		}
 		
 		this.commonOrderControl = HL7Utils.convertOrderActionToCommonOrderControl(order.getAction());
-		this.commonOrderPriority = HL7Utils.convertOrderUrgencyToCommonOrderPriority(this.radiologyOrder.getUrgency());
 	}
 	
 	/**
@@ -106,7 +102,7 @@ public class RadiologyORMO01 {
 				.getPID(), radiologyOrder.getPatient());
 		
 		RadiologyORC.populateCommonOrder(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC(), radiologyOrder, commonOrderControl, commonOrderPriority);
+				.getORC(), radiologyOrder, commonOrderControl);
 		
 		RadiologyOBR.populateObservationRequest(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
 				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
