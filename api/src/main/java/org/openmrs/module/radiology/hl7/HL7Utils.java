@@ -9,14 +9,15 @@
  */
 package org.openmrs.module.radiology.hl7;
 
+import org.openmrs.Order;
 import org.openmrs.PersonName;
 
 import ca.uhn.hl7v2.model.DataTypeException;
 import ca.uhn.hl7v2.model.v231.datatype.XPN;
 
 /**
- * HL7Utils is a utility class transforming OpenMRS PersonName into an HL7 conform Extended Person
- * Name
+ * HL7Utils is a utility class containing methods for transforming OpenMRS PersonName into an HL7 conform Extended Person
+ * Name, mapping Order.Action and Order.Urgency to HL7 Order Control Code and Priority codes.
  */
 public class HL7Utils {
 	
@@ -50,6 +51,76 @@ public class HL7Utils {
 					.setValue(personName.getGivenName());
 			result.getMiddleInitialOrName()
 					.setValue(personName.getMiddleName());
+		}
+		return result;
+	}
+	
+	/**
+	 * Get the HL7 Order Control Code component used in an HL7 common order segment (ORC-1 field)
+	 * given the Order.Action.
+	 * 
+	 * @param orderAction Order.Action to be converted to CommonOrderOrderControl
+	 * @return CommonOrderOrderControl for given Order.Action
+	 * @throws IllegalArgumentException given null
+	 * @throws UnsupportedOperationException for Order.Action RENEW or REVISE
+	 * @should return new order given order action new
+	 * @should return cancel order given order action discontinue
+	 * @should throw illegal argument exception given null
+	 * @should throw unsupported operation exception given order action renew
+	 * @should throw unsupported operation exception given order action revise
+	 */
+	public static CommonOrderOrderControl convertOrderActionToCommonOrderControl(Order.Action orderAction) {
+		final CommonOrderOrderControl result;
+		
+		if (orderAction == null) {
+			throw new IllegalArgumentException("orderAction cannot be null.");
+		}
+		
+		switch (orderAction) {
+			case NEW:
+				result = CommonOrderOrderControl.NEW_ORDER;
+				break;
+			case DISCONTINUE:
+				result = CommonOrderOrderControl.CANCEL_ORDER;
+				break;
+			default:
+				throw new UnsupportedOperationException("Order.Action '" + orderAction
+						+ "' not supported, can only be NEW or DISCONTINUE.");
+		}
+		return result;
+	}
+	
+	/**
+	 * Get the HL7 Priority component of Quantity/Timing (ORC-7) field included in an HL7 version
+	 * 2.3.1 Common Order segment given the Order.Urgency.
+	 * 
+	 * @param orderUrgency Order.Urgency to be converted to CommonOrderPriority
+	 * @return CommonOrderPriority for given Order.Urgency
+	 * @should return routine given null
+	 * @should return stat given order urgency stat
+	 * @should return routine given order urgency routine
+	 * @should return timing critical given order urgency on scheduled date
+	 */
+	public static CommonOrderPriority convertOrderUrgencyToCommonOrderPriority(Order.Urgency orderUrgency) {
+		final CommonOrderPriority result;
+		
+		if (orderUrgency == null) {
+			result = CommonOrderPriority.ROUTINE;
+		} else {
+			switch (orderUrgency) {
+				case STAT:
+					result = CommonOrderPriority.STAT;
+					break;
+				case ROUTINE:
+					result = CommonOrderPriority.ROUTINE;
+					break;
+				case ON_SCHEDULED_DATE:
+					result = CommonOrderPriority.TIMING_CRITICAL;
+					break;
+				default:
+					result = CommonOrderPriority.ROUTINE;
+					break;
+			}
 		}
 		return result;
 	}

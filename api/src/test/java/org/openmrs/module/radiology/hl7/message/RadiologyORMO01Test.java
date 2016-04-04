@@ -33,8 +33,6 @@ import org.openmrs.PersonName;
 import org.openmrs.module.radiology.Modality;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.Study;
-import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
-import org.openmrs.module.radiology.hl7.CommonOrderPriority;
 import org.openmrs.module.radiology.hl7.custommodel.v231.message.ORM_O01;
 import org.springframework.util.ReflectionUtils;
 
@@ -166,7 +164,8 @@ public class RadiologyORMO01Test {
 		// + "PID|||100||Doe^John^Francis||19500401000000|M\r"
 		// + "ORC|NW|ORD-20|||||^^^20150204143500^^S\r"
 		// +
-		// "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
+		// "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN
+		// PANCREAS WITH IV CONTRAST\r"
 		// + "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
 		
 		// ORM_O01 ormMsg = (ORM_O01) saveOrderHL7Message;
@@ -367,111 +366,5 @@ public class RadiologyORMO01Test {
 		assertThat(terser.get("/.ZDS-1-2"), is(nullValue()));
 		assertThat(terser.get("/.ZDS-1-3"), is("Application"));
 		assertThat(terser.get("/.ZDS-1-4"), is("DICOM"));
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies return cancel order given order action discontinue
-	 */
-	@Test
-	public void convertOrderActionToCommonOrderControl_shouldReturnCancelOrderGivenOrderActionDiscontinue() throws Exception {
-		
-		radiologyOrder.setAction(Order.Action.DISCONTINUE);
-		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction()),
-			is(CommonOrderOrderControl.CANCEL_ORDER));
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies return new order given order action new
-	 */
-	@Test
-	public void convertOrderActionToCommonOrderControl_shouldReturnNewOrderGivenOrderActionNew() throws Exception {
-		
-		radiologyOrder.setAction(Order.Action.NEW);
-		assertThat(RadiologyORMO01.convertOrderActionToCommonOrderControl(radiologyOrder.getAction()),
-			is(CommonOrderOrderControl.NEW_ORDER));
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies throw illegal argument exception given null
-	 */
-	@Test
-	public void convertOrderActionToCommonOrderControl_shouldThrowIllegalArgumentExceptionGivenNull() throws Exception {
-		
-		expectedException.expect(IllegalArgumentException.class);
-		expectedException.expectMessage(is("orderAction cannot be null."));
-		RadiologyORMO01.convertOrderActionToCommonOrderControl(null);
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies throw unsupported operation exception given order action renew
-	 */
-	@Test
-	public void convertOrderActionToCommonOrderControl_shouldThrowUnsupportedOperationExceptionGivenOrderActionRenew()
-			throws Exception {
-		
-		expectedException.expect(UnsupportedOperationException.class);
-		expectedException.expectMessage(is("Order.Action 'RENEW' not supported, can only be NEW or DISCONTINUE."));
-		RadiologyORMO01.convertOrderActionToCommonOrderControl(Order.Action.RENEW);
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
-	 * @verifies throw unsupported operation exception given order action revise
-	 */
-	@Test
-	public void convertOrderActionToCommonOrderControl_shouldThrowUnsupportedOperationExceptionGivenOrderActionRevise()
-			throws Exception {
-		
-		expectedException.expect(UnsupportedOperationException.class);
-		expectedException.expectMessage(is("Order.Action 'REVISE' not supported, can only be NEW or DISCONTINUE."));
-		RadiologyORMO01.convertOrderActionToCommonOrderControl(Order.Action.REVISE);
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
-	 * @verifies return routine given null
-	 */
-	@Test
-	public void convertOrderUrgencyToCommonOrderPriority_shouldReturnRoutineGivenNull() throws Exception {
-		
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(null), is(CommonOrderPriority.ROUTINE));
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
-	 * @verifies return stat given order urgency stat
-	 */
-	@Test
-	public void convertOrderUrgencyToCommonOrderPriority_shouldReturnStatGivenOrderUrgencyStat() throws Exception {
-		
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(Order.Urgency.STAT),
-			is(CommonOrderPriority.STAT));
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
-	 * @verifies return routine given order urgency routine
-	 */
-	@Test
-	public void convertOrderUrgencyToCommonOrderPriority_shouldReturnRoutineGivenOrderUrgencyRoutine() throws Exception {
-		
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(Order.Urgency.ROUTINE),
-			is(CommonOrderPriority.ROUTINE));
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
-	 * @verifies return timing critical given order urgency on scheduled date
-	 */
-	@Test
-	public void convertOrderUrgencyToCommonOrderPriority_shouldReturnTimingCriticalGivenOrderUrgencyOnScheduledDate()
-			throws Exception {
-		
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(Order.Urgency.ON_SCHEDULED_DATE),
-			is(CommonOrderPriority.TIMING_CRITICAL));
 	}
 }
