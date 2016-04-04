@@ -287,27 +287,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		
 		MwlStatus mwlStatus = null;
 		if (status == HL7_SEND_SUCCESS) {
-			switch (order.getAction()) {
-				case NEW:
-					mwlStatus = MwlStatus.SAVE_OK;
-					break;
-				case DISCONTINUE:
-					mwlStatus = MwlStatus.DISCONTINUE_OK;
-					break;
-				default:
-					break;
-			}
+			mwlStatus = MwlStatus.IN_SYNC;
 		} else if (status == HL7_SEND_ERROR) {
-			switch (order.getAction()) {
-				case NEW:
-					mwlStatus = MwlStatus.SAVE_ERR;
-					break;
-				case DISCONTINUE:
-					mwlStatus = MwlStatus.DISCONTINUE_ERR;
-					break;
-				default:
-					break;
-			}
+			mwlStatus = MwlStatus.OUT_OF_SYNC;
 		}
 		
 		final RadiologyOrder radiologyOrder;

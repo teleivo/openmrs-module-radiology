@@ -16,17 +16,5 @@ package org.openmrs.module.radiology;
  */
 public enum MwlStatus {
 	
-	DEFAULT,
-	SAVE_OK,
-	SAVE_ERR,
-	UPDATE_OK,
-	UPDATE_ERR,
-	VOID_OK,
-	VOID_ERR,
-	DISCONTINUE_OK,
-	DISCONTINUE_ERR,
-	UNDISCONTINUE_OK,
-	UNDISCONTINUE_ERR,
-	UNVOID_OK,
-	UNVOID_ERR;
+	IN_SYNC, OUT_OF_SYNC;
 }
