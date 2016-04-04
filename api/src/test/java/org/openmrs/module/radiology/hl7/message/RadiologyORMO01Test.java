@@ -32,7 +32,6 @@ import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
 import org.openmrs.module.radiology.Modality;
-import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.Study;
 import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
@@ -193,32 +192,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see {@link RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)}
-	 * @verifies should return hl7 common order priority given order urgency
-	 */
-	@Test
-	public void getCommonOrderPriorityFrom_shouldReturnHL7CommonOrderPriorityGivenOrderUrgency() {
-		
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(Order.Urgency.STAT),
-			is(CommonOrderPriority.STAT));
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(Order.Urgency.ROUTINE),
-			is(CommonOrderPriority.ROUTINE));
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(Order.Urgency.ON_SCHEDULED_DATE),
-			is(CommonOrderPriority.TIMING_CRITICAL));
-	}
-	
-	/**
-	 * @see {@link RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)}
-	 * @verifies should return default hl7 common order priority given null
-	 */
-	@Test
-	public void convertOrderUrgencyToCommonOrderPriority_shouldReturnDefaultHL7CommonOrderPriorityGivenNull() {
-		
-		assertThat(RadiologyORMO01.convertOrderUrgencyToCommonOrderPriority(null), is(CommonOrderPriority.ROUTINE));
-	}
-	
-	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Action)
+	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
 	 * @verifies return cancel order given order action discontinue
 	 */
 	@Test
@@ -230,7 +204,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Action)
+	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
 	 * @verifies return new order given order action new
 	 */
 	@Test
@@ -242,7 +216,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Action)
+	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
 	 * @verifies return null given any other order action
 	 */
 	@Test
@@ -256,7 +230,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Action)
+	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
 	 * @verifies return new order for order action new
 	 */
 	@Test
@@ -266,7 +240,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Action)
+	 * @see RadiologyORMO01#convertOrderActionToCommonOrderControl(Order.Action)
 	 * @verifies return null given null
 	 */
 	@Test
@@ -276,7 +250,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Urgency)
+	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
 	 * @verifies return routine given null
 	 */
 	@Test
@@ -286,7 +260,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Urgency)
+	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
 	 * @verifies return stat given order urgency stat
 	 */
 	@Test
@@ -297,7 +271,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Urgency)
+	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
 	 * @verifies return routine given order urgency routine
 	 */
 	@Test
@@ -308,7 +282,7 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Urgency)
+	 * @see RadiologyORMO01#convertOrderUrgencyToCommonOrderPriority(Order.Urgency)
 	 * @verifies return timing critical given order urgency on scheduled date
 	 */
 	@Test
