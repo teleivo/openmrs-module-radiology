@@ -162,7 +162,7 @@ public class DicomUtils {
 		try {
 			final RadiologyORMO01 radiologyOrderMessage = new RadiologyORMO01(radiologyOrder, commonOrderOrderControl,
 					orderPriority);
-			encodedHL7OrmMessage = radiologyOrderMessage.createEncodedRadiologyORMO01Message();
+			encodedHL7OrmMessage = radiologyOrderMessage.encode();
 			log.info("Created HL7 ORM^O01 message \n" + encodedHL7OrmMessage);
 		}
 		catch (HL7Exception e) {

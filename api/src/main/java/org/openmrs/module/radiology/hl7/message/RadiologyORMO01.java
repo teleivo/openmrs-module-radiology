@@ -88,7 +88,7 @@ public class RadiologyORMO01 {
 	 * @throws HL7Exception
 	 * @should create encoded hl7 ormo01 message
 	 */
-	public String createEncodedRadiologyORMO01Message() throws HL7Exception {
+	public String encode() throws HL7Exception {
 		
 		return PipeParser.encode(createRadiologyORMO01Message(), encodingCharacters);
 	}

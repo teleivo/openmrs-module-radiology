@@ -171,15 +171,15 @@ public class RadiologyORMO01Test {
 	}
 	
 	/**
-	 * @see RadiologyORMO01#createEncodedRadiologyORMO01Message()
+	 * @see RadiologyORMO01#encode()
 	 * @verifies create encoded hl7 ormo01 message
 	 */
 	@Test
-	public void createEncodedRadiologyORMO01Message_shouldCreateEncodedHl7Ormo01Message() throws Exception {
+	public void encode_shouldCreateEncodedHl7Ormo01Message() throws Exception {
 		
 		RadiologyORMO01 radiologyOrderMessage = new RadiologyORMO01(radiologyOrder, CommonOrderOrderControl.NEW_ORDER,
 				CommonOrderPriority.STAT);
-		String encodedOrmMessage = radiologyOrderMessage.createEncodedRadiologyORMO01Message();
+		String encodedOrmMessage = radiologyOrderMessage.encode();
 		
 		assertThat(encodedOrmMessage, startsWith("MSH|^~\\&|OpenMRSRadiologyModule|OpenMRS|||"));
 		assertThat(
