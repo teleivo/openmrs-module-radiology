@@ -10,7 +10,6 @@
 package org.openmrs.module.radiology;
 
 import org.apache.log4j.Logger;
-import org.dcm4che.tool.hl7snd.HL7Snd;
 import org.dcm4che2.data.DicomElement;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.SpecificCharacterSet;
@@ -124,14 +123,6 @@ public class DicomUtils {
 			specificCharacterSet, 0);
 		
 		return performedProcedureStepStatus;
-	}
-	
-	// Send HL7 ORU message to dcm4chee.
-	public static int sendHL7Worklist(String hl7blob) {
-		final String input[] = { "-c", radiologyProperties.getPacsAddress() + ":" + radiologyProperties.getPacsHL7Port(),
-				hl7blob };
-		final int result = HL7Snd.main(input);
-		return result;
 	}
 	
 	static RadiologyService radiologyService() {

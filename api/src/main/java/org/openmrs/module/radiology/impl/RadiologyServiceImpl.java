@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dcm4che.tool.hl7snd.HL7Snd;
 import org.openmrs.Encounter;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -283,7 +284,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		final String hl7blob = new RadiologyORMO01(order).encode();
 		log.info("Created HL7 ORM^O01 message \n" + hl7blob);
 		
-		final int status = DicomUtils.sendHL7Worklist(hl7blob);
+		final String input[] = { "-c", radiologyProperties.getPacsAddress() + ":" + radiologyProperties.getPacsHL7Port(),
+				hl7blob };
+		final int status = HL7Snd.main(input);
 		
 		MwlStatus mwlStatus = null;
 		if (status == HL7_SEND_SUCCESS) {
