@@ -16,9 +16,6 @@ import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.SpecificCharacterSet;
 import org.dcm4che2.data.Tag;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.hl7.message.RadiologyORMO01;
-
-import ca.uhn.hl7v2.HL7Exception;
 
 /**
  * DicomUtils is a utility class helping to process DicomObject's like DICOM MPPS messages and
@@ -129,37 +126,6 @@ public class DicomUtils {
 		return performedProcedureStepStatus;
 	}
 	
-	/**
-	 * Create HL7 ORM^O01 message to create a worklist request. See IHE Radiology Technical
-	 * Framework Volume 2.
-	 * 
-	 * @param radiologyOrder radiology order for which the order message is created
-	 * @return encoded HL7 ORM^O01 message
-	 * @should return encoded HL7 ORMO01 message string with new order control given study with
-	 *         mwlstatus default and save order request
-	 * @should return encoded HL7 ORMO01 message string with cancel order control given study with
-	 *         mwlstatus default and void order request
-	 * @should return encoded HL7 ORMO01 message string with change order control given study with
-	 *         mwlstatus save ok and save order request
-	 */
-	public static String createHL7Message(RadiologyOrder radiologyOrder) {
-		String encodedHL7OrmMessage = null;
-		
-		try {
-			final RadiologyORMO01 radiologyOrderMessage = new RadiologyORMO01(radiologyOrder);
-			encodedHL7OrmMessage = radiologyOrderMessage.encode();
-			log.info("Created HL7 ORM^O01 message \n" + encodedHL7OrmMessage);
-		}
-		catch (HL7Exception e) {
-			log.error("Error creating ORM^O01 Message : " + e.getMessage());
-			log.error(e.getMessage(), e);
-		}
-		catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		return encodedHL7OrmMessage;
-	}
-	
 	// Send HL7 ORU message to dcm4chee.
 	public static int sendHL7Worklist(String hl7blob) {
 		final String input[] = { "-c", radiologyProperties.getPacsAddress() + ":" + radiologyProperties.getPacsHL7Port(),
@@ -171,5 +137,4 @@ public class DicomUtils {
 	static RadiologyService radiologyService() {
 		return Context.getService(RadiologyService.class);
 	}
-	
 }

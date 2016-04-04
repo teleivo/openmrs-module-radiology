@@ -25,6 +25,8 @@ import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportStatus;
 import org.springframework.transaction.annotation.Transactional;
 
+import ca.uhn.hl7v2.HL7Exception;
+
 @Transactional
 public interface RadiologyService extends OpenmrsService {
 	
@@ -129,7 +131,7 @@ public interface RadiologyService extends OpenmrsService {
 	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
 	
-	public void sendModalityWorklist(RadiologyOrder radiologyOrder);
+	public void sendModalityWorklist(RadiologyOrder radiologyOrder) throws HL7Exception;
 	
 	/**
 	 * Get Study by studyId

@@ -34,9 +34,12 @@ import org.openmrs.module.radiology.Study;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.db.RadiologyReportDAO;
 import org.openmrs.module.radiology.db.StudyDAO;
+import org.openmrs.module.radiology.hl7.message.RadiologyORMO01;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportStatus;
 import org.springframework.transaction.annotation.Transactional;
+
+import ca.uhn.hl7v2.HL7Exception;
 
 class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyService {
 	
@@ -274,12 +277,14 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	@Override
-	public void sendModalityWorklist(RadiologyOrder radiologyOrder) {
+	public void sendModalityWorklist(RadiologyOrder radiologyOrder) throws HL7Exception {
 		final int HL7_SEND_SUCCESS = 1;
 		final int HL7_SEND_ERROR = 0;
 		MwlStatus mwlStatus = radiologyOrder.getStudy()
 				.getMwlStatus();
-		final String hl7blob = DicomUtils.createHL7Message(radiologyOrder);
+		final String hl7blob = new RadiologyORMO01(radiologyOrder).encode();
+		log.info("Created HL7 ORM^O01 message \n" + hl7blob);
+		
 		final int status = DicomUtils.sendHL7Worklist(hl7blob);
 		
 		if (status == HL7_SEND_SUCCESS) {

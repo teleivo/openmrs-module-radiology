@@ -164,6 +164,99 @@ public class RadiologyORMO01Test {
 					+ "ORC|NW|ORD-20|||||^^^20150204143500^^S\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
+		
+		// ORM_O01 ormMsg = (ORM_O01) saveOrderHL7Message;
+		//
+		// // MSH segment
+		// MSH msh = ormMsg.getMSH();
+		// assertThat(msh.getVersionID()
+		// .getVersionID()
+		// .getValue(), is("2.3.1"));
+		// assertThat(msh.getMessageType()
+		// .getMessageType()
+		// .getValue(), is("ORM"));
+		// assertThat(msh.getMessageType()
+		// .getTriggerEvent()
+		// .getValue(), is("O01"));
+		// assertThat(msh.getSendingApplication()
+		// .getNamespaceID()
+		// .getValue(), is("OpenMRSRadiologyModule"));
+		// assertThat(msh.getSendingFacility()
+		// .getNamespaceID()
+		// .getValue(), is("OpenMRS"));
+		// assertThat(msh.getProcessingID()
+		// .getProcessingID()
+		// .getValue(), is("P"));
+		//
+		// // PID segment
+		// Patient expectedPatient = radiologyOrder.getPatient();
+		// PID pid = ormMsg.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
+		// .getPID();
+		// assertThat(pid.getPatientIdentifierList(0)
+		// .getID()
+		// .getValue(), is(expectedPatient.getPatientIdentifier()
+		// .getIdentifier()));
+		// assertThat(pid.getDateTimeOfBirth()
+		// .getTimeOfAnEvent()
+		// .getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(expectedPatient.getBirthdate())));
+		// assertThat(pid.getSex()
+		// .getValue(), is(expectedPatient.getGender()));
+		// assertThat(pid.getPatientName(0)
+		// .getFamilyLastName()
+		// .getFamilyName()
+		// .getValue(), is(expectedPatient.getPersonName()
+		// .getFamilyName()));
+		// assertThat(pid.getPatientName(0)
+		// .getMiddleInitialOrName()
+		// .getValue(), is(expectedPatient.getPersonName()
+		// .getMiddleName()));
+		// assertThat(pid.getPatientName(0)
+		// .getGivenName()
+		// .getValue(), is(expectedPatient.getPersonName()
+		// .getGivenName()));
+		//
+		// // ORC segment
+		// ORC orc = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
+		// .getORC();
+		// assertThat(orc.getOrderControl()
+		// .getValue(), is("NW"));
+		// assertThat(orc.getPlacerOrderNumber()
+		// .getEntityIdentifier()
+		// .getValue(), is(radiologyOrder.getOrderNumber()));
+		// assertThat(orc.getOrderStatus()
+		// .getValue(), is(nullValue()));
+		// assertThat(orc.getQuantityTiming()
+		// .getStartDateTime()
+		// .getTimeOfAnEvent()
+		// .getValue(), is(new SimpleDateFormat("yyyyMMddHHmmss").format(radiologyOrder.getEffectiveStartDate())));
+		// assertThat(orc.getQuantityTiming()
+		// .getPriority()
+		// .getValue(), is("T"));
+		//
+		// // OBR segment
+		// OBR obr = ormMsg.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
+		// .getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
+		// .getOBR();
+		// assertThat(obr.getUniversalServiceID()
+		// .getAlternateText()
+		// .getValue(), is(radiologyOrder.getInstructions()));
+		// assertThat(obr.getPlacerField2()
+		// .getValue(), is(radiologyOrder.getOrderNumber()));
+		// assertThat(obr.getFillerField1()
+		// .getValue(), is(String.valueOf(study.getStudyId())));
+		// assertThat(obr.getDiagnosticServSectID()
+		// .getValue(), is(study.getModality()
+		// .name()));
+		// assertThat(obr.getProcedureCode()
+		// .getText()
+		// .getValue(), is(radiologyOrder.getInstructions()));
+		//
+		// // ZDS Segment
+		// Terser terser = new Terser(ormMsg);
+		// assertThat(terser.get("/.ZDS-1-1"), is(study.getStudyInstanceUid()));
+		// assertThat(terser.get("/.ZDS-1-2"), is(nullValue()));
+		// assertThat(terser.get("/.ZDS-1-3"), is("Application"));
+		// assertThat(terser.get("/.ZDS-1-4"), is("DICOM"));
 	}
 	
 	/**
