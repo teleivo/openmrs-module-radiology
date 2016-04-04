@@ -277,22 +277,19 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	@Override
-	public void sendModalityWorklist(RadiologyOrder radiologyOrder) throws HL7Exception {
+	public boolean sendModalityWorklist(Order order) throws HL7Exception {
 		final int HL7_SEND_SUCCESS = 1;
 		final int HL7_SEND_ERROR = 0;
-		MwlStatus mwlStatus = radiologyOrder.getStudy()
-				.getMwlStatus();
-		final String hl7blob = new RadiologyORMO01(radiologyOrder).encode();
+		final String hl7blob = new RadiologyORMO01(order).encode();
 		log.info("Created HL7 ORM^O01 message \n" + hl7blob);
 		
 		final int status = DicomUtils.sendHL7Worklist(hl7blob);
 		
+		MwlStatus mwlStatus = null;
 		if (status == HL7_SEND_SUCCESS) {
-			switch (radiologyOrder.getAction()) {
+			switch (order.getAction()) {
 				case NEW:
-					if (mwlStatus == MwlStatus.DEFAULT || mwlStatus == MwlStatus.SAVE_ERR) {
-						mwlStatus = MwlStatus.SAVE_OK;
-					}
+					mwlStatus = MwlStatus.SAVE_OK;
 					break;
 				case DISCONTINUE:
 					mwlStatus = MwlStatus.DISCONTINUE_OK;
@@ -300,13 +297,10 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 				default:
 					break;
 			}
-			
 		} else if (status == HL7_SEND_ERROR) {
-			switch (radiologyOrder.getAction()) {
+			switch (order.getAction()) {
 				case NEW:
-					if (mwlStatus == MwlStatus.DEFAULT || mwlStatus == MwlStatus.SAVE_ERR) {
-						mwlStatus = MwlStatus.SAVE_ERR;
-					}
+					mwlStatus = MwlStatus.SAVE_ERR;
 					break;
 				case DISCONTINUE:
 					mwlStatus = MwlStatus.DISCONTINUE_ERR;
@@ -315,9 +309,17 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 					break;
 			}
 		}
+		
+		final RadiologyOrder radiologyOrder;
+		if (order instanceof RadiologyOrder) {
+			radiologyOrder = (RadiologyOrder) order;
+		} else {
+			radiologyOrder = (RadiologyOrder) order.getPreviousOrder();
+		}
 		radiologyOrder.getStudy()
 				.setMwlStatus(mwlStatus);
 		saveStudy(radiologyOrder.getStudy());
+		return status == HL7_SEND_SUCCESS ? true : false;
 	}
 	
 	/**

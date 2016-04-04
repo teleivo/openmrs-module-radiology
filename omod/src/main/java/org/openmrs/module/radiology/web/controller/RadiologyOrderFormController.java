@@ -191,15 +191,12 @@ public class RadiologyOrderFormController {
 			try {
 				radiologyService.placeRadiologyOrder(radiologyOrder);
 				
-				radiologyService.sendModalityWorklist(radiologyOrder);
-				if (radiologyOrder.getStudy()
-						.getMwlStatus() == MwlStatus.SAVE_ERR || radiologyOrder.getStudy()
-						.getMwlStatus() == MwlStatus.UPDATE_ERR) {
-					request.getSession()
-							.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.savedFailWorklist");
-				} else {
+				if (radiologyService.sendModalityWorklist(radiologyOrder)) {
 					request.getSession()
 							.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.saved");
+				} else {
+					request.getSession()
+							.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "radiology.savedFailWorklist");
 				}
 				
 				modelAndView.setViewName("redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId="
@@ -248,11 +245,8 @@ public class RadiologyOrderFormController {
 			discontinuationOrder = radiologyService.discontinueRadiologyOrder(radiologyOrderToDiscontinue,
 				discontinuationOrder.getOrderer(), discontinuationOrder.getDateActivated(),
 				discontinuationOrder.getOrderReasonNonCoded());
-			radiologyOrderToDiscontinue = (RadiologyOrder) discontinuationOrder.getPreviousOrder();
 			
-			radiologyService.sendModalityWorklist(radiologyOrderToDiscontinue);
-			if (radiologyOrderToDiscontinue.getStudy()
-					.getMwlStatus() == MwlStatus.DISCONTINUE_OK) {
+			if (radiologyService.sendModalityWorklist(discontinuationOrder)) {
 				request.getSession()
 						.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.discontinuedSuccessfully");
 				modelAndView.setViewName("redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId="

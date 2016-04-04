@@ -131,7 +131,7 @@ public interface RadiologyService extends OpenmrsService {
 	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
 	
-	public void sendModalityWorklist(RadiologyOrder radiologyOrder) throws HL7Exception;
+	public boolean sendModalityWorklist(Order order) throws HL7Exception;
 	
 	/**
 	 * Get Study by studyId
