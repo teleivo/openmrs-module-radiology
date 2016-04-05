@@ -17,8 +17,7 @@ import org.dcm4che2.data.Tag;
 import org.openmrs.api.context.Context;
 
 /**
- * DicomUtils is a utility class helping to process DicomObject's like DICOM MPPS messages and
- * create and send HL7 order messages for RadiologyOrder's
+ * DicomUtils is a utility class helping to process DicomObject's like DICOM MPPS messages
  */
 public class DicomUtils {
 	
