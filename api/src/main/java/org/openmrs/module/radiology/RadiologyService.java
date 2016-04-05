@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -144,8 +145,9 @@ public interface RadiologyService extends OpenmrsService {
 	 * @throws HL7Exception
 	 * @throws LLPException
 	 * @throws NumberFormatException
+	 * @throws IOException
 	 */
-	public boolean updateOrderInPacs(Order order) throws HL7Exception, NumberFormatException, LLPException;
+	public boolean updateOrderInPacs(Order order) throws HL7Exception, NumberFormatException, LLPException, IOException;
 	
 	/**
 	 * Get Study by studyId

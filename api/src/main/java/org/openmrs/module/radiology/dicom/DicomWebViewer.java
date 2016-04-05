@@ -23,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class DicomWebViewer {
 	
+	
 	@Autowired
 	private RadiologyProperties radiologyProperties;
 	

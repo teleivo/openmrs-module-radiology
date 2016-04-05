@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -279,7 +280,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	@Override
-	public boolean updateOrderInPacs(Order order) throws HL7Exception, NumberFormatException, LLPException {
+	public boolean updateOrderInPacs(Order order) throws HL7Exception, NumberFormatException, LLPException, IOException {
 		final ORM_O01 orderMessage = new RadiologyORMO01(order).createRadiologyORMO01Message();
 		// log.info("Created HL7 ORM^O01 message \n" + hl7blob);
 		final boolean status = HL7Utils.sendHL7Message(radiologyProperties.getPacsAddress(),

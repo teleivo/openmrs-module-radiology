@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology.hl7.message;
 
+import java.io.IOException;
 import java.util.Date;
 
 import org.openmrs.Order;
@@ -77,9 +78,10 @@ public class RadiologyORMO01 {
 	 * 
 	 * @return encoded HL7 ORM^O01 message
 	 * @throws HL7Exception
+	 * @throws IOException
 	 * @should create encoded hl7 ormo01 message
 	 */
-	public String encode() throws HL7Exception {
+	public String encode() throws HL7Exception, IOException {
 		
 		return PipeParser.encode(createRadiologyORMO01Message(), encodingCharacters);
 	}
@@ -89,9 +91,10 @@ public class RadiologyORMO01 {
 	 * 
 	 * @return ORM_O01 message
 	 * @throws HL7Exception
+	 * @throws IOException
 	 * @should create ormo01 message
 	 */
-	public ORM_O01 createRadiologyORMO01Message() throws HL7Exception {
+	public ORM_O01 createRadiologyORMO01Message() throws HL7Exception, IOException {
 		
 		final ORM_O01 result = new ORM_O01();
 		
