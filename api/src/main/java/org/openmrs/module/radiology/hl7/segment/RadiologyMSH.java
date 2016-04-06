@@ -9,7 +9,9 @@
  */
 package org.openmrs.module.radiology.hl7.segment;
 
+import java.io.IOException;
 import java.util.Date;
+import ca.uhn.hl7v2.util.MessageIDGenerator;
 
 import org.openmrs.module.radiology.utils.DateTimeUtils;
 
@@ -38,6 +40,7 @@ public class RadiologyMSH {
 	 * @param messageTriggerEvent corresponds to MSH-9: Message Type (trigger event (ID))
 	 * @return populated messageHeaderSegment segment
 	 * @throws DataTypeException
+	 * @throws IOException
 	 * @should return populated message header segment given all parameters
 	 * @should return populated message header segment given empty sending application
 	 * @should return populated message header segment given empty sending facility
@@ -47,11 +50,13 @@ public class RadiologyMSH {
 	 * @should fail given null as message header segment
 	 */
 	public static MSH populateMessageHeader(MSH messageHeaderSegment, String sendingApplication, String sendingFacility,
-			Date dateTimeOfMessage, String messageType, String messageTriggerEvent) throws DataTypeException {
+			Date dateTimeOfMessage, String messageType, String messageTriggerEvent) throws DataTypeException, IOException {
 		
 		if (messageHeaderSegment == null) {
 			throw new IllegalArgumentException("messageHeaderSegment cannot be null.");
 		}
+		
+		MessageIDGenerator messageIDGenerator = MessageIDGenerator.getInstance();
 		
 		messageHeaderSegment.getFieldSeparator()
 				.setValue("|");
@@ -78,6 +83,8 @@ public class RadiologyMSH {
 		messageHeaderSegment.getVersionID()
 				.getVersionID()
 				.setValue("2.3.1");
+		messageHeaderSegment.getMessageControlID()
+				.setValue(messageIDGenerator.getNewID());
 		
 		return messageHeaderSegment;
 	}
