@@ -21,14 +21,15 @@ import org.openmrs.module.radiology.hl7.v231.segment.RadiologyORC;
 import org.openmrs.module.radiology.hl7.v231.segment.RadiologyPID;
 import org.openmrs.module.radiology.hl7.v231.segment.RadiologyZDS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.parser.EncodingCharacters;
 import ca.uhn.hl7v2.parser.PipeParser;
 
 /**
  * Translates a <code>RadiologyOrder</code> to an HL7 ORM^O01 message
  */
+@Component
 public class RadiologyORMO01 {
 	
 	private static final String sendingApplication = "OpenMRSRadiologyModule";
@@ -38,6 +39,9 @@ public class RadiologyORMO01 {
 	private static final String orderMessageType = "ORM";
 	
 	private static final String orderMessageTriggerEvent = "O01";
+	
+	@Autowired
+	RadiologyMSH radiologyMSH;
 	
 	/**
 	 * Create encoded <code>ORM_O01</code> message (version 2.3.1) from a <code>RadiologyOrder</code> and set the Order
@@ -58,9 +62,6 @@ public class RadiologyORMO01 {
 		return PipeParser.encode(this.createMessage(radiologyOrder, OrderControlelement), HL7Constants.ENCODING_CHARACTERS);
 	}
 	
-	@Autowired
-	RadiologyMSH radiologyMSH;
-	
 	/**
 	 * Create <code>ORM_O01</code> message (version 2.3.1) from a <code>RadiologyOrder</code> and set the Order Control Code
 	 * 
@@ -73,7 +74,8 @@ public class RadiologyORMO01 {
 	 * @should throw illegal argument exception if given radiology orders study is null
 	 * @should throw illegal argument exception given null as orderControlElement
 	 */
-	public ORM_O01 createMessage(RadiologyOrder radiologyOrder, OrderControlElement orderControlElement) throws HL7Exception {
+	public ORM_O01 createMessage(RadiologyOrder radiologyOrder, OrderControlElement orderControlElement)
+			throws HL7Exception {
 		
 		if (radiologyOrder == null) {
 			throw new IllegalArgumentException("radiologyOrder cannot be null.");
@@ -93,14 +95,17 @@ public class RadiologyORMO01 {
 			orderMessageType, orderMessageTriggerEvent);
 		
 		RadiologyPID.populatePatientIdentifier(result.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()
-				.getPID(), radiologyOrder.getPatient());
+				.getPID(),
+			radiologyOrder.getPatient());
 		
 		RadiologyORC.populateCommonOrder(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
-				.getORC(), radiologyOrder, orderControlElement);
+				.getORC(),
+			radiologyOrder, orderControlElement);
 		
 		RadiologyOBR.populateObservationRequest(result.getORCOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTECTIBLG()
 				.getOBRRQDRQ1ODSODTRXONTEDG1RXRRXCNTEOBXNTE()
-				.getOBR(), radiologyOrder);
+				.getOBR(),
+			radiologyOrder);
 		
 		RadiologyZDS.populateZDSSegment(result.getZDS(), radiologyOrder.getStudy());
 		

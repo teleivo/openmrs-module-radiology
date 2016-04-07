@@ -14,6 +14,7 @@ import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
@@ -24,6 +25,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
@@ -34,14 +37,24 @@ import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.Study;
 import org.openmrs.module.radiology.hl7.HL7Constants;
 import org.openmrs.module.radiology.hl7.custommodel.v231.message.ORM_O01;
+import org.openmrs.module.radiology.hl7.util.MessageControlIDGenerator;
 import org.openmrs.module.radiology.hl7.v231.code.OrderControlElement;
+import org.openmrs.module.radiology.hl7.v231.segment.RadiologyMSH;
+import org.openmrs.test.BaseContextMockTest;
 
 import ca.uhn.hl7v2.parser.PipeParser;
 
 /**
  * Tests {@link RadiologyORMO01}
  */
-public class RadiologyORMO01Test {
+public class RadiologyORMO01Test extends BaseContextMockTest {
+	
+	
+	@Mock
+	MessageControlIDGenerator messageControlIDGenerator;
+	
+	@InjectMocks
+	RadiologyMSH radiologyMSH;
 	
 	RadiologyORMO01 radiologyORMO01;
 	
@@ -56,6 +69,7 @@ public class RadiologyORMO01Test {
 	
 	@Before
 	public void runBeforeEachTest() throws Exception {
+		when(messageControlIDGenerator.getNewMessageControlID()).thenReturn("2844");
 		
 		radiologyORMO01 = new RadiologyORMO01();
 		
@@ -120,12 +134,10 @@ public class RadiologyORMO01Test {
 		assertNotNull(radiologyOrderMessage);
 		
 		String encodedOrmMessage = PipeParser.encode(radiologyOrderMessage, HL7Constants.ENCODING_CHARACTERS);
-		assertThat(encodedOrmMessage, startsWith("MSH|" + HL7Constants.ENCODING_CHARACTERS
-				+ "|OpenMRSRadiologyModule|OpenMRS|||"));
-		assertThat(
-			encodedOrmMessage,
-			endsWith("||ORM^O01||P|2.3.1\r"
-					+ "PID|||100||Doe^John^Francis||19500401000000|M\r"
+		assertThat(encodedOrmMessage,
+			startsWith("MSH|" + HL7Constants.ENCODING_CHARACTERS + "|OpenMRSRadiologyModule|OpenMRS|||"));
+		assertThat(encodedOrmMessage,
+			endsWith("||ORM^O01||P|2.3.1\r" + "PID|||100||Doe^John^Francis||19500401000000|M\r"
 					+ "ORC|NW|ORD-20|||||^^^20150204143500^^T\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
@@ -178,12 +190,10 @@ public class RadiologyORMO01Test {
 		
 		String encodedOrmMessage = radiologyORMO01.createEncodedMessage(radiologyOrder, OrderControlElement.NEW_ORDER);
 		
-		assertThat(encodedOrmMessage, startsWith("MSH|" + HL7Constants.ENCODING_CHARACTERS
-				+ "|OpenMRSRadiologyModule|OpenMRS|||"));
-		assertThat(
-			encodedOrmMessage,
-			endsWith("||ORM^O01||P|2.3.1\r"
-					+ "PID|||100||Doe^John^Francis||19500401000000|M\r"
+		assertThat(encodedOrmMessage,
+			startsWith("MSH|" + HL7Constants.ENCODING_CHARACTERS + "|OpenMRSRadiologyModule|OpenMRS|||"));
+		assertThat(encodedOrmMessage,
+			endsWith("||ORM^O01||P|2.3.1\r" + "PID|||100||Doe^John^Francis||19500401000000|M\r"
 					+ "ORC|NW|ORD-20|||||^^^20150204143500^^T\r"
 					+ "OBR||||^^^^CT ABDOMEN PANCREAS WITH IV CONTRAST|||||||||||||||ORD-20|1||||CT||||||||||||||||||||^CT ABDOMEN PANCREAS WITH IV CONTRAST\r"
 					+ "ZDS|1.2.826.0.1.3680043.8.2186.1.1^^Application^DICOM\r"));
@@ -206,7 +216,8 @@ public class RadiologyORMO01Test {
 	 * @verifies throw illegal argument exception if given radiology orders study is null
 	 */
 	@Test
-	public void createEncodedMessage_shouldThrowIllegalArgumentExceptionIfGivenRadiologyOrdersStudyIsNull() throws Exception {
+	public void createEncodedMessage_shouldThrowIllegalArgumentExceptionIfGivenRadiologyOrdersStudyIsNull()
+			throws Exception {
 		
 		radiologyOrder.setStudy(null);
 		
