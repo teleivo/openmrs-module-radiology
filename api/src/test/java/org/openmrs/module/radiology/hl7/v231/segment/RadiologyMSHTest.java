@@ -11,14 +11,20 @@ package org.openmrs.module.radiology.hl7.v231.segment;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.openmrs.module.radiology.hl7.HL7Constants;
+import org.openmrs.module.radiology.hl7.util.MessageControlIDGenerator;
+import org.openmrs.test.BaseContextMockTest;
 import org.openmrs.test.Verifies;
 
 import ca.uhn.hl7v2.HL7Exception;
@@ -29,10 +35,22 @@ import ca.uhn.hl7v2.parser.PipeParser;
 /**
  * Tests {@link RadiologyMSH}
  */
-public class RadiologyMSHTest {
+public class RadiologyMSHTest extends BaseContextMockTest {
+	
+	
+	@Mock
+	MessageControlIDGenerator messageControlIDGenerator;
+	
+	@InjectMocks
+	RadiologyMSH radiologyMSH;
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
+	
+	@Before
+	public void runBeforeAllTests() {
+		when(messageControlIDGenerator.getNewMessageControlID()).thenReturn("2844");
+	}
 	
 	/**
 	 * Test RadiologyMSH.populateMessageHeader
@@ -52,10 +70,10 @@ public class RadiologyMSHTest {
 		
 		ORM_O01 message = new ORM_O01();
 		
-		RadiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", cal.getTime(), "ORM", "O01");
-		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS), is("MSH|"
-				+ HL7Constants.ENCODING_CHARACTERS.toString()
-				+ "|OpenMRSRadiology|OpenMRS|||20130228222510||ORM^O01||P|2.3.1\r"));
+		radiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", cal.getTime(), "ORM", "O01");
+		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS),
+			is("MSH|" + HL7Constants.ENCODING_CHARACTERS.toString()
+					+ "|OpenMRSRadiology|OpenMRS|||20130228222510||ORM^O01|2844|P|2.3.1\r"));
 	}
 	
 	/**
@@ -77,9 +95,9 @@ public class RadiologyMSHTest {
 		
 		ORM_O01 message = new ORM_O01();
 		
-		RadiologyMSH.populateMessageHeader(message.getMSH(), "", "OpenMRS", cal.getTime(), "ORM", "O01");
-		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS), is("MSH|"
-				+ HL7Constants.ENCODING_CHARACTERS.toString() + "||OpenMRS|||20130228222510||ORM^O01||P|2.3.1\r"));
+		radiologyMSH.populateMessageHeader(message.getMSH(), "", "OpenMRS", cal.getTime(), "ORM", "O01");
+		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS),
+			is("MSH|" + HL7Constants.ENCODING_CHARACTERS.toString() + "||OpenMRS|||20130228222510||ORM^O01|2844|P|2.3.1\r"));
 	}
 	
 	/**
@@ -101,9 +119,9 @@ public class RadiologyMSHTest {
 		
 		ORM_O01 message = new ORM_O01();
 		
-		RadiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "", cal.getTime(), "ORM", "O01");
+		radiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "", cal.getTime(), "ORM", "O01");
 		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS), is("MSH|"
-				+ HL7Constants.ENCODING_CHARACTERS.toString() + "|OpenMRSRadiology||||20130228222510||ORM^O01||P|2.3.1\r"));
+				+ HL7Constants.ENCODING_CHARACTERS.toString() + "|OpenMRSRadiology||||20130228222510||ORM^O01|2844|P|2.3.1\r"));
 	}
 	
 	/**
@@ -124,9 +142,9 @@ public class RadiologyMSHTest {
 		
 		ORM_O01 message = new ORM_O01();
 		
-		RadiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", cal.getTime(), "", "O01");
+		radiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", cal.getTime(), "", "O01");
 		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS),
-			is("MSH|^~\\&|OpenMRSRadiology|OpenMRS|||20130228222510||^O01||P|2.3.1\r"));
+			is("MSH|^~\\&|OpenMRSRadiology|OpenMRS|||20130228222510||^O01|2844|P|2.3.1\r"));
 	}
 	
 	/**
@@ -148,10 +166,10 @@ public class RadiologyMSHTest {
 		
 		ORM_O01 message = new ORM_O01();
 		
-		RadiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", cal.getTime(), "ORM", "");
+		radiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", cal.getTime(), "ORM", "");
 		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS),
 			is("MSH|" + HL7Constants.ENCODING_CHARACTERS.toString()
-					+ "|OpenMRSRadiology|OpenMRS|||20130228222510||ORM||P|2.3.1\r"));
+					+ "|OpenMRSRadiology|OpenMRS|||20130228222510||ORM|2844|P|2.3.1\r"));
 	}
 	
 	/**
@@ -167,9 +185,9 @@ public class RadiologyMSHTest {
 		
 		ORM_O01 message = new ORM_O01();
 		
-		RadiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", null, "ORM", "O01");
-		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS), is("MSH|"
-				+ HL7Constants.ENCODING_CHARACTERS.toString() + "|OpenMRSRadiology|OpenMRS|||||ORM^O01||P|2.3.1\r"));
+		radiologyMSH.populateMessageHeader(message.getMSH(), "OpenMRSRadiology", "OpenMRS", null, "ORM", "O01");
+		assertThat(PipeParser.encode(message, HL7Constants.ENCODING_CHARACTERS),
+			is("MSH|" + HL7Constants.ENCODING_CHARACTERS.toString() + "|OpenMRSRadiology|OpenMRS|||||ORM^O01|2844|P|2.3.1\r"));
 	}
 	
 	/**
@@ -190,6 +208,6 @@ public class RadiologyMSHTest {
 		
 		expectedException.expect(IllegalArgumentException.class);
 		expectedException.expectMessage(is("messageHeaderSegment cannot be null."));
-		RadiologyMSH.populateMessageHeader(null, "OpenMRSRadiology", "OpenMRS", cal.getTime(), "ORM", "O01");
+		radiologyMSH.populateMessageHeader(null, "OpenMRSRadiology", "OpenMRS", cal.getTime(), "ORM", "O01");
 	}
 }

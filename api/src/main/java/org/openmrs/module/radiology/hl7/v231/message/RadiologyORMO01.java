@@ -20,6 +20,7 @@ import org.openmrs.module.radiology.hl7.v231.segment.RadiologyOBR;
 import org.openmrs.module.radiology.hl7.v231.segment.RadiologyORC;
 import org.openmrs.module.radiology.hl7.v231.segment.RadiologyPID;
 import org.openmrs.module.radiology.hl7.v231.segment.RadiologyZDS;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.parser.EncodingCharacters;
@@ -57,6 +58,9 @@ public class RadiologyORMO01 {
 		return PipeParser.encode(this.createMessage(radiologyOrder, OrderControlelement), HL7Constants.ENCODING_CHARACTERS);
 	}
 	
+	@Autowired
+	RadiologyMSH radiologyMSH;
+	
 	/**
 	 * Create <code>ORM_O01</code> message (version 2.3.1) from a <code>RadiologyOrder</code> and set the Order Control Code
 	 * 
@@ -85,7 +89,7 @@ public class RadiologyORMO01 {
 		
 		final ORM_O01 result = new ORM_O01();
 		
-		RadiologyMSH.populateMessageHeader(result.getMSH(), sendingApplication, sendingFacility, new Date(),
+		radiologyMSH.populateMessageHeader(result.getMSH(), sendingApplication, sendingFacility, new Date(),
 			orderMessageType, orderMessageTriggerEvent);
 		
 		RadiologyPID.populatePatientIdentifier(result.getPIDPD1NTEPV1PV2IN1IN2IN3GT1AL1()

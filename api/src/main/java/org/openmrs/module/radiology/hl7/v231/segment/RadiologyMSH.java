@@ -13,6 +13,9 @@ import java.util.Date;
 
 import org.openmrs.module.radiology.hl7.HL7Constants;
 import org.openmrs.module.radiology.hl7.util.DateTimeUtils;
+import org.openmrs.module.radiology.hl7.util.MessageControlIDGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import ca.uhn.hl7v2.model.DataTypeException;
 import ca.uhn.hl7v2.model.v231.segment.MSH;
@@ -20,11 +23,11 @@ import ca.uhn.hl7v2.model.v231.segment.MSH;
 /**
  * RadiologyMSH is a utility class populating an HL7 Message Header
  */
+@Component
 public class RadiologyMSH {
 	
-	private RadiologyMSH() {
-		// This class is a utility class which should not be instantiated
-	};
+	@Autowired
+	private MessageControlIDGenerator messageControlIDGenerator;
 	
 	/**
 	 * Fill HL7 (version 2.3.1) Message Header (MSH) with Sending Facility, Date/Time Of Message,
@@ -47,7 +50,7 @@ public class RadiologyMSH {
 	 * @should return populated message header segment given null as date time of message
 	 * @should fail given null as message header segment
 	 */
-	public static MSH populateMessageHeader(MSH messageHeaderSegment, String sendingApplication, String sendingFacility,
+	public MSH populateMessageHeader(MSH messageHeaderSegment, String sendingApplication, String sendingFacility,
 			Date dateTimeOfMessage, String messageType, String messageTriggerEvent) throws DataTypeException {
 		
 		if (messageHeaderSegment == null) {
@@ -71,6 +74,8 @@ public class RadiologyMSH {
 		messageHeaderSegment.getMessageType()
 				.getTriggerEvent()
 				.setValue(messageTriggerEvent);
+		messageHeaderSegment.getMessageControlID()
+				.setValue(messageControlIDGenerator.getNewMessageControlID());
 		messageHeaderSegment.getProcessingID()
 				.getProcessingID()
 				.setValue("P");
