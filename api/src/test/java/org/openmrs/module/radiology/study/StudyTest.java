@@ -1,9 +1,11 @@
-package org.openmrs.module.radiology;
+package org.openmrs.module.radiology.study;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.openmrs.module.radiology.PerformedProcedureStepStatus;
+import org.openmrs.module.radiology.study.Study;
 
 public class StudyTest {
 	

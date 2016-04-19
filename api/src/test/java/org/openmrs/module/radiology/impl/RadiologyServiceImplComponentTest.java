@@ -43,8 +43,8 @@ import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
-import org.openmrs.module.radiology.Study;
 import org.openmrs.module.radiology.db.StudyDAO;
+import org.openmrs.module.radiology.study.Study;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -128,7 +128,7 @@ public class RadiologyServiceImplComponentTest extends BaseModuleContextSensitiv
 		}
 		
 		saveStudyMethod = RadiologyServiceImpl.class.getDeclaredMethod("saveStudy",
-			new Class[] { org.openmrs.module.radiology.Study.class });
+			new Class[] { org.openmrs.module.radiology.study.Study.class });
 		saveStudyMethod.setAccessible(true);
 		
 		updateStudyMwlStatusMethod = RadiologyServiceImpl.class.getDeclaredMethod("updateStudyMwlStatus", new Class[] {

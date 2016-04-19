@@ -35,7 +35,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyService;
-import org.openmrs.module.radiology.Study;
+import org.openmrs.module.radiology.study.Study;
 import org.openmrs.module.radiology.test.RadiologyTestData;
 import org.openmrs.test.BaseContextMockTest;
 import org.springframework.beans.TypeMismatchException;

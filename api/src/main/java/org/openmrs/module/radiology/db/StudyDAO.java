@@ -12,7 +12,7 @@ package org.openmrs.module.radiology.db;
 import java.util.List;
 
 import org.openmrs.module.radiology.RadiologyOrder;
-import org.openmrs.module.radiology.Study;
+import org.openmrs.module.radiology.study.Study;
 
 /**
  * Study-related database functions
