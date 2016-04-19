@@ -33,11 +33,11 @@ import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
-import org.openmrs.module.radiology.db.StudyDAO;
 import org.openmrs.module.radiology.hl7.util.HL7Sender;
 import org.openmrs.module.radiology.hl7.v231.code.OrderControlElement;
 import org.openmrs.module.radiology.hl7.v231.message.RadiologyORMO01;
 import org.openmrs.module.radiology.study.Study;
+import org.openmrs.module.radiology.study.StudyDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 

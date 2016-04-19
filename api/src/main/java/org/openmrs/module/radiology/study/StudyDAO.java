@@ -7,12 +7,11 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.radiology.db;
+package org.openmrs.module.radiology.study;
 
 import java.util.List;
 
 import org.openmrs.module.radiology.RadiologyOrder;
-import org.openmrs.module.radiology.study.Study;
 
 /**
  * Study-related database functions
