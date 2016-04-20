@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.radiology;
+package org.openmrs.module.radiology.order;
 
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
@@ -45,6 +45,9 @@ import org.openmrs.api.OrderService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.ProviderService;
 import org.openmrs.api.VisitService;
+import org.openmrs.module.radiology.Modality;
+import org.openmrs.module.radiology.PerformedProcedureStepStatus;
+import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.order.RadiologyOrderService;
 import org.openmrs.module.radiology.study.Study;
@@ -55,7 +58,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 /**
  * Tests {@link RadiologyOrderService}
  */
-public class RadiologyServiceComponentTest extends BaseModuleContextSensitiveTest {
+public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensitiveTest {
 	
 	private static final String STUDIES_TEST_DATASET = "org/openmrs/module/radiology/include/RadiologyOrderServiceComponentTestDataset.xml";
 	
