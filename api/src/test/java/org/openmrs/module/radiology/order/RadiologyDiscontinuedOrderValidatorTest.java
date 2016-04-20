@@ -8,7 +8,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-package org.openmrs.module.radiology.validator;
+package org.openmrs.module.radiology.order;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -16,6 +16,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.openmrs.Provider;
+import org.openmrs.module.radiology.order.RadiologyDiscontinuedOrderValidator;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.Order;
 import org.springframework.validation.BindException;
