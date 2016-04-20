@@ -15,7 +15,7 @@ import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.dicom.DicomWebViewer;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
-import org.openmrs.module.radiology.validator.RadiologyReportValidator;
+import org.openmrs.module.radiology.report.RadiologyReportValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
