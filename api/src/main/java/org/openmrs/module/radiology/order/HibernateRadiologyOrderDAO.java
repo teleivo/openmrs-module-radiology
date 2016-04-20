@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  * @see org.openmrs.module.radiology.order.RadiologyOrderService
  */
 @Repository
-public class HibernateRadiologyOrderDAO implements RadiologyOrderDAO {
+class HibernateRadiologyOrderDAO implements RadiologyOrderDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;

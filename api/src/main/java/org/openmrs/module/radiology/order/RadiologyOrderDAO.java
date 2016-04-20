@@ -18,7 +18,7 @@ import org.openmrs.Patient;
  * 
  * @see org.openmrs.module.radiology.order.RadiologyOrderService
  */
-public interface RadiologyOrderDAO {
+interface RadiologyOrderDAO {
 	
 	/**
 	 * @see org.openmrs.module.radiology.order.RadiologyOrderService#getRadiologyOrderByOrderId(Integer)
