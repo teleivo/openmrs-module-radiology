@@ -54,7 +54,7 @@ import org.xml.sax.SAXException;
  */
 public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	
-	private static final String STUDIES_TEST_DATASET = "org/openmrs/module/radiology/include/DicomUtilsComponentTestDataset.xml";
+	private static final String TEST_DATASET = "org/openmrs/module/radiology/include/DicomUtilsComponentTestDataset.xml";
 	
 	protected static final int STUDY_ID_OF_EXISTING_STUDY_WITH_ORDER = 1;
 	
@@ -86,7 +86,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET,
 				DICOM_SPECIFIC_CHARACTER_SET));
 		
-		executeDataSet(STUDIES_TEST_DATASET);
+		executeDataSet(TEST_DATASET);
 	}
 	
 	/**

@@ -58,7 +58,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  */
 public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensitiveTest {
 	
-	private static final String STUDIES_TEST_DATASET = "org/openmrs/module/radiology/include/RadiologyOrderServiceComponentTestDataset.xml";
+	private static final String TEST_DATASET = "org/openmrs/module/radiology/include/RadiologyOrderServiceComponentTestDataset.xml";
 	
 	private static final int PATIENT_ID_WITH_ONLY_ONE_NON_RADIOLOGY_ORDER = 70011;
 	
@@ -130,7 +130,7 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 	
 	@Before
 	public void runBeforeAllTests() throws Exception {
-		executeDataSet(STUDIES_TEST_DATASET);
+		executeDataSet(TEST_DATASET);
 	}
 	
 	/**
