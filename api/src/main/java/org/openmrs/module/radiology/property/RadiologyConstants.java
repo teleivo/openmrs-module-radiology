@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.radiology;
+package org.openmrs.module.radiology.property;
 
 /**
  * A class that contains constants which are used within this module.

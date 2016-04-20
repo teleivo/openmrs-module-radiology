@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dcm4che2.tool.dcmof.DcmOF;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.radiology.property.RadiologyProperties;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown

@@ -2,7 +2,7 @@ package org.openmrs.module.radiology.hl7.util;
 
 import org.dcm4che.tool.hl7snd.HL7Snd;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyProperties;
 
 public class HL7Sender {
 	

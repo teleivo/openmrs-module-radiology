@@ -13,6 +13,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Visit;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.emrapi.encounter.EncounterParameters;
+import org.openmrs.module.radiology.property.RadiologyProperties;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
