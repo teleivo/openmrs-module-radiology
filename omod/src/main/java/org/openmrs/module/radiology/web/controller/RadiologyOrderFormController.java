@@ -29,7 +29,7 @@ import org.openmrs.module.radiology.Modality;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
-import org.openmrs.module.radiology.RadiologyService;
+import org.openmrs.module.radiology.RadiologyOrderService;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.dicom.DicomWebViewer;
 import org.openmrs.module.radiology.report.RadiologyReport;
@@ -56,7 +56,7 @@ public class RadiologyOrderFormController {
 	static final String RADIOLOGY_ORDER_FORM_VIEW = "/module/radiology/radiologyOrderForm";
 	
 	@Autowired
-	private RadiologyService radiologyService;
+	private RadiologyOrderService radiologyOrderService;
 	
 	@Autowired
 	private RadiologyReportService radiologyReportService;
@@ -188,9 +188,9 @@ public class RadiologyOrderFormController {
 			}
 			
 			try {
-				radiologyService.placeRadiologyOrder(radiologyOrder);
+				radiologyOrderService.placeRadiologyOrder(radiologyOrder);
 				
-				if (radiologyService.placeRadiologyOrderInPacs(radiologyOrder)) {
+				if (radiologyOrderService.placeRadiologyOrderInPacs(radiologyOrder)) {
 					request.getSession()
 							.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.saved");
 				} else {
@@ -234,14 +234,14 @@ public class RadiologyOrderFormController {
 			if (radiologyOrderErrors.hasErrors()) {
 				modelAndView.addObject("order", radiologyOrderToDiscontinue);
 				modelAndView.addObject("radiologyOrder",
-					radiologyService.getRadiologyOrderByOrderId(radiologyOrderToDiscontinue.getOrderId()));
+					radiologyOrderService.getRadiologyOrderByOrderId(radiologyOrderToDiscontinue.getOrderId()));
 				
 				return modelAndView;
 			}
-			discontinuationOrder = radiologyService.discontinueRadiologyOrder(radiologyOrderToDiscontinue,
+			discontinuationOrder = radiologyOrderService.discontinueRadiologyOrder(radiologyOrderToDiscontinue,
 				discontinuationOrder.getOrderer(), discontinuationOrder.getOrderReasonNonCoded());
 			
-			if (radiologyService.discontinueRadiologyOrderInPacs(radiologyOrderToDiscontinue)) {
+			if (radiologyOrderService.discontinueRadiologyOrderInPacs(radiologyOrderToDiscontinue)) {
 				request.getSession()
 						.setAttribute(WebConstants.OPENMRS_MSG_ATTR, "Order.discontinuedSuccessfully");
 				modelAndView.setViewName("redirect:" + RADIOLOGY_ORDER_FORM_REQUEST_MAPPING + "?orderId="
@@ -258,7 +258,7 @@ public class RadiologyOrderFormController {
 		
 		modelAndView.addObject("order", radiologyOrderToDiscontinue);
 		modelAndView.addObject("radiologyOrder",
-			radiologyService.getRadiologyOrderByOrderId(radiologyOrderToDiscontinue.getOrderId()));
+			radiologyOrderService.getRadiologyOrderByOrderId(radiologyOrderToDiscontinue.getOrderId()));
 		modelAndView.addObject("discontinuationOrder", discontinuationOrder);
 		return modelAndView;
 	}

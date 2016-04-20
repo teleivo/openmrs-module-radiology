@@ -15,7 +15,7 @@
                         http://www.springframework.org/schema/util
                         http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<bean id="radiologyService"
+	<bean id="radiologyOrderService"
 		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref bean="transactionManager" />
@@ -35,8 +35,8 @@
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list merge="true">
-				<value>org.openmrs.module.radiology.RadiologyService</value>
-				<ref local="radiologyService" />
+				<value>org.openmrs.module.radiology.RadiologyOrderService</value>
+				<ref local="radiologyOrderService" />
 			</list>
 		</property>
 	</bean>

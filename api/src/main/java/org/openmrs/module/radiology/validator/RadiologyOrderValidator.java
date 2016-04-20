@@ -75,7 +75,7 @@ public class RadiologyOrderValidator implements Validator {
 			ValidationUtils.rejectIfEmpty(errors, "action", "error.null");
 			// Order.encounter and
 			// Order.orderType
-			// have not null constraint as well, but are set in RadiologyService.saveRadiologyOrder
+			// have not null constraint as well, but are set in RadiologyOrderService.saveRadiologyOrder
 			validateDateActivated(radiologyOrder, errors);
 			validateScheduledDate(radiologyOrder, errors);
 		}

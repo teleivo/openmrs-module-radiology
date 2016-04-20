@@ -17,23 +17,23 @@ import org.openmrs.module.radiology.RadiologyOrder;
 /**
  * RadiologyOrder-related database functions
  * 
- * @see org.openmrs.module.radiology.RadiologyService
+ * @see org.openmrs.module.radiology.RadiologyOrderService
  */
 public interface RadiologyOrderDAO {
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyService#getRadiologyOrderByOrderId(Integer)
+	 * @see org.openmrs.module.radiology.RadiologyOrderService#getRadiologyOrderByOrderId(Integer)
 	 */
 	public RadiologyOrder getRadiologyOrderByOrderId(Integer orderId);
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyService#getRadiologyOrdersByPatient(Patient)
+	 * @see org.openmrs.module.radiology.RadiologyOrderService#getRadiologyOrdersByPatient(Patient)
 	 */
 	public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient);
 	
 	/**
 	 * @see
-	 *      org.openmrs.module.radiology.RadiologyService#getRadiologyOrdersByPatients(List<Patient>)
+	 *      org.openmrs.module.radiology.RadiologyOrderService#getRadiologyOrdersByPatients(List<Patient>)
 	 */
 	public List<RadiologyOrder> getRadiologyOrdersByPatients(List<Patient> patients);
 	

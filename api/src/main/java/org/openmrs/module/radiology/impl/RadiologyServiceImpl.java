@@ -29,7 +29,7 @@ import org.openmrs.module.emrapi.encounter.domain.EncounterTransaction;
 import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
-import org.openmrs.module.radiology.RadiologyService;
+import org.openmrs.module.radiology.RadiologyOrderService;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.hl7.util.HL7Sender;
 import org.openmrs.module.radiology.hl7.v231.code.OrderControlElement;
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.uhn.hl7v2.HL7Exception;
 
-class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyService {
+class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyOrderService {
 	
 	private static final Log log = LogFactory.getLog(RadiologyServiceImpl.class);
 	
@@ -63,7 +63,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	private RadiologyProperties radiologyProperties;
 	
 	/**
-	 * @see RadiologyService#placeRadiologyOrder(RadiologyOrder)
+	 * @see RadiologyOrderService#placeRadiologyOrder(RadiologyOrder)
 	 */
 	@Transactional
 	@Override
@@ -132,7 +132,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#discontinueRadiologyOrder(RadiologyOrder, Provider, String)
+	 * @see RadiologyOrderService#discontinueRadiologyOrder(RadiologyOrder, Provider, String)
 	 */
 	@Transactional
 	@Override
@@ -170,7 +170,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#getRadiologyOrderByOrderId(Integer)
+	 * @see RadiologyOrderService#getRadiologyOrderByOrderId(Integer)
 	 */
 	@Transactional(readOnly = true)
 	@Override
@@ -183,7 +183,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#getRadiologyOrdersByPatient(Patient)
+	 * @see RadiologyOrderService#getRadiologyOrdersByPatient(Patient)
 	 */
 	@Transactional(readOnly = true)
 	@Override
@@ -196,7 +196,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#getRadiologyOrdersByPatients(List<Patient>)
+	 * @see RadiologyOrderService#getRadiologyOrdersByPatients(List<Patient>)
 	 */
 	@Transactional(readOnly = true)
 	@Override
@@ -209,7 +209,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#placeRadiologyOrderInPacs(RadiologyOrder)
+	 * @see RadiologyOrderService#placeRadiologyOrderInPacs(RadiologyOrder)
 	 */
 	@Transactional
 	@Override
@@ -236,7 +236,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#discontinueRadiologyOrderInPacs(RadiologyOrder)
+	 * @see RadiologyOrderService#discontinueRadiologyOrderInPacs(RadiologyOrder)
 	 */
 	@Transactional
 	@Override
