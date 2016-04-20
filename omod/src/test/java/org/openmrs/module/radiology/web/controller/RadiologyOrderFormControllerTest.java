@@ -39,7 +39,7 @@ import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.dicom.DicomWebViewer;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.order.RadiologyOrderService;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.report.RadiologyReportStatus;
@@ -67,7 +67,7 @@ public class RadiologyOrderFormControllerTest extends BaseContextMockTest {
 	private RadiologyReportService radiologyReportService;
 	
 	@Mock
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	@Mock
 	private DicomWebViewer dicomWebViewer;
@@ -79,7 +79,7 @@ public class RadiologyOrderFormControllerTest extends BaseContextMockTest {
 	
 	@Before
 	public void runBeforeAllTests() throws Exception {
-		when(radiologyProperties.getRadiologyTestOrderType()).thenReturn(RadiologyTestData.getMockRadiologyOrderType());
+		when(radiologyModulePropertyService.getRadiologyTestOrderType()).thenReturn(RadiologyTestData.getMockRadiologyOrderType());
 		
 		radiologyReportNeedsToBeCreatedMethod = RadiologyOrderFormController.class.getDeclaredMethod(
 			"radiologyReportNeedsToBeCreated", new Class[] { org.springframework.web.servlet.ModelAndView.class,

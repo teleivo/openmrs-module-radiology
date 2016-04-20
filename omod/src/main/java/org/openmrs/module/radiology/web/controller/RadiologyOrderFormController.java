@@ -33,7 +33,7 @@ import org.openmrs.module.radiology.order.RadiologyDiscontinuedOrderValidator;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.order.RadiologyOrderService;
 import org.openmrs.module.radiology.order.RadiologyOrderValidator;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.study.Study;
@@ -62,7 +62,7 @@ public class RadiologyOrderFormController {
 	private RadiologyReportService radiologyReportService;
 	
 	@Autowired
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	@Autowired
 	private DicomWebViewer dicomWebViewer;
@@ -359,6 +359,6 @@ public class RadiologyOrderFormController {
 	 */
 	@ModelAttribute("radiologyConceptClassNames")
 	private String getRadiologyConceptClassNames() {
-		return radiologyProperties.getRadiologyConceptClassNames();
+		return radiologyModulePropertyService.getRadiologyConceptClassNames();
 	}
 }

@@ -12,8 +12,7 @@ package org.openmrs.module.radiology.property;
 /**
  * A class that contains OpenMRS global property constants which are used to configure the module.
  */
-public class RadiologyPropertyConstants {
-	
+public class RadiologyModulePropertyConstants {
 	
 	public static final String GP_MPPS_DIR = "radiology.mppsDirectory";
 	

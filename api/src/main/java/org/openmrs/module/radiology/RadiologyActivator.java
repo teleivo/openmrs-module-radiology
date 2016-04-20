@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dcm4che2.tool.dcmof.DcmOF;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -69,10 +69,11 @@ public class RadiologyActivator extends BaseModuleActivator {
 	 */
 	String[] getDicomOrderFillerArguments() {
 		log.info("Loading dicom order filler arguments");
-		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
-			RadiologyProperties.class);
-		return new String[] { "-mwl", radiologyProperties.getMwlDir(), "-mpps", radiologyProperties.getMppsDir(),
-				radiologyProperties.getDicomAeTitle() + ":" + radiologyProperties.getDicomMppsPort() };
+		final RadiologyModulePropertyService radiologyModulePropertyService = Context.getRegisteredComponent(
+			"radiologyModulePropertyService", RadiologyModulePropertyService.class);
+		return new String[] { "-mwl", radiologyModulePropertyService.getMwlDir(), "-mpps",
+				radiologyModulePropertyService.getMppsDir(),
+				radiologyModulePropertyService.getDicomAeTitle() + ":" + radiologyModulePropertyService.getDicomMppsPort() };
 	}
 	
 	/**

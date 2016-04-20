@@ -47,8 +47,7 @@
 			<ref bean="transactionManager" />
 		</property>
 		<property name="target">
-			<bean
-				class="org.openmrs.module.radiology.study.RadiologyStudyServiceImpl">
+			<bean class="org.openmrs.module.radiology.study.RadiologyStudyServiceImpl">
 			</bean>
 		</property>
 		<property name="preInterceptors">
@@ -91,6 +90,33 @@
 			<list merge="true">
 				<value>org.openmrs.module.radiology.report.RadiologyReportService</value>
 				<ref local="radiologyReportService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="radiologyModulePropertyService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<bean
+				class="org.openmrs.module.radiology.property.RadiologyModulePropertyServiceImpl">
+			</bean>
+		</property>
+		<property name="preInterceptors">
+			<ref bean="serviceInterceptors" />
+		</property>
+		<property name="transactionAttributeSource">
+			<ref bean="transactionAttributeSource" />
+		</property>
+	</bean>
+
+	<bean parent="serviceContext">
+		<property name="moduleService">
+			<list merge="true">
+				<value>org.openmrs.module.radiology.property.RadiologyModulePropertyService</value>
+				<ref local="radiologyModulePropertyService" />
 			</list>
 		</property>
 	</bean>

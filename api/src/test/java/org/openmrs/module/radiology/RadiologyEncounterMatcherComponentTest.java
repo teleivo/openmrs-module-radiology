@@ -13,7 +13,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Visit;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.emrapi.encounter.EncounterParameters;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,7 +41,7 @@ public class RadiologyEncounterMatcherComponentTest extends BaseModuleContextSen
 	private VisitService visitService;
 	
 	@Autowired
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -61,7 +61,7 @@ public class RadiologyEncounterMatcherComponentTest extends BaseModuleContextSen
 			throws Exception {
 		// given
 		EncounterParameters encounterParameters = EncounterParameters.instance()
-				.setEncounterType(radiologyProperties.getRadiologyOrderEncounterType())
+				.setEncounterType(radiologyModulePropertyService.getRadiologyOrderEncounterType())
 				.setEncounterUuid(NON_VOIDED_ENCOUNTER_UUID);
 		Visit visit = visitService.getVisit(VISIT_ID_WITH_NON_VOIDED_ENCOUNTER);
 		
@@ -79,7 +79,7 @@ public class RadiologyEncounterMatcherComponentTest extends BaseModuleContextSen
 	public void findEncounter_shouldReturnNullGivenVisitWithoutNonVoidedEncounters() throws Exception {
 		// given
 		EncounterParameters encounterParameters = EncounterParameters.instance()
-				.setEncounterType(radiologyProperties.getRadiologyOrderEncounterType());
+				.setEncounterType(radiologyModulePropertyService.getRadiologyOrderEncounterType());
 		Visit visit = visitService.getVisit(VISIT_ID_WITHOUT_ENCOUNTER);
 		
 		Encounter encounter = radiologyEncounterMatcher.findEncounter(visit, encounterParameters);
@@ -95,7 +95,7 @@ public class RadiologyEncounterMatcherComponentTest extends BaseModuleContextSen
 	public void findEncounter_shouldReturnNullIfEncounterUuidGivenByEncounterParametersIsVoided() throws Exception {
 		// given
 		EncounterParameters encounterParameters = EncounterParameters.instance()
-				.setEncounterType(radiologyProperties.getRadiologyOrderEncounterType())
+				.setEncounterType(radiologyModulePropertyService.getRadiologyOrderEncounterType())
 				.setEncounterUuid(VOIDED_ENCOUNTER_UUID);
 		Visit visit = visitService.getVisit(VISIT_ID_WITH_VOIDED_ENCOUNTER);
 		
@@ -112,7 +112,7 @@ public class RadiologyEncounterMatcherComponentTest extends BaseModuleContextSen
 	public void findEncounter_shouldThrowIllegalArgumentExceptionIfGivenVisitIsNull() throws Exception {
 		// given
 		EncounterParameters encounterParameters = EncounterParameters.instance()
-				.setEncounterType(radiologyProperties.getRadiologyOrderEncounterType())
+				.setEncounterType(radiologyModulePropertyService.getRadiologyOrderEncounterType())
 				.setEncounterUuid(VOIDED_ENCOUNTER_UUID);
 		
 		expectedException.expect(IllegalArgumentException.class);

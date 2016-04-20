@@ -38,15 +38,14 @@ import org.openmrs.api.ProviderService;
 import org.openmrs.api.VisitService;
 import org.openmrs.module.emrapi.encounter.EmrEncounterService;
 import org.openmrs.module.radiology.MwlStatus;
-import org.openmrs.module.radiology.order.RadiologyOrder;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.module.radiology.study.RadiologyStudyService;
 import org.openmrs.module.radiology.study.Study;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Tests {@link RadiologyOrderServiceImpl}
+ * Tests {@link RadiologyModulePropertyServiceImpl}
  */
 public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSensitiveTest {
 	
@@ -84,7 +83,7 @@ public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSen
 	private RadiologyStudyService radiologyStudyService;
 	
 	@Autowired
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	private Method saveRadiologyOrderEncounterMethod = null;
 	
@@ -110,9 +109,9 @@ public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSen
 			Field emrEncounterServiceField = RadiologyOrderServiceImpl.class.getDeclaredField("emrEncounterService");
 			emrEncounterServiceField.setAccessible(true);
 			emrEncounterServiceField.set(radiologyOrderServiceImpl, emrEncounterService);
-			Field radiologyPropertiesField = RadiologyOrderServiceImpl.class.getDeclaredField("radiologyProperties");
+			Field radiologyPropertiesField = RadiologyOrderServiceImpl.class.getDeclaredField("radiologyModuleProperties");
 			radiologyPropertiesField.setAccessible(true);
-			radiologyPropertiesField.set(radiologyOrderServiceImpl, radiologyProperties);
+			radiologyPropertiesField.set(radiologyOrderServiceImpl, radiologyModulePropertyService);
 		}
 		
 		updateStudyMwlStatusMethod = RadiologyOrderServiceImpl.class.getDeclaredMethod("updateStudyMwlStatus", new Class[] {
@@ -127,7 +126,7 @@ public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSen
 	}
 	
 	/**
-	 * @see RadiologyOrderServiceImpl#updateStudyMwlStatus(RadiologyOrder,boolean)
+	 * @see RadiologyModulePropertyServiceImpl#updateStudyMwlStatus(RadiologyOrder,boolean)
 	 * @verifies set the study mwlstatus of given radiology order to in sync given is in sync true
 	 */
 	@Test
@@ -151,7 +150,7 @@ public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSen
 	}
 	
 	/**
-	 * @see RadiologyOrderServiceImpl#updateStudyMwlStatus(RadiologyOrder,boolean)
+	 * @see RadiologyModulePropertyServiceImpl#updateStudyMwlStatus(RadiologyOrder,boolean)
 	 * @verifies set the study mwlstatus of given radiology order to out of sync given is in sync false
 	 */
 	@Test
@@ -175,7 +174,7 @@ public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSen
 	}
 	
 	/**
-	 * @see RadiologyOrderServiceImpl#saveRadiologyOrderEncounter(Patient,Provider,Date)
+	 * @see RadiologyModulePropertyServiceImpl#saveRadiologyOrderEncounter(Patient,Provider,Date)
 	 * @verifies create radiology order encounter attached to existing active visit given patient with active visit
 	 */
 	@Test
@@ -195,20 +194,20 @@ public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSen
 		
 		assertNotNull(encounter);
 		assertThat(encounter.getPatient(), is(patient));
-		assertThat(encounter.getProvidersByRole(radiologyProperties.getRadiologyOrderingProviderEncounterRole())
+		assertThat(encounter.getProvidersByRole(radiologyModulePropertyService.getRadiologyOrderingProviderEncounterRole())
 				.size(), is(1));
-		assertThat(encounter.getProvidersByRole(radiologyProperties.getRadiologyOrderingProviderEncounterRole())
+		assertThat(encounter.getProvidersByRole(radiologyModulePropertyService.getRadiologyOrderingProviderEncounterRole())
 				.contains(provider), is(true));
 		assertThat(encounter.getEncounterDatetime(), is(encounterDatetime));
 		assertThat(encounter.getVisit()
-				.getVisitType(), is(radiologyProperties.getRadiologyVisitType()));
-		assertThat(encounter.getEncounterType(), is(radiologyProperties.getRadiologyOrderEncounterType()));
+				.getVisitType(), is(radiologyModulePropertyService.getRadiologyVisitType()));
+		assertThat(encounter.getEncounterType(), is(radiologyModulePropertyService.getRadiologyOrderEncounterType()));
 		assertThat(encounterService.getEncountersByPatient(patient), is(Arrays.asList(encounter)));
 		assertThat(visitService.getActiveVisitsByPatient(patient), is(preExistingVisits));
 	}
 	
 	/**
-	 * @see RadiologyOrderServiceImpl#saveRadiologyOrderEncounter(Patient,Provider,Date)
+	 * @see RadiologyModulePropertyServiceImpl#saveRadiologyOrderEncounter(Patient,Provider,Date)
 	 * @verifies create radiology order encounter attached to new active visit given patient without active visit
 	 */
 	@Test
@@ -227,14 +226,14 @@ public class RadiologyOrderServiceImplComponentTest extends BaseModuleContextSen
 		
 		assertNotNull(encounter);
 		assertThat(encounter.getPatient(), is(patient));
-		assertThat(encounter.getProvidersByRole(radiologyProperties.getRadiologyOrderingProviderEncounterRole())
+		assertThat(encounter.getProvidersByRole(radiologyModulePropertyService.getRadiologyOrderingProviderEncounterRole())
 				.size(), is(1));
-		assertThat(encounter.getProvidersByRole(radiologyProperties.getRadiologyOrderingProviderEncounterRole())
+		assertThat(encounter.getProvidersByRole(radiologyModulePropertyService.getRadiologyOrderingProviderEncounterRole())
 				.contains(provider), is(true));
 		assertThat(encounter.getEncounterDatetime(), is(encounterDatetime));
 		assertThat(encounter.getVisit()
-				.getVisitType(), is(radiologyProperties.getRadiologyVisitType()));
-		assertThat(encounter.getEncounterType(), is(radiologyProperties.getRadiologyOrderEncounterType()));
+				.getVisitType(), is(radiologyModulePropertyService.getRadiologyVisitType()));
+		assertThat(encounter.getEncounterType(), is(radiologyModulePropertyService.getRadiologyOrderEncounterType()));
 		assertThat(encounterService.getEncountersByPatient(patient), is(Arrays.asList(encounter)));
 		assertThat(visitService.getVisitsByPatient(patient), is(not(empty())));
 	}

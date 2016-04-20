@@ -36,7 +36,7 @@ import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.order.RadiologyOrderService;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -73,7 +73,7 @@ public class RadiologyStudyServiceComponentTest extends BaseModuleContextSensiti
 	private RadiologyStudyService radiologyStudyService;
 	
 	@Autowired
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -118,7 +118,8 @@ public class RadiologyStudyServiceComponentTest extends BaseModuleContextSensiti
 		assertThat(createdStudy, is(radiologyStudy));
 		assertThat(createdStudy.getStudyId(), is(radiologyStudy.getStudyId()));
 		assertNotNull(createdStudy.getStudyInstanceUid());
-		assertThat(createdStudy.getStudyInstanceUid(), is(radiologyProperties.getStudyPrefix() + createdStudy.getStudyId()));
+		assertThat(createdStudy.getStudyInstanceUid(),
+			is(radiologyModulePropertyService.getStudyPrefix() + createdStudy.getStudyId()));
 		assertThat(createdStudy.getModality(), is(radiologyStudy.getModality()));
 		assertThat(createdStudy.getRadiologyOrder(), is(radiologyStudy.getRadiologyOrder()));
 	}

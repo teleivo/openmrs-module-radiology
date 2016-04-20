@@ -30,7 +30,7 @@ import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.hl7.util.HL7Sender;
 import org.openmrs.module.radiology.hl7.v231.code.OrderControlElement;
 import org.openmrs.module.radiology.hl7.v231.message.RadiologyORMO01;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.module.radiology.study.RadiologyStudyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +57,7 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
 	private EmrEncounterService emrEncounterService;
 	
 	@Autowired
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	/**
 	 * @see RadiologyOrderService#placeRadiologyOrder(RadiologyOrder)
@@ -87,8 +87,8 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
 		encounter.addOrder(radiologyOrder);
 		
 		OrderContext orderContext = new OrderContext();
-		orderContext.setCareSetting(radiologyProperties.getRadiologyCareSetting());
-		orderContext.setOrderType(radiologyProperties.getRadiologyTestOrderType());
+		orderContext.setCareSetting(radiologyModulePropertyService.getRadiologyCareSetting());
+		orderContext.setOrderType(radiologyModulePropertyService.getRadiologyTestOrderType());
 		
 		final RadiologyOrder result = (RadiologyOrder) orderService.saveOrder(radiologyOrder, orderContext);
 		this.radiologyStudyService.saveStudy(result.getStudy());
@@ -111,7 +111,7 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
 		final EncounterTransaction encounterTransaction = new EncounterTransaction();
 		encounterTransaction.setPatientUuid(patient.getUuid());
 		final EncounterTransaction.Provider encounterProvider = new EncounterTransaction.Provider();
-		encounterProvider.setEncounterRoleUuid(radiologyProperties.getRadiologyOrderingProviderEncounterRole()
+		encounterProvider.setEncounterRoleUuid(radiologyModulePropertyService.getRadiologyOrderingProviderEncounterRole()
 				.getUuid());
 		// sets the provider of the encounterprovider
 		encounterProvider.setUuid(provider.getUuid());
@@ -119,9 +119,9 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
 		encounterProviderSet.add(encounterProvider);
 		encounterTransaction.setProviders(encounterProviderSet);
 		encounterTransaction.setEncounterDateTime(encounterDateTime);
-		encounterTransaction.setVisitTypeUuid(this.radiologyProperties.getRadiologyVisitType()
+		encounterTransaction.setVisitTypeUuid(this.radiologyModulePropertyService.getRadiologyVisitType()
 				.getUuid());
-		encounterTransaction.setEncounterTypeUuid(this.radiologyProperties.getRadiologyOrderEncounterType()
+		encounterTransaction.setEncounterTypeUuid(this.radiologyModulePropertyService.getRadiologyOrderEncounterType()
 				.getUuid());
 		
 		return this.encounterService.getEncounterByUuid(this.emrEncounterService.save(encounterTransaction)

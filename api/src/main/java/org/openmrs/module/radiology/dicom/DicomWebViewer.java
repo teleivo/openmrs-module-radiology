@@ -10,7 +10,7 @@
 package org.openmrs.module.radiology.dicom;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.module.radiology.study.Study;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class DicomWebViewer {
 	
 	@Autowired
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	/**
 	 * Return URL to open DICOM web viewer for given Study.
@@ -46,12 +46,12 @@ public class DicomWebViewer {
 		
 		final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance()
 				.scheme("http")
-				.host(radiologyProperties.getDicomWebViewerAddress())
-				.port(Integer.valueOf(radiologyProperties.getDicomWebViewerPort()))
-				.path(radiologyProperties.getDicomWebViewerBaseUrl())
+				.host(radiologyModulePropertyService.getDicomWebViewerAddress())
+				.port(Integer.valueOf(radiologyModulePropertyService.getDicomWebViewerPort()))
+				.path(radiologyModulePropertyService.getDicomWebViewerBaseUrl())
 				.queryParam("studyUID", study.getStudyInstanceUid());
 		
-		final String serverName = radiologyProperties.getDicomWebViewerLocalServerName();
+		final String serverName = radiologyModulePropertyService.getDicomWebViewerLocalServerName();
 		if (StringUtils.isNotBlank(serverName)) {
 			uriComponentsBuilder.queryParam("serverName", serverName);
 		}

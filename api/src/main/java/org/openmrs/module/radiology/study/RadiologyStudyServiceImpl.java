@@ -17,7 +17,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.order.RadiologyOrder;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ class RadiologyStudyServiceImpl extends BaseOpenmrsService implements RadiologyS
 	private StudyDAO studyDAO;
 	
 	@Autowired
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	/**
 	 * @see RadiologyStudyService#saveStudy(Study)
@@ -46,7 +46,7 @@ class RadiologyStudyServiceImpl extends BaseOpenmrsService implements RadiologyS
 		
 		try {
 			Study savedStudy = studyDAO.saveStudy(study);
-			final String studyInstanceUid = radiologyProperties.getStudyPrefix() + savedStudy.getStudyId();
+			final String studyInstanceUid = radiologyModulePropertyService.getStudyPrefix() + savedStudy.getStudyId();
 			savedStudy.setStudyInstanceUid(studyInstanceUid);
 			savedStudy = studyDAO.saveStudy(savedStudy);
 			return savedStudy;

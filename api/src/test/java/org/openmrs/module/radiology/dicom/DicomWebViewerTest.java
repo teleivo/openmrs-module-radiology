@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.module.radiology.study.Study;
 import org.openmrs.test.BaseContextMockTest;
 
@@ -23,16 +23,16 @@ public class DicomWebViewerTest extends BaseContextMockTest {
 	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Mock
-	private RadiologyProperties radiologyProperties;
+	private RadiologyModulePropertyService radiologyModulePropertyService;
 	
 	@InjectMocks
 	private DicomWebViewer dicomviewer = new DicomWebViewer();
 	
 	@Before
 	public void runBeforeAllTests() {
-		when(radiologyProperties.getDicomWebViewerAddress()).thenReturn("localhost");
-		when(radiologyProperties.getDicomWebViewerPort()).thenReturn("8081");
-		when(radiologyProperties.getDicomWebViewerBaseUrl()).thenReturn("/weasis-pacs-connector/viewer");
+		when(radiologyModulePropertyService.getDicomWebViewerAddress()).thenReturn("localhost");
+		when(radiologyModulePropertyService.getDicomWebViewerPort()).thenReturn("8081");
+		when(radiologyModulePropertyService.getDicomWebViewerBaseUrl()).thenReturn("/weasis-pacs-connector/viewer");
 	}
 	
 	/**
@@ -61,8 +61,8 @@ public class DicomWebViewerTest extends BaseContextMockTest {
 	@Test
 	public void getDicomViewerUrl_shouldAddQueryParamServerNameToUrlIfLocalServerNameIsNotBlank() {
 		
-		when(radiologyProperties.getDicomWebViewerBaseUrl()).thenReturn("/oviyam2/viewer.html");
-		when(radiologyProperties.getDicomWebViewerLocalServerName()).thenReturn("oviyamlocal");
+		when(radiologyModulePropertyService.getDicomWebViewerBaseUrl()).thenReturn("/oviyam2/viewer.html");
+		when(radiologyModulePropertyService.getDicomWebViewerLocalServerName()).thenReturn("oviyamlocal");
 		
 		Study study = getMockStudy();
 		

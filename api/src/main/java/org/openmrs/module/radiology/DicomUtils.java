@@ -15,7 +15,7 @@ import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.SpecificCharacterSet;
 import org.dcm4che2.data.Tag;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.property.RadiologyProperties;
+import org.openmrs.module.radiology.property.RadiologyModulePropertyService;
 import org.openmrs.module.radiology.study.RadiologyStudyService;
 
 /**
@@ -30,8 +30,8 @@ public class DicomUtils {
 		// This class is a utility class which should not be instantiated
 	};
 	
-	private static RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
-		RadiologyProperties.class);
+	private static RadiologyModulePropertyService radiologyModulePropertyService = Context.getRegisteredComponent(
+		"radiologyModulePropertyService", RadiologyModulePropertyService.class);
 	
 	/**
 	 * <p>
@@ -83,7 +83,7 @@ public class DicomUtils {
 	public static String getStudyInstanceUidFromMpps(DicomObject mppsObject) {
 		
 		final SpecificCharacterSet specificCharacterSet = new SpecificCharacterSet(
-				radiologyProperties.getDicomSpecificCharacterSet());
+				radiologyModulePropertyService.getDicomSpecificCharacterSet());
 		
 		final DicomElement scheduledStepAttributesSequenceElement = mppsObject.get(Tag.ScheduledStepAttributesSequence);
 		if (scheduledStepAttributesSequenceElement == null) {
@@ -114,7 +114,7 @@ public class DicomUtils {
 	public static String getPerformedProcedureStepStatus(DicomObject dicomObject) {
 		
 		final SpecificCharacterSet specificCharacterSet = new SpecificCharacterSet(
-				radiologyProperties.getDicomSpecificCharacterSet());
+				radiologyModulePropertyService.getDicomSpecificCharacterSet());
 		
 		final DicomElement performedProcedureStepStatusElement = dicomObject.get(Tag.PerformedProcedureStepStatus);
 		if (performedProcedureStepStatusElement == null) {
