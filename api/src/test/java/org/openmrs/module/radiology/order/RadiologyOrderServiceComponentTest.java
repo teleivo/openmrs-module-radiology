@@ -58,7 +58,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
  */
 public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensitiveTest {
 	
-	
 	private static final String STUDIES_TEST_DATASET = "org/openmrs/module/radiology/include/RadiologyOrderServiceComponentTestDataset.xml";
 	
 	private static final int PATIENT_ID_WITH_ONLY_ONE_NON_RADIOLOGY_ORDER = 70011;
@@ -191,8 +190,7 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 			throws Exception {
 		
 		RadiologyOrder radiologyOrder = getUnsavedRadiologyOrder();
-		radiologyOrder.setPatient(
-			patientService.getPatient(PATIENT_ID_WITH_NO_RADIOLOGY_ORDER_AND_NO_EXISTIG_ENCOUNTER_AND_ACTIVE_VISIT));
+		radiologyOrder.setPatient(patientService.getPatient(PATIENT_ID_WITH_NO_RADIOLOGY_ORDER_AND_NO_EXISTIG_ENCOUNTER_AND_ACTIVE_VISIT));
 		
 		assertThat(encounterService.getEncountersByPatient(radiologyOrder.getPatient()), is(empty()));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient()), is(not(empty())));
@@ -206,25 +204,19 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 		Encounter encounter = radiologyOrder.getEncounter();
 		assertThat(encounter, is(not(nullValue())));
 		assertThat(encounter.getEncounterProviders()
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(encounter.getEncounterProviders()
 				.iterator()
 				.next()
-				.getProvider(),
-			is(radiologyOrder.getOrderer()));
+				.getProvider(), is(radiologyOrder.getOrderer()));
 		assertThat(encounterService.getEncountersByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
-				.get(0),
-			is(preExistingVisit));
+				.get(0), is(preExistingVisit));
 		assertThat(orderService.getAllOrdersByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 	}
 	
 	/**
@@ -245,26 +237,20 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 		Encounter encounter = radiologyOrder.getEncounter();
 		assertThat(encounter, is(not(nullValue())));
 		assertThat(encounter.getEncounterProviders()
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(encounter.getEncounterProviders()
 				.iterator()
 				.next()
-				.getProvider(),
-			is(radiologyOrder.getOrderer()));
+				.getProvider(), is(radiologyOrder.getOrderer()));
 		assertThat(encounterService.getEncountersByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
-				.getEncounters(),
-			hasItem(encounter));
+				.getEncounters(), hasItem(encounter));
 		assertThat(orderService.getAllOrdersByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		
 	}
 	
@@ -366,49 +352,39 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 		assertThat(visitService.getActiveVisitsByPatient(patient), is(not(empty())));
 		assertThat(visitService.getActiveVisitsByPatient(patient)
 				.get(0)
-				.getEncounters(),
-			is(not(empty())));
+				.getEncounters(), is(not(empty())));
 		
-		RadiologyOrder radiologyOrder = radiologyOrderService
-				.getRadiologyOrderByOrderId(RADIOLOGY_ORDER_WITH_ENCOUNTER_AND_ACTIVE_VISIT);
+		RadiologyOrder radiologyOrder = radiologyOrderService.getRadiologyOrderByOrderId(RADIOLOGY_ORDER_WITH_ENCOUNTER_AND_ACTIVE_VISIT);
 		
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
 				.getEncounters()
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
-				.getEncounters(),
-			hasItem(radiologyOrder.getEncounter()));
+				.getEncounters(), hasItem(radiologyOrder.getEncounter()));
 		
 		String discontinueReason = "Wrong Procedure";
 		
 		assertThat(radiologyOrder.getPatient()
-				.getUuid(),
-			is(not(nullValue())));
+				.getUuid(), is(not(nullValue())));
 		Order discontinuationOrder = radiologyOrderService.discontinueRadiologyOrder(radiologyOrder,
 			radiologyOrder.getOrderer(), discontinueReason);
 		
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
 				.getEncounters()
-				.size(),
-			is(2));
+				.size(), is(2));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
-				.getEncounters(),
-			hasItem(radiologyOrder.getEncounter()));
+				.getEncounters(), hasItem(radiologyOrder.getEncounter()));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
-				.getEncounters(),
-			hasItem(discontinuationOrder.getEncounter()));
+				.getEncounters(), hasItem(discontinuationOrder.getEncounter()));
 	}
 	
 	/**
@@ -430,17 +406,14 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 			radiologyOrder.getOrderer(), discontinueReason);
 		
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
 				.getEncounters()
-				.size(),
-			is(1));
+				.size(), is(1));
 		assertThat(visitService.getActiveVisitsByPatient(radiologyOrder.getPatient())
 				.get(0)
-				.getEncounters(),
-			hasItem(discontinuationOrder.getEncounter()));
+				.getEncounters(), hasItem(discontinuationOrder.getEncounter()));
 	}
 	
 	/**
@@ -512,8 +485,7 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 	 * @verifies throw illegal argument exception if radiology order is in progress
 	 */
 	@Test
-	public void discontinueRadiologyOrder_shouldThrowIllegalArgumentExceptionIfRadiologyOrderIsInProgress()
-			throws Exception {
+	public void discontinueRadiologyOrder_shouldThrowIllegalArgumentExceptionIfRadiologyOrderIsInProgress() throws Exception {
 		
 		RadiologyOrder radiologyOrder = radiologyOrderService.getRadiologyOrderByOrderId(EXISTING_RADIOLOGY_ORDER_ID);
 		radiologyOrder.getStudy()
@@ -586,11 +558,9 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 	@Test
 	public void getRadiologyOrdersByPatient_shouldReturnAllRadiologyOrdersAssociatedWithGivenPatient() {
 		
-		Patient patientWithTwoRadiologyOrders = patientService
-				.getPatient(PATIENT_ID_WITH_TWO_STUDIES_AND_NO_NON_RADIOLOGY_ORDER);
+		Patient patientWithTwoRadiologyOrders = patientService.getPatient(PATIENT_ID_WITH_TWO_STUDIES_AND_NO_NON_RADIOLOGY_ORDER);
 		
-		List<RadiologyOrder> radiologyOrders = radiologyOrderService
-				.getRadiologyOrdersByPatient(patientWithTwoRadiologyOrders);
+		List<RadiologyOrder> radiologyOrders = radiologyOrderService.getRadiologyOrdersByPatient(patientWithTwoRadiologyOrders);
 		
 		assertThat(radiologyOrders.size(), is(2));
 	}
@@ -604,8 +574,7 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 		
 		Patient patientWithoutRadiologyOrders = patientService.getPatient(PATIENT_ID_WITH_ONLY_ONE_NON_RADIOLOGY_ORDER);
 		
-		List<RadiologyOrder> radiologyOrders = radiologyOrderService
-				.getRadiologyOrdersByPatient(patientWithoutRadiologyOrders);
+		List<RadiologyOrder> radiologyOrders = radiologyOrderService.getRadiologyOrdersByPatient(patientWithoutRadiologyOrders);
 		
 		assertThat(radiologyOrders.size(), is(0));
 	}
@@ -631,24 +600,19 @@ public class RadiologyOrderServiceComponentTest extends BaseModuleContextSensiti
 		
 		Patient patientWithTwoRadiologyOrders = patientService.getPatient(PATIENT_ID_WITH_TWO_RADIOLOGY_ORDERS);
 		assertThat(orderService.getAllOrdersByPatient(patientWithTwoRadiologyOrders)
-				.size(),
-			is(2));
+				.size(), is(2));
 		Patient patientWithFiveRadiologyOrders = patientService.getPatient(PATIENT_ID_WITH_FIVE_RADIOLOGY_ORDERS);
 		assertThat(orderService.getAllOrdersByPatient(patientWithFiveRadiologyOrders)
-				.size(),
-			is(1));
-		Patient patientWithOneRadiologyOrder = patientService
-				.getPatient(PATIENT_ID_WITH_ONE_RADIOLOGY_ORDER_AND_ACTIVE_VISIT);
+				.size(), is(1));
+		Patient patientWithOneRadiologyOrder = patientService.getPatient(PATIENT_ID_WITH_ONE_RADIOLOGY_ORDER_AND_ACTIVE_VISIT);
 		assertThat(orderService.getAllOrdersByPatient(patientWithOneRadiologyOrder)
-				.size(),
-			is(1));
+				.size(), is(1));
 		List<Patient> allPatientsWithRadiologyOrders = new ArrayList<Patient>();
 		allPatientsWithRadiologyOrders.add(patientWithTwoRadiologyOrders);
 		allPatientsWithRadiologyOrders.add(patientWithFiveRadiologyOrders);
 		allPatientsWithRadiologyOrders.add(patientWithOneRadiologyOrder);
 		
-		List<RadiologyOrder> radiologyOrders = radiologyOrderService
-				.getRadiologyOrdersByPatients(allPatientsWithRadiologyOrders);
+		List<RadiologyOrder> radiologyOrders = radiologyOrderService.getRadiologyOrdersByPatients(allPatientsWithRadiologyOrders);
 		
 		assertThat(radiologyOrders.size(), is(TOTAL_NUMBER_OF_RADIOLOGY_ORDERS));
 	}
