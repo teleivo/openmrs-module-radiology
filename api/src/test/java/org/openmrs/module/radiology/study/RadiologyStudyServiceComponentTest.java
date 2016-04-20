@@ -45,7 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class RadiologyStudyServiceComponentTest extends BaseModuleContextSensitiveTest {
 	
-	private static final String STUDIES_TEST_DATASET = "org/openmrs/module/radiology/include/RadiologyServiceComponentTestDataset.xml";
+	private static final String STUDIES_TEST_DATASET = "org/openmrs/module/radiology/include/RadiologyStudyServiceComponentTestDataset.xml";
 	
 	private static final int PATIENT_ID_WITH_TWO_STUDIES_AND_NO_NON_RADIOLOGY_ORDER = 70021;
 	
