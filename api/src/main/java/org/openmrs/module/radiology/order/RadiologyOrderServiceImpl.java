@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.radiology.impl;
+package org.openmrs.module.radiology.order;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -27,9 +27,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.emrapi.encounter.EmrEncounterService;
 import org.openmrs.module.emrapi.encounter.domain.EncounterTransaction;
 import org.openmrs.module.radiology.MwlStatus;
-import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
-import org.openmrs.module.radiology.RadiologyOrderService;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.hl7.util.HL7Sender;
 import org.openmrs.module.radiology.hl7.v231.code.OrderControlElement;
@@ -40,9 +38,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.uhn.hl7v2.HL7Exception;
 
-class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyOrderService {
+class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyOrderService {
 	
-	private static final Log log = LogFactory.getLog(RadiologyServiceImpl.class);
+	private static final Log log = LogFactory.getLog(RadiologyOrderServiceImpl.class);
 	
 	@Autowired
 	private RadiologyOrderDAO radiologyOrderDAO;

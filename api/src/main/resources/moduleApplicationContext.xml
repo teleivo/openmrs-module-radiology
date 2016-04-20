@@ -21,7 +21,7 @@
 			<ref bean="transactionManager" />
 		</property>
 		<property name="target">
-			<bean class="org.openmrs.module.radiology.impl.RadiologyServiceImpl">
+			<bean class="org.openmrs.module.radiology.order.RadiologyOrderServiceImpl">
 			</bean>
 		</property>
 		<property name="preInterceptors">

@@ -35,7 +35,7 @@ import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.module.radiology.Modality;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
-import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.study.Study;
 import org.openmrs.util.RoleConstants;

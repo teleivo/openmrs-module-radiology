@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.openmrs.Provider;
-import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.Order;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;

@@ -12,22 +12,22 @@ package org.openmrs.module.radiology.db;
 import java.util.List;
 
 import org.openmrs.Patient;
-import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.order.RadiologyOrder;
 
 /**
  * RadiologyOrder-related database functions
  * 
- * @see org.openmrs.module.radiology.RadiologyOrderService
+ * @see org.openmrs.module.radiology.order.RadiologyOrderService
  */
 public interface RadiologyOrderDAO {
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyOrderService#getRadiologyOrderByOrderId(Integer)
+	 * @see org.openmrs.module.radiology.order.RadiologyOrderService#getRadiologyOrderByOrderId(Integer)
 	 */
 	public RadiologyOrder getRadiologyOrderByOrderId(Integer orderId);
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyOrderService#getRadiologyOrdersByPatient(Patient)
+	 * @see org.openmrs.module.radiology.order.RadiologyOrderService#getRadiologyOrdersByPatient(Patient)
 	 */
 	public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient);
 	
