@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.radiology.db.hibernate;
+package org.openmrs.module.radiology.order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,6 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Patient;
-import org.openmrs.module.radiology.db.RadiologyOrderDAO;
-import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +23,7 @@ import org.springframework.stereotype.Repository;
  * Hibernate specific RadiologyOrder related functions. This class should not be used directly. All
  * calls should go through the {@link org.openmrs.module.radiology.order.RadiologyOrderService} methods.
  *
- * @see org.openmrs.module.radiology.db.RadiologyOrderDAO
+ * @see org.openmrs.module.radiology.order.RadiologyOrderDAO
  * @see org.openmrs.module.radiology.order.RadiologyOrderService
  */
 @Repository
