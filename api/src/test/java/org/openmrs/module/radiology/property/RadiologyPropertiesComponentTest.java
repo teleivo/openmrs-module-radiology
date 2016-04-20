@@ -29,7 +29,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.OrderService;
 import org.openmrs.api.VisitService;
-import org.openmrs.module.radiology.property.RadiologyConstants;
+import org.openmrs.module.radiology.property.RadiologyPropertyConstants;
 import org.openmrs.module.radiology.property.RadiologyProperties;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getPacsAddress_shouldReturnPacsAddress() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_PACS_ADDRESS, "localhost"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_PACS_ADDRESS, "localhost"));
 		
 		assertThat(radiologyProperties.getPacsAddress(), is("localhost"));
 	}
@@ -83,7 +83,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_PACS_ADDRESS);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_PACS_ADDRESS);
 		
 		radiologyProperties.getPacsAddress();
 	}
@@ -95,7 +95,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getPacsHL7Port_shouldReturnPacsHl7Port() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_PACS_HL7_PORT, "2575"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_PACS_HL7_PORT, "2575"));
 		
 		assertThat(radiologyProperties.getPacsHL7Port(), is("2575"));
 	}
@@ -109,7 +109,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_PACS_HL7_PORT);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_PACS_HL7_PORT);
 		
 		radiologyProperties.getPacsHL7Port();
 	}
@@ -121,7 +121,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getPacsDicomAeTitle_shouldReturnPacsDicomAeTitle() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_PACS_DICOM_AE_TITLE, "DCM4CHEE"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_PACS_DICOM_AE_TITLE, "DCM4CHEE"));
 		
 		assertThat(radiologyProperties.getPacsDicomAeTitle(), is("DCM4CHEE"));
 	}
@@ -136,7 +136,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_PACS_DICOM_AE_TITLE);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_PACS_DICOM_AE_TITLE);
 		
 		radiologyProperties.getPacsDicomAeTitle();
 	}
@@ -148,7 +148,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomMppsPort_shouldReturnPacsDicomMppsPort() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_MPPS_PORT, "11114"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_MPPS_PORT, "11114"));
 		
 		assertThat(radiologyProperties.getDicomMppsPort(), is("11114"));
 	}
@@ -163,7 +163,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_MPPS_PORT);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_MPPS_PORT);
 		
 		radiologyProperties.getDicomMppsPort();
 	}
@@ -175,7 +175,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomAeTitle_shouldReturnDicomAeTitle() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_AE_TITLE, "RADIOLOGY_MODULE"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_AE_TITLE, "RADIOLOGY_MODULE"));
 		
 		assertThat(radiologyProperties.getDicomAeTitle(), is("RADIOLOGY_MODULE"));
 	}
@@ -189,7 +189,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_AE_TITLE);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_AE_TITLE);
 		
 		radiologyProperties.getDicomAeTitle();
 	}
@@ -201,7 +201,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomUIDOrgRoot_shouldReturnDicomUidOrgRoot() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_UID_ORG_ROOT,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_ORG_ROOT,
 				"1.2.826.0.1.3680043.8.2186"));
 		
 		assertThat(radiologyProperties.getDicomUIDOrgRoot(), is("1.2.826.0.1.3680043.8.2186"));
@@ -216,7 +216,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_UID_ORG_ROOT);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_UID_ORG_ROOT);
 		
 		radiologyProperties.getDicomUIDOrgRoot();
 	}
@@ -228,7 +228,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomUIDApplication_shouldReturnDicomUidApplication() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_UID_APPLICATION, "1"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_APPLICATION, "1"));
 		
 		assertThat(radiologyProperties.getDicomUIDApplication(), is("1"));
 	}
@@ -242,7 +242,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_UID_APPLICATION);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_UID_APPLICATION);
 		
 		radiologyProperties.getDicomUIDApplication();
 	}
@@ -254,7 +254,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomUIDTypeStudy_shouldReturnDicomUidTypeStudy() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_UID_TYPE_STUDY, "1"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_TYPE_STUDY, "1"));
 		
 		assertThat(radiologyProperties.getDicomUIDTypeStudy(), is("1"));
 	}
@@ -268,7 +268,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_UID_TYPE_STUDY);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_UID_TYPE_STUDY);
 		
 		radiologyProperties.getDicomUIDTypeStudy();
 	}
@@ -280,7 +280,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomSpecificCharacterSet_shouldDicomSpecificCharacterSet() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET,
 				"ISO-8859-1"));
 		
 		assertThat(radiologyProperties.getDicomSpecificCharacterSet(), is("ISO-8859-1"));
@@ -296,7 +296,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET);
 		
 		radiologyProperties.getDicomSpecificCharacterSet();
 	}
@@ -308,10 +308,10 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getStudyPrefix_shouldReturnStudyPrefixConsistingofApplicationUidAndStudyUidSlug() {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_UID_ORG_ROOT,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_ORG_ROOT,
 				"1.2.826.0.1.3680043.8.2186"));
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_UID_APPLICATION, "1"));
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_UID_TYPE_STUDY, "1"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_APPLICATION, "1"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_TYPE_STUDY, "1"));
 		
 		assertThat(radiologyProperties.getStudyPrefix(), is("1.2.826.0.1.3680043.8.2186.1.1."));
 	}
@@ -323,7 +323,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomWebViewerAddress_shouldReturnDicomWebViewerAddress() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_ADDRESS,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_ADDRESS,
 				"localhost"));
 		
 		assertThat(radiologyProperties.getDicomWebViewerAddress(), is("localhost"));
@@ -339,7 +339,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_WEB_VIEWER_ADDRESS);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_ADDRESS);
 		
 		radiologyProperties.getDicomWebViewerAddress();
 	}
@@ -351,7 +351,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomWebViewerPort_shouldReturnDicomWebViewerPort() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_PORT, "8081"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_PORT, "8081"));
 		
 		assertThat(radiologyProperties.getDicomWebViewerPort(), is("8081"));
 	}
@@ -366,7 +366,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_WEB_VIEWER_PORT);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_PORT);
 		
 		radiologyProperties.getDicomWebViewerPort();
 	}
@@ -378,7 +378,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getDicomWebViewerBaseUrl_shouldReturnDicomWebViewerBaseUrl() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_BASE_URL,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_BASE_URL,
 				"/weasis-pacs-connector/viewer"));
 		
 		assertThat(radiologyProperties.getDicomWebViewerBaseUrl(), is("/weasis-pacs-connector/viewer"));
@@ -394,7 +394,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_WEB_VIEWER_BASE_URL);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_BASE_URL);
 		
 		radiologyProperties.getDicomWebViewerBaseUrl();
 	}
@@ -407,7 +407,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getDicomWebViewerLocalServerName_shouldReturnDicomWebViewerLocalServerName() throws Exception {
 		
 		administrationService.saveGlobalProperty(new GlobalProperty(
-				RadiologyConstants.GP_DICOM_WEB_VIEWER_LOCAL_SERVER_NAME, "oviyamlocal"));
+				RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_LOCAL_SERVER_NAME, "oviyamlocal"));
 		
 		assertThat(radiologyProperties.getDicomWebViewerLocalServerName(), is("oviyamlocal"));
 	}
@@ -420,7 +420,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyCareSetting_shouldReturnRadiologyCareSetting() {
 		
 		String outpatientCareSettingUuidInOpenMrsCore = "6f0c9a92-6f24-11e3-af88-005056821db0";
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_RADIOLOGY_CARE_SETTING,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_CARE_SETTING,
 				outpatientCareSettingUuidInOpenMrsCore));
 		
 		assertThat(radiologyProperties.getRadiologyCareSetting()
@@ -437,7 +437,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_RADIOLOGY_CARE_SETTING);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_RADIOLOGY_CARE_SETTING);
 		
 		radiologyProperties.getRadiologyCareSetting();
 	}
@@ -450,11 +450,11 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyCareSetting_shouldThrowIllegalStateExceptionIfRadiologyCareSettingCannotBeFound() {
 		
 		String nonExistingCareSettingUuid = "5a1b8b43-6f24-11e3-af99-005056821db0";
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_RADIOLOGY_CARE_SETTING,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_CARE_SETTING,
 				nonExistingCareSettingUuid));
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("No existing care setting for uuid: " + RadiologyConstants.GP_RADIOLOGY_CARE_SETTING);
+		expectedException.expectMessage("No existing care setting for uuid: " + RadiologyPropertyConstants.GP_RADIOLOGY_CARE_SETTING);
 		
 		radiologyProperties.getRadiologyCareSetting();
 	}
@@ -467,7 +467,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyTestOrderType_shouldReturnOrderTypeForRadiologyTestOrders() {
 		
 		String radiologyTestOrderTypeUuid = "dbdb9a9b-56ea-11e5-a47f-08002719a237";
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_RADIOLOGY_TEST_ORDER_TYPE,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_TEST_ORDER_TYPE,
 				radiologyTestOrderTypeUuid));
 		
 		OrderType radiologyOrderType = new OrderType("Radiology Order", "Order type for radiology exams",
@@ -489,7 +489,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyTestOrderType_shouldThrowIllegalStateExceptionForNonExistingRadiologyTestOrderType() {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_RADIOLOGY_TEST_ORDER_TYPE);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_RADIOLOGY_TEST_ORDER_TYPE);
 		
 		radiologyProperties.getRadiologyTestOrderType();
 	}
@@ -502,7 +502,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyOrderEncounterType_shouldReturnEncounterTypeForRadiologyOrders() {
 		
 		String radiologyEncounterTypeUuid = "19db8c0d-3520-48f2-babd-77f2d450e5c7";
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_RADIOLOGY_ORDER_ENCOUNTER_TYPE,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_ORDER_ENCOUNTER_TYPE,
 				radiologyEncounterTypeUuid));
 		
 		EncounterType encounterType = new EncounterType("Radiology Order Encounter", "Ordering radiology exams");
@@ -523,7 +523,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyOrderEncounterType_shouldThrowIllegalStateExceptionForNonExistingRadiologyEncounterType() {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_RADIOLOGY_ORDER_ENCOUNTER_TYPE);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_RADIOLOGY_ORDER_ENCOUNTER_TYPE);
 		
 		radiologyProperties.getRadiologyOrderEncounterType();
 	}
@@ -537,7 +537,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 		
 		String radiologyOrderingProviderEncounterRoleUuid = "13fc9b4a-49ed-429c-9dde-ca005b387a3d";
 		administrationService.saveGlobalProperty(new GlobalProperty(
-				RadiologyConstants.GP_RADIOLOGY_ORDERING_PROVIDER_ENCOUNTER_ROLE, radiologyOrderingProviderEncounterRoleUuid));
+				RadiologyPropertyConstants.GP_RADIOLOGY_ORDERING_PROVIDER_ENCOUNTER_ROLE, radiologyOrderingProviderEncounterRoleUuid));
 		
 		EncounterRole encounterRole = new EncounterRole();
 		encounterRole.setName("Radiology Ordering Provider Encounter Role");
@@ -559,7 +559,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			throws Exception {
 		expectedException.expect(IllegalStateException.class);
 		expectedException.expectMessage("Configuration required: "
-				+ RadiologyConstants.GP_RADIOLOGY_ORDERING_PROVIDER_ENCOUNTER_ROLE);
+				+ RadiologyPropertyConstants.GP_RADIOLOGY_ORDERING_PROVIDER_ENCOUNTER_ROLE);
 		
 		radiologyProperties.getRadiologyOrderingProviderEncounterRole();
 	}
@@ -572,7 +572,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyVisitType_shouldReturnVisitTypeForRadiologyOrders() throws Exception {
 		
 		String radiologyVisitTypeUuid = "fe898a34-1ade-11e1-9c71-00248140a5eb";
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_RADIOLOGY_VISIT_TYPE,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_VISIT_TYPE,
 				radiologyVisitTypeUuid));
 		
 		VisitType visitType = new VisitType();
@@ -594,7 +594,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyVisitType_shouldThrowIllegalStateExceptionForNonExistingRadiologyVisitType() throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_RADIOLOGY_VISIT_TYPE);
+		expectedException.expectMessage("Configuration required: " + RadiologyPropertyConstants.GP_RADIOLOGY_VISIT_TYPE);
 		
 		radiologyProperties.getRadiologyVisitType();
 	}
@@ -622,7 +622,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 			uuidFromConceptClasses = uuidFromConceptClasses + "," + conceptClass.getUuid();
 			expectedNames = expectedNames + "," + conceptClass.getName();
 		}
-		administrationService.setGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES, uuidFromConceptClasses);
+		administrationService.setGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_CONCEPT_CLASSES, uuidFromConceptClasses);
 		assertThat(radiologyProperties.getRadiologyConceptClassNames(), is(expectedNames));
 	}
 	
@@ -665,7 +665,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	@Test
 	public void getRadiologyConceptClassNames_shouldThrowIllegalStateExceptionIfGlobalPropertyRadiologyConceptClassesIsBadlyFormatted()
 			throws Exception {
-		administrationService.setGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES,
+		administrationService.setGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_CONCEPT_CLASSES,
 			"AAAA-bbbbb-1111-2222/AAAA-BBBB-2222-3333");
 		
 		expectedException.expect(IllegalStateException.class);
@@ -683,7 +683,7 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	public void getRadiologyConceptClassNames_shouldThrowIllegalStateExceptionIfGlobalPropertyRadiologyConceptClassesContainsAUUIDNotFoundAmongConceptClasses()
 			throws Exception {
 		
-		administrationService.setGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES,
+		administrationService.setGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_CONCEPT_CLASSES,
 			conceptService.getConceptClassByName("Drug")
 					.getUuid() + "5");
 		

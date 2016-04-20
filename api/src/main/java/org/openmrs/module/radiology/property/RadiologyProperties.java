@@ -30,7 +30,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @return mpps directory
 	 */
 	public String getMppsDir() {
-		return getGlobalProperty(RadiologyConstants.GP_MPPS_DIR, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_MPPS_DIR, true);
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @return mwl directory
 	 */
 	public String getMwlDir() {
-		return getGlobalProperty(RadiologyConstants.GP_MWL_DIR, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_MWL_DIR, true);
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if global property for pacs address cannot be found
 	 */
 	public String getPacsAddress() {
-		return getGlobalProperty(RadiologyConstants.GP_PACS_ADDRESS, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_PACS_ADDRESS, true);
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if global property for pacs hl7 port cannot be found
 	 */
 	public String getPacsHL7Port() {
-		return getGlobalProperty(RadiologyConstants.GP_PACS_HL7_PORT, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_PACS_HL7_PORT, true);
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 *         found
 	 */
 	public String getPacsDicomAeTitle() {
-		return getGlobalProperty(RadiologyConstants.GP_PACS_DICOM_AE_TITLE, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_PACS_DICOM_AE_TITLE, true);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if global property for dicom mpps port cannot be found
 	 */
 	public String getDicomMppsPort() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_MPPS_PORT, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_MPPS_PORT, true);
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if global property for dicom ae title cannot be found
 	 */
 	public String getDicomAeTitle() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_AE_TITLE, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_AE_TITLE, true);
 	}
 	
 	/**
@@ -112,7 +112,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if global property for dicom uid org root cannot be found
 	 */
 	public String getDicomUIDOrgRoot() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_UID_ORG_ROOT, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_ORG_ROOT, true);
 	}
 	
 	/**
@@ -124,7 +124,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if global property for dicom uid application cannot be found
 	 */
 	public String getDicomUIDApplication() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_UID_APPLICATION, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_APPLICATION, true);
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if global property for dicom uid type study cannot be found
 	 */
 	public String getDicomUIDTypeStudy() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_UID_TYPE_STUDY, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_UID_TYPE_STUDY, true);
 	}
 	
 	/**
@@ -150,7 +150,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 *         cannot be found
 	 */
 	public String getDicomSpecificCharacterSet() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET, true);
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 *         be found
 	 */
 	public String getDicomWebViewerAddress() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_ADDRESS, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_ADDRESS, true);
 	}
 	
 	/**
@@ -186,7 +186,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 *         found
 	 */
 	public String getDicomWebViewerPort() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_PORT, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_PORT, true);
 	}
 	
 	/**
@@ -200,7 +200,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 *         be found
 	 */
 	public String getDicomWebViewerBaseUrl() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_BASE_URL, true);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_BASE_URL, true);
 	}
 	
 	/**
@@ -210,7 +210,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should return dicom web viewer local server name
 	 */
 	public String getDicomWebViewerLocalServerName() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_LOCAL_SERVER_NAME, false);
+		return getGlobalProperty(RadiologyPropertyConstants.GP_DICOM_WEB_VIEWER_LOCAL_SERVER_NAME, false);
 	}
 	
 	/**
@@ -223,11 +223,11 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception if radiology care setting cannot be found
 	 */
 	public CareSetting getRadiologyCareSetting() {
-		final String radiologyCareSettingUuid = getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CARE_SETTING, true);
+		final String radiologyCareSettingUuid = getGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_CARE_SETTING, true);
 		final CareSetting result = orderService.getCareSettingByUuid(radiologyCareSettingUuid);
 		if (result == null) {
 			throw new IllegalStateException("No existing care setting for uuid: "
-					+ RadiologyConstants.GP_RADIOLOGY_CARE_SETTING);
+					+ RadiologyPropertyConstants.GP_RADIOLOGY_CARE_SETTING);
 		}
 		return result;
 	}
@@ -240,7 +240,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception for non existing radiology test order type
 	 */
 	public OrderType getRadiologyTestOrderType() {
-		return getOrderTypeByGlobalProperty(RadiologyConstants.GP_RADIOLOGY_TEST_ORDER_TYPE);
+		return getOrderTypeByGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_TEST_ORDER_TYPE);
 	}
 	
 	/**
@@ -251,7 +251,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception for non existing radiology encounter type
 	 */
 	public EncounterType getRadiologyOrderEncounterType() {
-		return getEncounterTypeByGlobalProperty(RadiologyConstants.GP_RADIOLOGY_ORDER_ENCOUNTER_TYPE);
+		return getEncounterTypeByGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_ORDER_ENCOUNTER_TYPE);
 	}
 	
 	/**
@@ -262,7 +262,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception for non existing ordering provider encounter role
 	 */
 	public EncounterRole getRadiologyOrderingProviderEncounterRole() {
-		return getEncounterRoleByGlobalProperty(RadiologyConstants.GP_RADIOLOGY_ORDERING_PROVIDER_ENCOUNTER_ROLE);
+		return getEncounterRoleByGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_ORDERING_PROVIDER_ENCOUNTER_ROLE);
 	}
 	
 	/**
@@ -273,7 +273,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 * @should throw illegal state exception for non existing radiology visit type
 	 */
 	public VisitType getRadiologyVisitType() {
-		return getVisitTypeByGlobalProperty(RadiologyConstants.GP_RADIOLOGY_VISIT_TYPE);
+		return getVisitTypeByGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_VISIT_TYPE);
 	}
 	
 	/**
@@ -292,7 +292,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 */
 	public String getRadiologyConceptClassNames() {
 		
-		String radiologyConceptClassUuidSetting = getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES, true);
+		String radiologyConceptClassUuidSetting = getGlobalProperty(RadiologyPropertyConstants.GP_RADIOLOGY_CONCEPT_CLASSES, true);
 		radiologyConceptClassUuidSetting = radiologyConceptClassUuidSetting.replace(" ", "");
 		if (!radiologyConceptClassUuidSetting.matches("^[0-9a-fA-f,-]+$")) {
 			throw new IllegalStateException(

@@ -41,7 +41,7 @@ import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.module.radiology.order.RadiologyOrder;
-import org.openmrs.module.radiology.property.RadiologyConstants;
+import org.openmrs.module.radiology.property.RadiologyPropertyConstants;
 import org.openmrs.module.radiology.property.RadiologyProperties;
 import org.openmrs.module.radiology.study.RadiologyStudyService;
 import org.openmrs.module.radiology.study.Study;
@@ -85,7 +85,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	@Before
 	public void runBeforeEachTest() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_DICOM_SPECIFIC_CHARCATER_SET,
 				DICOM_SPECIFIC_CHARACTER_SET));
 		
 		executeDataSet(TEST_DATASET);
@@ -109,7 +109,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomObjectNCreate = getDicomNCreate(studyToBeUpdated, radiologyOrder);
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
@@ -215,7 +215,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomObjectNCreate = getDicomNSet(studyToBeUpdated, radiologyOrder, "DISCONTINUED");
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
@@ -284,7 +284,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomObjectNCreate = getDicomNSet(studyToBeUpdated, radiologyOrder, "COMPLETED");
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
@@ -306,7 +306,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		dicomObjectNCreate.remove(Tag.ScheduledStepAttributesSequence);
 		
 		File temporaryMwlFolder = temporaryBaseFolder.newFolder(MWL_DIRECTORY);
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyPropertyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
 		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
