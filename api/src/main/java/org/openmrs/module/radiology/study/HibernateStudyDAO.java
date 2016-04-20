@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  * @see org.openmrs.module.radiology.RadiologyService
  */
 @Repository
-public class HibernateStudyDAO implements StudyDAO {
+class HibernateStudyDAO implements StudyDAO {
 	
 	@Autowired
 	private SessionFactory sessionFactory;

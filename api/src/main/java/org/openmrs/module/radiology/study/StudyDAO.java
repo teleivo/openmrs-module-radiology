@@ -18,7 +18,7 @@ import org.openmrs.module.radiology.RadiologyOrder;
  * 
  * @see org.openmrs.module.radiology.RadiologyService
  */
-public interface StudyDAO {
+interface StudyDAO {
 	
 	/**
 	 * @see org.openmrs.module.radiology.RadiologyService#saveStudy(Integer)
