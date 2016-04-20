@@ -21,10 +21,10 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Hibernate specific Study related functions. This class should not be used directly. All calls
- * should go through the {@link org.openmrs.module.radiology.RadiologyService} methods.
+ * should go through the {@link org.openmrs.module.radiology.study.RadiologyStudyService} methods.
  *
  * @see org.openmrs.module.radiology.study.StudyDAO
- * @see org.openmrs.module.radiology.RadiologyService
+ * @see org.openmrs.module.radiology.study.RadiologyStudyService
  */
 @Repository
 class HibernateStudyDAO implements StudyDAO {
@@ -42,7 +42,7 @@ class HibernateStudyDAO implements StudyDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyService#saveStudy(Integer)
+	 * @see org.openmrs.module.radiology.study.RadiologyStudyService#saveStudy(Study)
 	 */
 	@Override
 	public Study saveStudy(Study study) {
@@ -52,7 +52,7 @@ class HibernateStudyDAO implements StudyDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyService#getStudyByStudyId(Integer)
+	 * @see org.openmrs.module.radiology.study.RadiologyStudyService#getStudyByStudyId(Integer)
 	 */
 	@Override
 	public Study getStudyByStudyId(Integer studyId) {
@@ -61,7 +61,7 @@ class HibernateStudyDAO implements StudyDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyService#getStudyByOrderId(Integer)
+	 * @see org.openmrs.module.radiology.study.RadiologyStudyService#getStudyByOrderId(Integer)
 	 */
 	@Override
 	public Study getStudyByOrderId(Integer orderId) {
@@ -72,7 +72,7 @@ class HibernateStudyDAO implements StudyDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyService#getStudyByStudyInstanceUid(String)
+	 * @see org.openmrs.module.radiology.study.RadiologyStudyService#getStudyByStudyInstanceUid(String)
 	 */
 	@Override
 	public Study getStudyByStudyInstanceUid(String studyInstanceUid) {
@@ -83,8 +83,8 @@ class HibernateStudyDAO implements StudyDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.module.radiology.RadiologyService#getStudiesByRadiologyOrders(List
-	 *      <RadiologyOrder>)
+	 * @see org.openmrs.module.radiology.study.RadiologyStudyService#getStudiesByRadiologyOrders(List
+	 *      <RadiologyOrder> radiologyOrders)
 	 */
 	@Override
 	public List<Study> getStudiesByRadiologyOrders(List<RadiologyOrder> radiologyOrders) {
