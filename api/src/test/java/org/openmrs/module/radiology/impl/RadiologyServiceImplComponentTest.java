@@ -98,6 +98,9 @@ public class RadiologyServiceImplComponentTest extends BaseModuleContextSensitiv
 		
 		if (radiologyServiceImpl == null) {
 			radiologyServiceImpl = new RadiologyServiceImpl();
+			Field radiologyStudyServiceField = RadiologyServiceImpl.class.getDeclaredField("radiologyStudyService");
+			radiologyStudyServiceField.setAccessible(true);
+			radiologyStudyServiceField.set(radiologyServiceImpl, radiologyStudyService);
 			Field orderServiceField = RadiologyServiceImpl.class.getDeclaredField("orderService");
 			orderServiceField.setAccessible(true);
 			orderServiceField.set(radiologyServiceImpl, orderService);
