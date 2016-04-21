@@ -28,7 +28,9 @@ import org.dcm4che2.data.BasicDicomObject;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.SpecificCharacterSet;
 import org.dcm4che2.data.Tag;
+import org.dcm4che2.data.UID;
 import org.dcm4che2.data.VR;
+import org.dcm4che2.io.DicomOutputStream;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,6 +78,9 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 	@Autowired
 	private RadiologyProperties radiologyProperties;
 	
+	@Autowired
+	private DicomUtils dicomUtils;
+	
 	@Rule
 	public TemporaryFolder temporaryBaseFolder = new TemporaryFolder();
 	
@@ -114,7 +119,11 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
-		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
+		File dicomMppsFile = temporaryMwlFolder.createTempFile(studyToBeUpdated.getStudyInstanceUid(), "");
+		DicomOutputStream dicomOutputStream = new DicomOutputStream(dicomMppsFile);
+		dicomOutputStream.writeDicomFile(dicomObjectNCreate);
+		dicomOutputStream.close();
+		dicomUtils.updateStudyPerformedStatusByMpps(dicomMppsFile);
 		
 		assertThat(studyToBeUpdated.getPerformedStatus(), is(PerformedProcedureStepStatus.IN_PROGRESS));
 	}
@@ -159,6 +168,8 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		String patientGender = patient.getGender();
 		
 		BasicDicomObject dicomObject = new BasicDicomObject();
+		dicomObject.initFileMetaInformation(UID.ModalityPerformedProcedureStepSOPClass, referencedSOPInstanceUID,
+			UID.ExplicitVRLittleEndian);
 		BasicDicomObject referencedStudySequence = new BasicDicomObject();
 		BasicDicomObject scheduledStepAttributesSequence = new BasicDicomObject();
 		
@@ -220,7 +231,11 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
-		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
+		File dicomMppsFile = temporaryMwlFolder.createTempFile(studyToBeUpdated.getStudyInstanceUid(), "");
+		DicomOutputStream dicomOutputStream = new DicomOutputStream(dicomMppsFile);
+		dicomOutputStream.writeDicomFile(dicomObjectNCreate);
+		dicomOutputStream.close();
+		dicomUtils.updateStudyPerformedStatusByMpps(dicomMppsFile);
 		
 		assertThat(studyToBeUpdated.getPerformedStatus(), is(PerformedProcedureStepStatus.DISCONTINUED));
 	}
@@ -289,7 +304,11 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
-		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
+		File dicomMppsFile = temporaryMwlFolder.createTempFile(studyToBeUpdated.getStudyInstanceUid(), "");
+		DicomOutputStream dicomOutputStream = new DicomOutputStream(dicomMppsFile);
+		dicomOutputStream.writeDicomFile(dicomObjectNCreate);
+		dicomOutputStream.close();
+		dicomUtils.updateStudyPerformedStatusByMpps(dicomMppsFile);
 		
 		assertThat(studyToBeUpdated.getPerformedStatus(), is(PerformedProcedureStepStatus.COMPLETED));
 	}
@@ -311,7 +330,11 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_MWL_DIR,
 				temporaryMwlFolder.getAbsolutePath()));
 		
-		DicomUtils.updateStudyPerformedStatusByMpps(dicomObjectNCreate);
+		File dicomMppsFile = temporaryMwlFolder.createTempFile(studyToBeUpdated.getStudyInstanceUid(), "");
+		DicomOutputStream dicomOutputStream = new DicomOutputStream(dicomMppsFile);
+		dicomOutputStream.writeDicomFile(dicomObjectNCreate);
+		dicomOutputStream.close();
+		dicomUtils.updateStudyPerformedStatusByMpps(dicomMppsFile);
 		
 		assertThat(studyToBeUpdated.getPerformedStatus(), is(PerformedProcedureStepStatus.COMPLETED));
 	}
@@ -327,7 +350,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		Order radiologyOrder = radiologyStudy.getRadiologyOrder();
 		DicomObject dicomMpps = getDicomNCreate(radiologyStudy, radiologyOrder);
 		
-		String studyInstanceUid = DicomUtils.getStudyInstanceUidFromMpps(dicomMpps);
+		String studyInstanceUid = dicomUtils.getStudyInstanceUidFromMpps(dicomMpps);
 		
 		assertThat(radiologyStudy.getStudyInstanceUid(), is(studyInstanceUid));
 	}
@@ -344,7 +367,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomMpps = getDicomNCreate(radiologyStudy, radiologyOrder);
 		dicomMpps.remove(Tag.ScheduledStepAttributesSequence);
 		
-		String studyInstanceUid = DicomUtils.getStudyInstanceUidFromMpps(dicomMpps);
+		String studyInstanceUid = dicomUtils.getStudyInstanceUidFromMpps(dicomMpps);
 		
 		assertThat(studyInstanceUid, is(nullValue()));
 	}
@@ -365,7 +388,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 				.getDicomObject()
 				.remove(Tag.StudyInstanceUID);
 		
-		String studyInstanceUid = DicomUtils.getStudyInstanceUidFromMpps(dicomMpps);
+		String studyInstanceUid = dicomUtils.getStudyInstanceUidFromMpps(dicomMpps);
 		
 		assertThat(studyInstanceUid, is(nullValue()));
 	}
@@ -381,7 +404,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		Order radiologyOrder = radiologyStudy.getRadiologyOrder();
 		DicomObject dicomMpps = getDicomNCreate(radiologyStudy, radiologyOrder);
 		
-		String performedProcedureStepStatus = DicomUtils.getPerformedProcedureStepStatus(dicomMpps);
+		String performedProcedureStepStatus = dicomUtils.getPerformedProcedureStepStatus(dicomMpps);
 		
 		assertThat(radiologyStudy.getPerformedStatus(), is(PerformedProcedureStepStatus.IN_PROGRESS));
 		assertThat(performedProcedureStepStatus, is("IN PROGRESS"));
@@ -399,7 +422,7 @@ public class DicomUtilsComponentTest extends BaseModuleContextSensitiveTest {
 		DicomObject dicomMpps = getDicomNCreate(radiologyStudy, radiologyOrder);
 		dicomMpps.remove(Tag.PerformedProcedureStepStatus);
 		
-		String performedProcedureStepStatus = DicomUtils.getPerformedProcedureStepStatus(dicomMpps);
+		String performedProcedureStepStatus = dicomUtils.getPerformedProcedureStepStatus(dicomMpps);
 		
 		assertThat(performedProcedureStepStatus, is(nullValue()));
 	}

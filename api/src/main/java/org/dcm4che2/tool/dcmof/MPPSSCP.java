@@ -62,11 +62,6 @@ import org.openmrs.module.radiology.dicom.DicomUtils;
  */
 class MPPSSCP {
 
-	private static Logger log=Logger.getLogger(MPPSSCP.class);
-	private static void debug(String message){
-		if(log.isDebugEnabled()) log.debug(message);
-	}
-	
 	private final DicomService ncreatescp = new NCreateService(
 			UID.ModalityPerformedProcedureStepSOPClass) {
 
@@ -122,16 +117,6 @@ class MPPSSCP {
 				UID.ExplicitVRLittleEndian);
 		try {
 			store(f, data);
-			try {
-				Context.openSession();
-				DicomUtils.updateStudyPerformedStatusByMpps(data);
-			} catch (Exception e) {
-				debug("Can not update database with");
-				debug(data.toString());
-				e.printStackTrace();
-			}finally{
-				Context.closeSession();
-			}
 		} catch (Exception e) {
 			throw new DicomServiceException(rq, Status.ProcessingFailure);
 		}
@@ -162,16 +147,6 @@ class MPPSSCP {
 			}
 			data.copyTo(mpps);
 			store(f, mpps);
-			try {
-				Context.openSession();
-				DicomUtils.updateStudyPerformedStatusByMpps(mpps);
-			} catch (Exception e) {
-				debug("Can not update database with");
-				debug(mpps.toString());
-				e.printStackTrace();
-			}finally{
-				Context.closeSession();
-			}
 		} catch (DicomServiceException e) {
 			throw e;
 		} catch (Exception e) {

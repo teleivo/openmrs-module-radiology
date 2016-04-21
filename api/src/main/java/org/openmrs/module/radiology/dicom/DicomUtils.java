@@ -9,30 +9,32 @@
  */
 package org.openmrs.module.radiology.dicom;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.camel.Handler;
 import org.apache.log4j.Logger;
 import org.dcm4che2.data.DicomElement;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.SpecificCharacterSet;
 import org.dcm4che2.data.Tag;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.RadiologyProperties;
+import org.dcm4che2.io.DicomInputStream;
 import org.openmrs.module.radiology.dicom.code.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.study.RadiologyStudyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * DicomUtils is a utility class helping to process DicomObject's like DICOM MPPS messages and
  * create and send HL7 order messages for RadiologyOrder's
  */
+@Component
 public class DicomUtils {
 	
 	private static final Logger log = Logger.getLogger(DicomUtils.class);
 	
-	private DicomUtils() {
-		// This class is a utility class which should not be instantiated
-	};
-	
-	private static RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
-		RadiologyProperties.class);
+	@Autowired
+	private RadiologyStudyService radiologyStudyService;
 	
 	/**
 	 * <p>
@@ -50,23 +52,28 @@ public class DicomUtils {
 	 *         status COMPLETED of given mpps object
 	 * @should not fail if study instance uid referenced in dicom mpps cannot be found
 	 */
-	public static void updateStudyPerformedStatusByMpps(DicomObject mppsObject) {
+	@Handler
+	public void updateStudyPerformedStatusByMpps(File mppsFile) throws IOException {
+		
+		log.info("Received DICOM MPPS from PACS. Mpps file: " + mppsFile.getAbsolutePath());
+		DicomInputStream dicomInputStream = null;
+		
 		try {
-			final String studyInstanceUid = getStudyInstanceUidFromMpps(mppsObject);
+			dicomInputStream = new DicomInputStream(mppsFile);
+			final DicomObject mppsObject = dicomInputStream.readDicomObject();
+			final String studyInstanceUid = this.getStudyInstanceUidFromMpps(mppsObject);
 			
-			final String performedProcedureStepStatusString = getPerformedProcedureStepStatus(mppsObject);
+			final String performedProcedureStepStatusString = this.getPerformedProcedureStepStatus(mppsObject);
 			final PerformedProcedureStepStatus performedProcedureStepStatus = PerformedProcedureStepStatus.getMatchForDisplayName(performedProcedureStepStatusString);
 			
-			radiologyStudyService().updateStudyPerformedStatus(studyInstanceUid, performedProcedureStepStatus);
-			log.info("Received Update from dcm4chee. Updating Performed Procedure Step Status for study :"
-					+ studyInstanceUid + " to Status : "
+			radiologyStudyService.updateStudyPerformedStatus(studyInstanceUid, performedProcedureStepStatus);
+			log.info("Updated Performed Procedure Step Status for study :" + studyInstanceUid + " to status : "
 					+ PerformedProcedureStepStatus.getNameOrUnknown(performedProcedureStepStatus));
 		}
-		catch (NumberFormatException e) {
-			log.error("Number can not be parsed");
-		}
-		catch (Exception e) {
-			log.error("Error : " + e.getMessage());
+		finally {
+			if (dicomInputStream != null) {
+				dicomInputStream.close();
+			}
 		}
 	}
 	
@@ -81,10 +88,9 @@ public class DicomUtils {
 	 * @should return null given dicom mpps object with scheduled step attributes sequence missing
 	 *         study instance uid tag
 	 */
-	public static String getStudyInstanceUidFromMpps(DicomObject mppsObject) {
+	public String getStudyInstanceUidFromMpps(DicomObject mppsObject) {
 		
-		final SpecificCharacterSet specificCharacterSet = new SpecificCharacterSet(
-				radiologyProperties.getDicomSpecificCharacterSet());
+		final SpecificCharacterSet specificCharacterSet = new SpecificCharacterSet("ISO-8859-1");
 		
 		final DicomElement scheduledStepAttributesSequenceElement = mppsObject.get(Tag.ScheduledStepAttributesSequence);
 		if (scheduledStepAttributesSequenceElement == null) {
@@ -112,10 +118,9 @@ public class DicomUtils {
 	 * @should return performed procedure step status given dicom object
 	 * @should return null given given dicom object without performed procedure step status
 	 */
-	public static String getPerformedProcedureStepStatus(DicomObject dicomObject) {
+	public String getPerformedProcedureStepStatus(DicomObject dicomObject) {
 		
-		final SpecificCharacterSet specificCharacterSet = new SpecificCharacterSet(
-				radiologyProperties.getDicomSpecificCharacterSet());
+		final SpecificCharacterSet specificCharacterSet = new SpecificCharacterSet("ISO-8859-1");
 		
 		final DicomElement performedProcedureStepStatusElement = dicomObject.get(Tag.PerformedProcedureStepStatus);
 		if (performedProcedureStepStatusElement == null) {
@@ -126,9 +131,5 @@ public class DicomUtils {
 			specificCharacterSet, 0);
 		
 		return performedProcedureStepStatus;
-	}
-	
-	static RadiologyStudyService radiologyStudyService() {
-		return Context.getService(RadiologyStudyService.class);
 	}
 }
