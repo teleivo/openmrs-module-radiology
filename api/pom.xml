@@ -61,7 +61,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che.tool</groupId>
-			<artifactId>dcm4che-tool-common</artifactId>
+			<artifactId>dcm4che-tool-mppsscp</artifactId>
 			<version>${dcm4che3Version}</version>
 		</dependency>
 		<dependency>
