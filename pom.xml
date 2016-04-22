@@ -210,7 +210,7 @@
 			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
 		</repository>
 		<repository>
-			<id>dcm4che</id>
+			<id>org.dcm4che</id>
 			<name>dcm4che Repository</name>
 			<url>http://www.dcm4che.org/maven2</url>
 		</repository>

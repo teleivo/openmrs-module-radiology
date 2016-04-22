@@ -9,13 +9,17 @@
  */
 package org.openmrs.module.radiology;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dcm4che2.tool.dcmof.DcmOF;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.radiology.dicom.MppsSCP;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
@@ -25,7 +29,7 @@ public class RadiologyActivator extends BaseModuleActivator {
 	
 	private static final Log log = LogFactory.getLog(RadiologyActivator.class);
 	
-	private DcmOF dicomOrderFiller;
+	private MppsSCP mppsSCP;
 	
 	@Override
 	public void willStart() {
@@ -56,8 +60,33 @@ public class RadiologyActivator extends BaseModuleActivator {
 	 */
 	void startDicomOrderFiller() {
 		final String[] dicomOrderFillerArguments = getDicomOrderFillerArguments();
-		log.info("Trying to start OpenMRS MPPS SCU Client (dcmof) with: " + Arrays.asList(dicomOrderFillerArguments));
-		dicomOrderFiller = DcmOF.main(dicomOrderFillerArguments);
+		log.info("Trying to start OpenMRS MPPS SCP Client with: " + Arrays.asList(dicomOrderFillerArguments));
+		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
+			RadiologyProperties.class);
+		
+		try {
+			this.mppsSCP = new MppsSCP(radiologyProperties.getDicomMppsSCPAeTitle(),
+					radiologyProperties.getDicomMppsSCPPort(), new File(
+							radiologyProperties.getDicomMppsSCPStorageDirectory()));
+		}
+		catch (IOException ioException) {
+			log.error("Error creating OpenMRS MPPS SCP Client", ioException);
+		}
+		catch (ParseException parseException) {
+			log.error("Error creating OpenMRS MPPS SCP Client", parseException);
+		}
+		
+		log.info("Starting OpenMRS MPPS SCP Client");
+		try {
+			this.mppsSCP.start();
+			log.info("OpenMRS MPPS SCP Client started");
+		}
+		catch (IOException ioException) {
+			log.error("Error starting OpenMRS MPPS SCP Client", ioException);
+		}
+		catch (GeneralSecurityException generalSecurityException) {
+			log.error("Error starting OpenMRS MPPS SCP Client", generalSecurityException);
+		}
 	}
 	
 	/**
@@ -70,8 +99,9 @@ public class RadiologyActivator extends BaseModuleActivator {
 		log.info("Loading dicom order filler arguments");
 		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
 			RadiologyProperties.class);
-		return new String[] { "-mwl", radiologyProperties.getMwlDir(), "-mpps", radiologyProperties.getMppsDir(),
-				radiologyProperties.getDicomAeTitle() + ":" + radiologyProperties.getDicomMppsPort() };
+		return new String[] { "--bind",
+				radiologyProperties.getDicomMppsSCPAeTitle() + ":" + radiologyProperties.getDicomMppsSCPPort(),
+				"--directory", radiologyProperties.getDicomMppsSCPStorageDirectory(), };
 	}
 	
 	/**
@@ -82,6 +112,6 @@ public class RadiologyActivator extends BaseModuleActivator {
 	 */
 	void stopDicomOrderFiller() {
 		log.info("Trying to stop MPPSScu : OpenMRS MPPS SCU Client (dcmof)");
-		dicomOrderFiller.stop();
+		this.mppsSCP.stop();
 	}
 }

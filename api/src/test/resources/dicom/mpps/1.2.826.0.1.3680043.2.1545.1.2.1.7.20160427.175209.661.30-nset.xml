@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NativeDicomModel xml:space="preserve">
+<DicomAttribute keyword="FileMetaInformationVersion"
+	tag="00020001" vr="OB">
+<InlineBinary>AAE=</InlineBinary>
+</DicomAttribute>
+<DicomAttribute keyword="MediaStorageSOPClassUID" tag="00020002"
+	vr="UI">
+<Value number="1">1.2.840.10008.3.1.2.3.3</Value>
+</DicomAttribute>
+<DicomAttribute keyword="MediaStorageSOPInstanceUID"
+	tag="00020003" vr="UI">
+<Value number="1">1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30</Value>
+</DicomAttribute>
+<DicomAttribute keyword="TransferSyntaxUID" tag="00020010"
+	vr="UI">
+<Value number="1">1.2.840.10008.1.2.1</Value>
+</DicomAttribute>
+<DicomAttribute keyword="ImplementationClassUID" tag="00020012"
+	vr="UI">
+<Value number="1">1.2.40.0.13.1.1</Value>
+</DicomAttribute>
+<DicomAttribute keyword="ImplementationVersionName" tag="00020013"
+	vr="SH">
+<Value number="1">dcm4che-3.3.7</Value>
+</DicomAttribute>
+<DicomAttribute keyword="SpecificCharacterSet" tag="00080005"
+	vr="CS">
+<Value number="1">ISO_IR 196</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepStatus"
+	tag="00400252" vr="CS">
+<Value number="1">COMPLETED</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepDescription"
+	tag="00400254" vr="LO" />
+<DicomAttribute keyword="PerformedProcedureTypeDescription"
+	tag="00400255" vr="LO" />
+<DicomAttribute keyword="ProcedureCodeSequence" tag="00081032"
+	vr="SQ" />
+<DicomAttribute keyword="ReasonForPerformedProcedureCodeSequence"
+	tag="00401012" vr="SQ" />
+<DicomAttribute keyword="PerformedProcedureStepEndDate"
+	tag="00400250" vr="DA">
+<Value number="1">20160427</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepEndTime"
+	tag="00400251" vr="TM">
+<Value number="1">181312</Value>
+</DicomAttribute>
+<DicomAttribute keyword="CommentsOnThePerformedProcedureStep"
+	tag="00400280" vr="ST" />
+<DicomAttribute
+	keyword="PerformedProcedureStepDiscontinuationReasonCodeSequence" tag="00400281"
+	vr="SQ" />
+<DicomAttribute keyword="PerformedProtocolCodeSequence"
+	tag="00400260" vr="SQ" />
+<DicomAttribute keyword="PerformedSeriesSequence" tag="00400340"
+	vr="SQ" />
+</NativeDicomModel>
