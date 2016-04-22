@@ -13,10 +13,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.dcm4che3.data.Attributes;
-import org.dcm4che3.data.IOD;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.data.UID;
+import org.dcm4che3.data.Attributes;
+import org.dcm4che3.data.IOD;
 import org.dcm4che3.data.ValidationResult;
 import org.dcm4che3.io.DicomInputStream;
 import org.dcm4che3.io.DicomOutputStream;
@@ -153,6 +153,23 @@ public class MppsSCP {
 	
 	private void setMppsNSetIOD(IOD mppsNSetIOD) {
 		this.mppsNSetIOD = mppsNSetIOD;
+	}
+	
+	public static MppsSCP createFromCommandLineArgs(String[] args) throws IOException, ParseException,
+			GeneralSecurityException {
+		CommandLine cl = parseComandLine(args);
+		MppsSCP result = new MppsSCP();
+		
+		CLIUtils.configureBindServer(result.conn, result.ae, cl);
+		CLIUtils.configure(result.conn, cl);
+		configureTransferCapability(result.ae, cl);
+		
+		result.configure(cl.hasOption("no-validate"),
+			cl.getOptionValue("mpps-ncreate-iod", "resource:mpps-ncreate-iod.xml"),
+			cl.getOptionValue("mpps-nset-iod", "resource:mpps-nset-iod.xml"), cl.hasOption("ignore"),
+			cl.getOptionValue("directory", "."));
+		
+		return result;
 	}
 	
 	public static void main(String[] args) {
@@ -326,5 +343,4 @@ public class MppsSCP {
 		}
 		return null;
 	}
-	
 }
