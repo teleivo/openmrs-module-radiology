@@ -226,10 +226,10 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
 		
 		final String hl7message = new RadiologyORMO01().createEncodedMessage(radiologyOrder, OrderControlElement.NEW_ORDER);
 		log.info("Created HL7 ORM^O01 message \n" + hl7message);
-		final boolean result = HL7Sender.sendHL7Message(hl7message);
+		HL7Sender.sendHL7Message(hl7message);
 		
-		updateStudyMwlStatus(radiologyOrder, result);
-		return result;
+		updateStudyMwlStatus(radiologyOrder, true);
+		return true;
 	}
 	
 	/**
@@ -250,10 +250,10 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
 		final String hl7message = new RadiologyORMO01().createEncodedMessage(radiologyOrder,
 			OrderControlElement.CANCEL_ORDER);
 		log.info("Created HL7 ORM^O01 message \n" + hl7message);
-		final boolean result = HL7Sender.sendHL7Message(hl7message);
+		HL7Sender.sendHL7Message(hl7message);
 		
-		updateStudyMwlStatus(radiologyOrder, result);
-		return result;
+		updateStudyMwlStatus(radiologyOrder, true);
+		return true;
 	}
 	
 	/**
