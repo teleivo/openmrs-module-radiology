@@ -13,12 +13,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
-import java.net.URL;
 
-import org.dcm4che3.util.ResourceLocator;
-import org.dcm4che3.util.StreamUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -66,14 +62,6 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 		
 		mppsSCPFieldValue = (MppsSCP) mppsSCPField.get(radiologyActivator);
 		assertThat(mppsSCPFieldValue, notNullValue());
-	}
-	
-	@Test
-	public void test() throws FileNotFoundException {
-		String name = "resource:sop-classes.properties";
-		URL url = ResourceLocator.getResourceURL(name.substring(9), StreamUtils.class);
-		if (url == null)
-			throw new FileNotFoundException(name);
 	}
 	
 	/**
