@@ -227,10 +227,6 @@
 
 	<messages>
 		<lang>en</lang>
-		<file>hl7messages.properties</file>
-	</messages>
-	<messages>
-		<lang>en</lang>
 		<file>messages.properties</file>
 	</messages>
 	<messages>

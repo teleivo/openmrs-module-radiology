@@ -9,16 +9,13 @@
  */
 package org.openmrs.module.radiology;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dcm4che3.net.ApplicationEntity;
-import org.dcm4che3.net.Connection;
-import org.dcm4che3.net.Device;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.radiology.dicom.MppsSCP;
@@ -64,21 +61,42 @@ public class RadiologyActivator extends BaseModuleActivator {
 		final String[] dicomOrderFillerArguments = getDicomOrderFillerArguments();
 		log.info("Trying to start OpenMRS MPPS SCP Client with: " + Arrays.asList(dicomOrderFillerArguments));
 		
-		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
-			RadiologyProperties.class);
-		Device device = new Device("mppsscp");
-		Connection connection = new Connection("localhost", "localhost",
-				Integer.valueOf(radiologyProperties.getDicomMppsPort()));
-		device.addConnection(connection);
-		ApplicationEntity applicationEntity = new ApplicationEntity(radiologyProperties.getDicomAeTitle());
-		device.addApplicationEntity(applicationEntity);
-		applicationEntity.addConnection(connection);
-		mppsSCP = new MppsSCP(applicationEntity);
-		File dicomMppsStorageDirectory = new File(radiologyProperties.getMppsDir());
-		mppsSCP.setStorageDirectory(dicomMppsStorageDirectory);
+		// final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
+		// RadiologyProperties.class);
+		//
+		// log.info("Creating DICOM device");
+		// Device device = new Device("mppsscp");
+		// log.info("Creating DICOM connection");
+		// Connection connection = new Connection("localhost", "localhost",
+		// Integer.parseInt(radiologyProperties.getDicomMppsPort()));
+		//
+		// log.info("Adding DICOM connection to DICOM device");
+		// device.addConnection(connection);
+		// log.info("Creating DICOM AE");
+		// ApplicationEntity applicationEntity = new ApplicationEntity(radiologyProperties.getDicomAeTitle());
+		// device.addApplicationEntity(applicationEntity);
+		// applicationEntity.addConnection(connection);
+		// log.info("Creating MppsSCP for DICOM AE");
+		// mppsSCP = new MppsSCP(applicationEntity);
+		// File dicomMppsStorageDirectory = new File(radiologyProperties.getMppsDir());
+		// mppsSCP.setStorageDirectory(dicomMppsStorageDirectory);
 		
 		try {
-			mppsSCP.start();
+			this.mppsSCP = MppsSCP.createFromCommandLineArgs(dicomOrderFillerArguments);
+		}
+		catch (IOException ioException) {
+			log.error("Error creating OpenMRS MPPS SCP Client", ioException);
+		}
+		catch (ParseException parseException) {
+			log.error("Error creating OpenMRS MPPS SCP Client", parseException);
+		}
+		catch (GeneralSecurityException generalSecurityException) {
+			log.error("Error creating OpenMRS MPPS SCP Client", generalSecurityException);
+		}
+		
+		log.info("Starting OpenMRS MPPS SCP Client");
+		try {
+			this.mppsSCP.start();
 			log.info("OpenMRS MPPS SCP Client started");
 		}
 		catch (IOException ioException) {
@@ -99,8 +117,9 @@ public class RadiologyActivator extends BaseModuleActivator {
 		log.info("Loading dicom order filler arguments");
 		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
 			RadiologyProperties.class);
-		return new String[] { "-mwl", radiologyProperties.getMwlDir(), "-mpps", radiologyProperties.getMppsDir(),
-				radiologyProperties.getDicomAeTitle() + ":" + radiologyProperties.getDicomMppsPort() };
+		return new String[] { "--bind",
+				radiologyProperties.getDicomAeTitle() + ":" + radiologyProperties.getDicomMppsPort(), "--directory",
+				radiologyProperties.getMppsDir(), };
 	}
 	
 	/**
@@ -111,6 +130,6 @@ public class RadiologyActivator extends BaseModuleActivator {
 	 */
 	void stopDicomOrderFiller() {
 		log.info("Trying to stop MPPSScu : OpenMRS MPPS SCU Client (dcmof)");
-		mppsSCP.stop();
+		this.mppsSCP.stop();
 	}
 }
