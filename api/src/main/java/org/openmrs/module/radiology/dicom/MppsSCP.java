@@ -165,8 +165,8 @@ public class MppsSCP {
 		configureTransferCapability(result.ae, cl);
 		
 		result.configure(cl.hasOption("no-validate"),
-			cl.getOptionValue("mpps-ncreate-iod", "resource:mpps-ncreate-iod.xml"),
-			cl.getOptionValue("mpps-nset-iod", "resource:mpps-nset-iod.xml"), cl.hasOption("ignore"),
+			cl.getOptionValue("mpps-ncreate-iod", "resource:dicom/mpps-ncreate-iod.xml"),
+			cl.getOptionValue("mpps-nset-iod", "resource:dicom/mpps-nset-iod.xml"), cl.hasOption("ignore"),
 			cl.getOptionValue("directory", "."));
 		
 		return result;
@@ -261,7 +261,8 @@ public class MppsSCP {
 	}
 	
 	private static void configureTransferCapability(ApplicationEntity ae, CommandLine cl) throws IOException {
-		Properties p = CLIUtils.loadProperties(cl.getOptionValue("sop-classes", "resource:sop-classes.properties"), null);
+		Properties p = CLIUtils.loadProperties(cl.getOptionValue("sop-classes", "resource:dicom/sop-classes.properties"),
+			null);
 		for (String cuid : p.stringPropertyNames()) {
 			String ts = p.getProperty(cuid);
 			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
