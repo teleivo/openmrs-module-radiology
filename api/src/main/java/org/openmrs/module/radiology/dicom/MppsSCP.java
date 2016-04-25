@@ -95,10 +95,38 @@ public class MppsSCP {
 		applicationEntity.setDimseRQHandler(serviceRegistry);
 	}
 	
-	private void configure(boolean hasOptionNoValidate, String mppsNCreateIOD, String mppsNSetIOD, boolean ignore,
-			String directory) throws IOException, GeneralSecurityException {
-		configureStorageDirectory(this, ignore, directory);
-		configureIODs(this, hasOptionNoValidate, mppsNCreateIOD, mppsNSetIOD);
+	public MppsSCP(String aeTitle, String aePort, String storageDirectory) throws ParseException, IOException {
+		this.device.addConnection(this.conn);
+		this.device.addApplicationEntity(this.ae);
+		this.ae.setAssociationAcceptor(true);
+		this.ae.addConnection(this.conn);
+		DicomServiceRegistry serviceRegistry = new DicomServiceRegistry();
+		serviceRegistry.addDicomService(new BasicCEchoSCP());
+		serviceRegistry.addDicomService(this.mppsSCP);
+		this.ae.setDimseRQHandler(serviceRegistry);
+		
+		this.conn.setPort(Integer.valueOf(aePort));
+		this.ae.setAETitle(aeTitle);
+		
+		this.conn.setReceivePDULength(Connection.DEF_MAX_PDU_LENGTH);
+		this.conn.setSendPDULength(Connection.DEF_MAX_PDU_LENGTH);
+		this.conn.setMaxOpsInvoked(0);
+		this.conn.setMaxOpsPerformed(0);
+		this.conn.setConnectTimeout(0);
+		this.conn.setRequestTimeout(0);
+		this.conn.setAcceptTimeout(0);
+		this.conn.setReleaseTimeout(0);
+		this.conn.setResponseTimeout(0);
+		this.conn.setRetrieveTimeout(0);
+		this.conn.setIdleTimeout(0);
+		this.conn.setSocketCloseDelay(Connection.DEF_SOCKETDELAY);
+		this.conn.setSendBufferSize(0);
+		this.conn.setReceiveBufferSize(0);
+		configureTransferCapability(this.ae, "resource:dicom/sop-classes.properties");
+		
+		this.setStorageDirectory(new File(storageDirectory));
+		this.setMppsNCreateIOD(IOD.load("resource:dicom/mpps-ncreate-iod.xml"));
+		this.setMppsNSetIOD(IOD.load("resource:dicom/mpps-nset-iod.xml"));
 		
 		ExecutorService executorService = Executors.newCachedThreadPool();
 		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -164,41 +192,10 @@ public class MppsSCP {
 		CLIUtils.configure(result.conn, cl);
 		configureTransferCapability(result.ae, cl);
 		
-		result.configure(cl.hasOption("no-validate"),
-			cl.getOptionValue("mpps-ncreate-iod", "resource:dicom/mpps-ncreate-iod.xml"),
-			cl.getOptionValue("mpps-nset-iod", "resource:dicom/mpps-nset-iod.xml"), cl.hasOption("ignore"),
-			cl.getOptionValue("directory", "."));
+		result.configure(cl.getOptionValue("mpps-ncreate-iod", "resource:dicom/mpps-ncreate-iod.xml"),
+			cl.getOptionValue("mpps-nset-iod", "resource:dicom/mpps-nset-iod.xml"), cl.getOptionValue("directory", "."));
 		
 		return result;
-	}
-	
-	public static void main(String[] args) {
-		try {
-			CommandLine cl = parseComandLine(args);
-			MppsSCP main = new MppsSCP();
-			
-			CLIUtils.configureBindServer(main.conn, main.ae, cl);
-			CLIUtils.configure(main.conn, cl);
-			configureTransferCapability(main.ae, cl);
-			
-			main.configure(cl.hasOption("no-validate"),
-				cl.getOptionValue("mpps-ncreate-iod", "resource:mpps-ncreate-iod.xml"),
-				cl.getOptionValue("mpps-nset-iod", "resource:mpps-nset-iod.xml"), cl.hasOption("ignore"),
-				cl.getOptionValue("directory", "."));
-			
-			main.start();
-			
-		}
-		catch (ParseException e) {
-			System.err.println("mppsscp: " + e.getMessage());
-			System.err.println(rb.getString("try"));
-			System.exit(2);
-		}
-		catch (Exception e) {
-			System.err.println("mppsscp: " + e.getMessage());
-			e.printStackTrace();
-			System.exit(2);
-		}
 	}
 	
 	private static CommandLine parseComandLine(String[] args) throws ParseException {
@@ -246,17 +243,12 @@ public class MppsSCP {
 				.create(null));
 	}
 	
-	private static void configureStorageDirectory(MppsSCP main, boolean hasOptionIgnore, String directory) {
-		if (!hasOptionIgnore) {
-			main.setStorageDirectory(new File(directory));
-		}
-	}
-	
-	private static void configureIODs(MppsSCP main, boolean hasOptionNoValidate, String mppsNCreateIOD, String mppsNSetIOD)
-			throws IOException {
-		if (!hasOptionNoValidate) {
-			main.setMppsNCreateIOD(IOD.load(mppsNCreateIOD));
-			main.setMppsNSetIOD(IOD.load(mppsNSetIOD));
+	private static void configureTransferCapability(ApplicationEntity ae, String sopClassPropertiesUrl) throws IOException {
+		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
+		for (String cuid : p.stringPropertyNames()) {
+			String ts = p.getProperty(cuid);
+			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
+					CLIUtils.toUIDs(ts)));
 		}
 	}
 	
@@ -268,6 +260,18 @@ public class MppsSCP {
 			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
 					CLIUtils.toUIDs(ts)));
 		}
+	}
+	
+	private void configure(String mppsNCreateIOD, String mppsNSetIOD, String directory) throws IOException,
+			GeneralSecurityException {
+		this.setStorageDirectory(new File(directory));
+		this.setMppsNCreateIOD(IOD.load(mppsNCreateIOD));
+		this.setMppsNSetIOD(IOD.load(mppsNSetIOD));
+		
+		ExecutorService executorService = Executors.newCachedThreadPool();
+		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		device.setScheduledExecutor(scheduledExecutorService);
+		device.setExecutor(executorService);
 	}
 	
 	private Attributes create(Association as, Attributes rq, Attributes rqAttrs) throws DicomServiceException {

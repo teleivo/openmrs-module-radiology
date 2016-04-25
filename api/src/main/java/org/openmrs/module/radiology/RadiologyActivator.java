@@ -60,38 +60,18 @@ public class RadiologyActivator extends BaseModuleActivator {
 	void startDicomOrderFiller() {
 		final String[] dicomOrderFillerArguments = getDicomOrderFillerArguments();
 		log.info("Trying to start OpenMRS MPPS SCP Client with: " + Arrays.asList(dicomOrderFillerArguments));
-		
-		// final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
-		// RadiologyProperties.class);
-		//
-		// log.info("Creating DICOM device");
-		// Device device = new Device("mppsscp");
-		// log.info("Creating DICOM connection");
-		// Connection connection = new Connection("localhost", "localhost",
-		// Integer.parseInt(radiologyProperties.getDicomMppsPort()));
-		//
-		// log.info("Adding DICOM connection to DICOM device");
-		// device.addConnection(connection);
-		// log.info("Creating DICOM AE");
-		// ApplicationEntity applicationEntity = new ApplicationEntity(radiologyProperties.getDicomAeTitle());
-		// device.addApplicationEntity(applicationEntity);
-		// applicationEntity.addConnection(connection);
-		// log.info("Creating MppsSCP for DICOM AE");
-		// mppsSCP = new MppsSCP(applicationEntity);
-		// File dicomMppsStorageDirectory = new File(radiologyProperties.getMppsDir());
-		// mppsSCP.setStorageDirectory(dicomMppsStorageDirectory);
+		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
+			RadiologyProperties.class);
 		
 		try {
-			this.mppsSCP = MppsSCP.createFromCommandLineArgs(dicomOrderFillerArguments);
+			this.mppsSCP = new MppsSCP(radiologyProperties.getDicomAeTitle(), radiologyProperties.getDicomMppsPort(),
+					radiologyProperties.getMppsDir());
 		}
 		catch (IOException ioException) {
 			log.error("Error creating OpenMRS MPPS SCP Client", ioException);
 		}
 		catch (ParseException parseException) {
 			log.error("Error creating OpenMRS MPPS SCP Client", parseException);
-		}
-		catch (GeneralSecurityException generalSecurityException) {
-			log.error("Error creating OpenMRS MPPS SCP Client", generalSecurityException);
 		}
 		
 		log.info("Starting OpenMRS MPPS SCP Client");
