@@ -13,10 +13,12 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.dcm4che3.data.Tag;
-import org.dcm4che3.data.UID;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.IOD;
+import org.dcm4che3.data.Tag;
+import org.dcm4che3.data.UID;
 import org.dcm4che3.data.ValidationResult;
 import org.dcm4che3.io.DicomInputStream;
 import org.dcm4che3.io.DicomOutputStream;
@@ -32,14 +34,12 @@ import org.dcm4che3.net.service.DicomServiceException;
 import org.dcm4che3.net.service.DicomServiceRegistry;
 import org.dcm4che3.tool.common.CLIUtils;
 import org.dcm4che3.util.SafeClose;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MppsSCP {
 	
 	private static ResourceBundle rb = ResourceBundle.getBundle("org.dcm4che3.tool.mppsscp.messages");
 	
-	private static final Logger LOG = LoggerFactory.getLogger(MppsSCP.class);
+	private static final Log LOG = LogFactory.getLog(MppsSCP.class);
 	
 	private Device device = new Device("mppsscp");
 	
@@ -284,7 +284,7 @@ public class MppsSCP {
 		if (file.exists())
 			throw new DicomServiceException(Status.DuplicateSOPinstance).setUID(Tag.AffectedSOPInstanceUID, iuid);
 		DicomOutputStream out = null;
-		LOG.info("{}: M-WRITE {}", as, file);
+		LOG.info(as + ": M-WRITE " + file);
 		try {
 			out = new DicomOutputStream(file);
 			out.writeDataset(Attributes.createFileMetaInformation(iuid, cuid, UID.ExplicitVRLittleEndian), rqAttrs);
@@ -312,7 +312,7 @@ public class MppsSCP {
 		File file = new File(storageDir, iuid);
 		if (!file.exists())
 			throw new DicomServiceException(Status.NoSuchObjectInstance).setUID(Tag.AffectedSOPInstanceUID, iuid);
-		LOG.info("{}: M-UPDATE {}", as, file);
+		LOG.info(as + ": M-UPDATE " + file);
 		Attributes data;
 		DicomInputStream in = null;
 		try {
