@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology;
 
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -104,12 +105,12 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 	@Test
 	public void getDicomOrderFillerArguments_shouldReturnDicomOrderFillerArguments() throws Exception {
 		
-		// String[] dicomOrderFillerArguments = radiologyActivator.getDicomOrderFillerArguments();
-		//
-		// assertThat(dicomOrderFillerArguments[0], is("--bind"));
-		// assertThat(dicomOrderFillerArguments[1], is("RADIOLOGY_MODULE:11114"));
-		// assertThat(dicomOrderFillerArguments[2], is("--directory"));
-		// assertThat(dicomOrderFillerArguments[3], is("mpps"));
+		String[] dicomOrderFillerArguments = radiologyActivator.getDicomOrderFillerArguments();
+		
+		assertThat(dicomOrderFillerArguments[0], is("--bind"));
+		assertThat(dicomOrderFillerArguments[1], is("RADIOLOGY_MODULE:11114"));
+		assertThat(dicomOrderFillerArguments[2], is("--directory"));
+		assertThat(dicomOrderFillerArguments[3], is("mpps"));
 	}
 	
 }
