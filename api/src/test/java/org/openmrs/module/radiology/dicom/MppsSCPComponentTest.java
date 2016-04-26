@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -51,6 +52,56 @@ public class MppsSCPComponentTest {
 		dev.addApplicationEntity(ae);
 		ae.addConnection(conn);
 		return dev;
+	}
+	
+	/**
+	 * @see MppsSCP#isStarted()
+	 * @verifies return true if started is true
+	 */
+	@Test
+	public void isStarted_shouldReturnTrueIfStartedIsTrue() throws Exception {
+		
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		mppsSCP.start();
+		
+		assertTrue(mppsSCP.isStarted());
+	}
+	
+	/**
+	 * @see MppsSCP#isStarted()
+	 * @verifies return false if started is false
+	 */
+	@Test
+	public void isStarted_shouldReturnFalseIfStartedIsFalse() throws Exception {
+		
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		
+		assertFalse(mppsSCP.isStarted());
+	}
+	
+	/**
+	 * @see MppsSCP#isStopped()
+	 * @verifies return true if started is false
+	 */
+	@Test
+	public void isStopped_shouldReturnTrueIfStartedIsFalse() throws Exception {
+		
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		
+		assertTrue(mppsSCP.isStopped());
+	}
+	
+	/**
+	 * @see MppsSCP#isStopped()
+	 * @verifies return false if started is true
+	 */
+	@Test
+	public void isStopped_shouldReturnFalseIfStartedIsTrue() throws Exception {
+		
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		mppsSCP.start();
+		
+		assertFalse(mppsSCP.isStopped());
 	}
 	
 	/**
