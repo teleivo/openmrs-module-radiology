@@ -154,7 +154,8 @@ public class MppsSCPComponentTest {
 			mppsSCP.start();
 			Method createMethod = MppsSCP.class.getDeclaredMethod("create",
 				new Class[] { Association.class, Attributes.class, Attributes.class });
-			createMethod.invoke(mppsSCP, args);
+//			createMethod.invoke(mppsSCP, args);
+//			MppsSCU mppsSCU = new MppsSCU();
 		}
 		finally {
 			mppsSCP.stop();
