@@ -37,7 +37,6 @@ import org.dcm4che3.util.SafeClose;
 
 public class MppsSCP {
 	
-	
 	private static ResourceBundle rb = ResourceBundle.getBundle("org.dcm4che3.tool.mppsscp.messages");
 	
 	private static final Log LOG = LogFactory.getLog(MppsSCP.class);
@@ -55,7 +54,6 @@ public class MppsSCP {
 	private IOD mppsNSetIOD;
 	
 	protected final BasicMPPSSCP mppsSCP = new BasicMPPSSCP() {
-		
 		
 		@Override
 		protected Attributes create(Association as, Attributes rq, Attributes rqAttrs, Attributes rsp)
@@ -97,6 +95,16 @@ public class MppsSCP {
 		applicationEntity.setDimseRQHandler(serviceRegistry);
 	}
 	
+	/**
+	 * Creates an instance of MppsSCP with configured aeTitle, aePort and storageDirectory.
+	 * 
+	 * @param aeTitle Dicom AE Title to which ApplicationEntity will be set
+	 * @param aePort Port to which Connection will be set
+	 * @param storageDirectory Storage directory where DICOM Mpps files will be stored
+	 * @throws ParseException
+	 * @throws IOException
+	 * @should create an MppsSCP configured with given parameters
+	 */
 	public MppsSCP(String aeTitle, String aePort, String storageDirectory) throws ParseException, IOException {
 		this.device.addConnection(this.conn);
 		this.device.addApplicationEntity(this.ae);
@@ -167,6 +175,13 @@ public class MppsSCP {
 		
 	}
 	
+	/**
+	 * Create and set storageDir to given parameter.
+	 * 
+	 * @param storageDir Storage directory to which storageDir will be set
+	 * @should set this storageDir to given storageDir and create it
+	 * @should set this storageDir to null given null
+	 */
 	public void setStorageDirectory(File storageDir) {
 		if (storageDir != null)
 			storageDir.mkdirs();
@@ -174,7 +189,7 @@ public class MppsSCP {
 	}
 	
 	public File getStorageDirectory() {
-		return storageDir;
+		return this.storageDir;
 	}
 	
 	private void setMppsNCreateIOD(IOD mppsNCreateIOD) {
@@ -185,8 +200,8 @@ public class MppsSCP {
 		this.mppsNSetIOD = mppsNSetIOD;
 	}
 	
-	public static MppsSCP createFromCommandLineArgs(String[] args)
-			throws IOException, ParseException, GeneralSecurityException {
+	public static MppsSCP createFromCommandLineArgs(String[] args) throws IOException, ParseException,
+			GeneralSecurityException {
 		CommandLine cl = parseComandLine(args);
 		MppsSCP result = new MppsSCP();
 		
@@ -249,8 +264,8 @@ public class MppsSCP {
 		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
 		for (String cuid : p.stringPropertyNames()) {
 			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(
-				new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP, CLIUtils.toUIDs(ts)));
+			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
+					CLIUtils.toUIDs(ts)));
 		}
 	}
 	
@@ -259,13 +274,13 @@ public class MppsSCP {
 			null);
 		for (String cuid : p.stringPropertyNames()) {
 			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(
-				new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP, CLIUtils.toUIDs(ts)));
+			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
+					CLIUtils.toUIDs(ts)));
 		}
 	}
 	
-	private void configure(String mppsNCreateIOD, String mppsNSetIOD, String directory)
-			throws IOException, GeneralSecurityException {
+	private void configure(String mppsNCreateIOD, String mppsNSetIOD, String directory) throws IOException,
+			GeneralSecurityException {
 		this.setStorageDirectory(new File(directory));
 		this.setMppsNCreateIOD(IOD.load(mppsNCreateIOD));
 		this.setMppsNSetIOD(IOD.load(mppsNSetIOD));
