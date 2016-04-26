@@ -140,29 +140,51 @@ public class MppsSCP {
 		
 		ExecutorService executorService = Executors.newCachedThreadPool();
 		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-		device.setScheduledExecutor(scheduledExecutorService);
-		device.setExecutor(executorService);
+		this.device.setScheduledExecutor(scheduledExecutorService);
+		this.device.setExecutor(executorService);
 	}
 	
+	/**
+	 * Return true if started is true and false otherwise.
+	 * 
+	 * @return
+	 */
+	public boolean isStarted() {
+		
+		return this.started == true;
+	}
+	
+	/**
+	 * Start listening on device's connections.
+	 * 
+	 * @throws IOException
+	 * @throws GeneralSecurityException
+	 * @should start listening on device connections and set started to true
+	 */
 	public void start() throws IOException, GeneralSecurityException {
-		device.bindConnections();
-		started = true;
+		this.device.bindConnections();
+		this.started = true;
 	}
 	
+	/**
+	 * Stop listening on device's connections.
+	 * 
+	 * @should stop listening on device connections and set started to false
+	 */
 	public void stop() {
 		
-		if (!started)
+		if (!this.started)
 			return;
 		
-		started = false;
+		this.started = false;
 		
-		device.unbindConnections();
-		((ExecutorService) device.getExecutor()).shutdown();
-		device.getScheduledExecutor()
+		this.device.unbindConnections();
+		((ExecutorService) this.device.getExecutor()).shutdown();
+		this.device.getScheduledExecutor()
 				.shutdown();
 		
 		// very quick fix to block for listening connection
-		while (device.getConnections()
+		while (this.device.getConnections()
 				.get(0)
 				.isListening()) {
 			try {

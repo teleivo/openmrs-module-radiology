@@ -91,4 +91,17 @@ public class MppsSCPTest {
 		mppsSCP.setStorageDirectory(null);
 		assertThat(mppsSCP.getStorageDirectory(), is(nullValue()));
 	}
+	
+	/**
+	 * @see MppsSCP#start()
+	 * @verifies start listening on device connections and set started to true
+	 */
+	@Test
+	public void start_shouldStartListeningOnDeviceConnectionsAndSetStartedToTrue() throws Exception {
+		
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		mppsSCP.start();
+		
+		assertTrue(mppsSCP.isStarted());
+	}
 }
