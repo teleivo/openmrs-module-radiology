@@ -114,6 +114,40 @@ public class MppsSCP {
 	}
 	
 	/**
+	 * Create and set storageDir to given parameter.
+	 * 
+	 * @param storageDir Storage directory to which storageDir will be set
+	 * @should set this storageDir to given storageDir and create it
+	 * @should set this storageDir to null given null
+	 */
+	public void setStorageDirectory(File storageDir) {
+		if (storageDir != null)
+			storageDir.mkdirs();
+		this.storageDir = storageDir;
+	}
+	
+	public File getStorageDirectory() {
+		return this.storageDir;
+	}
+	
+	private void setMppsNCreateIOD(IOD mppsNCreateIOD) {
+		this.mppsNCreateIOD = mppsNCreateIOD;
+	}
+	
+	private void setMppsNSetIOD(IOD mppsNSetIOD) {
+		this.mppsNSetIOD = mppsNSetIOD;
+	}
+	
+	private static void configureTransferCapability(ApplicationEntity ae, String sopClassPropertiesUrl) throws IOException {
+		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
+		for (String cuid : p.stringPropertyNames()) {
+			String ts = p.getProperty(cuid);
+			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
+					CLIUtils.toUIDs(ts)));
+		}
+	}
+	
+	/**
 	 * Return true if started is true and false otherwise.
 	 * 
 	 * @return true if started is true and false otherwise
@@ -178,40 +212,6 @@ public class MppsSCP {
 			}
 		}
 		
-	}
-	
-	/**
-	 * Create and set storageDir to given parameter.
-	 * 
-	 * @param storageDir Storage directory to which storageDir will be set
-	 * @should set this storageDir to given storageDir and create it
-	 * @should set this storageDir to null given null
-	 */
-	public void setStorageDirectory(File storageDir) {
-		if (storageDir != null)
-			storageDir.mkdirs();
-		this.storageDir = storageDir;
-	}
-	
-	public File getStorageDirectory() {
-		return this.storageDir;
-	}
-	
-	private void setMppsNCreateIOD(IOD mppsNCreateIOD) {
-		this.mppsNCreateIOD = mppsNCreateIOD;
-	}
-	
-	private void setMppsNSetIOD(IOD mppsNSetIOD) {
-		this.mppsNSetIOD = mppsNSetIOD;
-	}
-	
-	private static void configureTransferCapability(ApplicationEntity ae, String sopClassPropertiesUrl) throws IOException {
-		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
-		for (String cuid : p.stringPropertyNames()) {
-			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
-					CLIUtils.toUIDs(ts)));
-		}
 	}
 	
 	private Attributes create(Association as, Attributes rq, Attributes rqAttrs) throws DicomServiceException {

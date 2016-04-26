@@ -3,17 +3,12 @@ package org.openmrs.module.radiology.dicom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.List;
 
-import org.dcm4che3.net.ApplicationEntity;
-import org.dcm4che3.net.Connection;
-import org.dcm4che3.net.Device;
 import org.junit.Test;
 
 public class MppsSCPComponentTest {
@@ -31,30 +26,6 @@ public class MppsSCPComponentTest {
 	}
 	
 	/**
-	 * Test method for {@link org.dcm4che3.net.Device#reconfigure(org.dcm4che3.net.Device)}.
-	 */
-	@Test
-	public void testReconfigure() throws Exception {
-		Device d1 = createDevice("test", "AET1");
-		Device d2 = createDevice("test", "AET2");
-		d1.reconfigure(d2);
-		ApplicationEntity ae = d1.getApplicationEntity("AET2");
-		assertNotNull(ae);
-		List<Connection> conns = ae.getConnections();
-		assertEquals(1, conns.size());
-	}
-	
-	private Device createDevice(String name, String aet) {
-		Device dev = new Device(name);
-		Connection conn = new Connection("dicom", "localhost", 11112);
-		dev.addConnection(conn);
-		ApplicationEntity ae = new ApplicationEntity(aet);
-		dev.addApplicationEntity(ae);
-		ae.addConnection(conn);
-		return dev;
-	}
-	
-	/**
 	 * @see MppsSCP#isStarted()
 	 * @verifies return true if started is true
 	 */
@@ -62,9 +33,14 @@ public class MppsSCPComponentTest {
 	public void isStarted_shouldReturnTrueIfStartedIsTrue() throws Exception {
 		
 		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
-		mppsSCP.start();
-		
-		assertTrue(mppsSCP.isStarted());
+		try {
+			mppsSCP.start();
+			
+			assertTrue(mppsSCP.isStarted());
+		}
+		finally {
+			mppsSCP.stop();
+		}
 	}
 	
 	/**
@@ -99,9 +75,32 @@ public class MppsSCPComponentTest {
 	public void isStopped_shouldReturnFalseIfStartedIsTrue() throws Exception {
 		
 		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
-		mppsSCP.start();
+		try {
+			mppsSCP.start();
+			
+			assertFalse(mppsSCP.isStopped());
+		}
+		finally {
+			mppsSCP.stop();
+		}
+	}
+	
+	/**
+	 * @see MppsSCP#start()
+	 * @verifies start listening on device connections and set started to true
+	 */
+	@Test
+	public void start_shouldStartListeningOnDeviceConnectionsAndSetStartedToTrue() throws Exception {
 		
-		assertFalse(mppsSCP.isStopped());
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		try {
+			mppsSCP.start();
+			
+			assertTrue(mppsSCP.isStarted());
+		}
+		finally {
+			mppsSCP.stop();
+		}
 	}
 	
 	/**
@@ -134,18 +133,5 @@ public class MppsSCPComponentTest {
 		
 		mppsSCP.setStorageDirectory(null);
 		assertThat(mppsSCP.getStorageDirectory(), is(nullValue()));
-	}
-	
-	/**
-	 * @see MppsSCP#start()
-	 * @verifies start listening on device connections and set started to true
-	 */
-	@Test
-	public void start_shouldStartListeningOnDeviceConnectionsAndSetStartedToTrue() throws Exception {
-		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
-		mppsSCP.start();
-		
-		assertTrue(mppsSCP.isStarted());
 	}
 }
