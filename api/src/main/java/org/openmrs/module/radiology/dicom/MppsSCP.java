@@ -37,6 +37,7 @@ import org.dcm4che3.util.SafeClose;
 
 public class MppsSCP {
 	
+	
 	private static ResourceBundle rb = ResourceBundle.getBundle("org.dcm4che3.tool.mppsscp.messages");
 	
 	private static final Log LOG = LogFactory.getLog(MppsSCP.class);
@@ -54,6 +55,7 @@ public class MppsSCP {
 	private IOD mppsNSetIOD;
 	
 	protected final BasicMPPSSCP mppsSCP = new BasicMPPSSCP() {
+		
 		
 		@Override
 		protected Attributes create(Association as, Attributes rq, Attributes rqAttrs, Attributes rsp)
@@ -183,8 +185,8 @@ public class MppsSCP {
 		this.mppsNSetIOD = mppsNSetIOD;
 	}
 	
-	public static MppsSCP createFromCommandLineArgs(String[] args) throws IOException, ParseException,
-			GeneralSecurityException {
+	public static MppsSCP createFromCommandLineArgs(String[] args)
+			throws IOException, ParseException, GeneralSecurityException {
 		CommandLine cl = parseComandLine(args);
 		MppsSCP result = new MppsSCP();
 		
@@ -247,8 +249,8 @@ public class MppsSCP {
 		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
 		for (String cuid : p.stringPropertyNames()) {
 			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
-					CLIUtils.toUIDs(ts)));
+			ae.addTransferCapability(
+				new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP, CLIUtils.toUIDs(ts)));
 		}
 	}
 	
@@ -257,13 +259,13 @@ public class MppsSCP {
 			null);
 		for (String cuid : p.stringPropertyNames()) {
 			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
-					CLIUtils.toUIDs(ts)));
+			ae.addTransferCapability(
+				new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP, CLIUtils.toUIDs(ts)));
 		}
 	}
 	
-	private void configure(String mppsNCreateIOD, String mppsNSetIOD, String directory) throws IOException,
-			GeneralSecurityException {
+	private void configure(String mppsNCreateIOD, String mppsNSetIOD, String directory)
+			throws IOException, GeneralSecurityException {
 		this.setStorageDirectory(new File(directory));
 		this.setMppsNCreateIOD(IOD.load(mppsNCreateIOD));
 		this.setMppsNSetIOD(IOD.load(mppsNSetIOD));
