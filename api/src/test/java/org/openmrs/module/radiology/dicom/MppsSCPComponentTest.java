@@ -13,15 +13,9 @@ import java.util.List;
 import org.dcm4che3.net.ApplicationEntity;
 import org.dcm4che3.net.Connection;
 import org.dcm4che3.net.Device;
-import org.junit.Before;
 import org.junit.Test;
 
-public class MppsSCPTest {
-	
-	@Before
-	public void runBeforeAllTests() {
-		
-	}
+public class MppsSCPComponentTest {
 	
 	/**
 	 * @see MppsSCP#MppsSCP(String,String,String)
@@ -57,6 +51,25 @@ public class MppsSCPTest {
 		dev.addApplicationEntity(ae);
 		ae.addConnection(conn);
 		return dev;
+	}
+	
+	/**
+	 * @see MppsSCP#setStorageDirectory(File)
+	 * @verifies set this storageDir to given storageDir and create it
+	 */
+	@Test
+	public void setStorageDirectory_shouldSetThisStorageDirToGivenStorageDirAndCreateIt() throws Exception {
+		
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		
+		String mppsDirName = "new-mpps-dir";
+		File mppsDir = new File(mppsDirName);
+		mppsSCP.setStorageDirectory(mppsDir);
+		
+		assertNotNull(mppsSCP.getStorageDirectory());
+		assertThat(mppsSCP.getStorageDirectory(), is(mppsDir));
+		assertTrue(mppsSCP.getStorageDirectory()
+				.exists());
 	}
 	
 	/**
