@@ -33,6 +33,7 @@ import org.dcm4che3.util.SafeClose;
 
 public class MppsSCP {
 	
+	
 	private static final Log LOG = LogFactory.getLog(MppsSCP.class);
 	
 	private Device device = new Device("mppsscp");
@@ -48,6 +49,7 @@ public class MppsSCP {
 	private IOD mppsNSetIOD;
 	
 	protected final BasicMPPSSCP mppsSCP = new BasicMPPSSCP() {
+		
 		
 		@Override
 		protected Attributes create(Association as, Attributes rq, Attributes rqAttrs, Attributes rsp)
@@ -142,8 +144,8 @@ public class MppsSCP {
 		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
 		for (String cuid : p.stringPropertyNames()) {
 			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
-					CLIUtils.toUIDs(ts)));
+			ae.addTransferCapability(
+				new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP, CLIUtils.toUIDs(ts)));
 		}
 	}
 	
@@ -214,27 +216,49 @@ public class MppsSCP {
 		
 	}
 	
-	private Attributes create(Association as, Attributes rq, Attributes rqAttrs) throws DicomServiceException {
+	/**
+	 * Implements the DIMSE Service Element N-CREATE for the Modality Performed Procedure Step SOP Class Role SCP.
+	 * 
+	 * @param association DICOM association on which MPPS N-CREATE RQ was sent
+	 * @param request Attributes of DICOM MPPS N-CREATE RQ
+	 * @param requestAttributes Request attributes of DICOM MPPS N-CREATE RQ
+	 * @return response attributes which will be sent back to the MPPS SCU in the N-CREATE response
+	 * @throws DicomServiceException if <code>requestAttributes</code> are not conform with DICOM IOD
+	 *         <code>mppsNCreateIOD</code>
+	 * @throws DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in <code>request</code>
+	 * @throws DicomServiceException if MPPS file cannot be stored
+	 * @should throw DicomServiceException if requestAttributes are not conform with DICOM IOD mppsNCreateIOD
+	 * @should DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in request
+	 * @should DicomServiceException if MPPS file cannot be stored
+	 */
+	private Attributes create(Association association, Attributes request, Attributes requestAttributes)
+			throws DicomServiceException {
+		
 		if (mppsNCreateIOD != null) {
-			ValidationResult result = rqAttrs.validate(mppsNCreateIOD);
-			if (!result.isValid())
-				throw DicomServiceException.valueOf(result, rqAttrs);
+			ValidationResult result = requestAttributes.validate(mppsNCreateIOD);
+			if (!result.isValid()) {
+				throw DicomServiceException.valueOf(result, requestAttributes);
+			}
 		}
-		if (storageDir == null)
+		if (storageDir == null) {
 			return null;
-		String cuid = rq.getString(Tag.AffectedSOPClassUID);
-		String iuid = rq.getString(Tag.AffectedSOPInstanceUID);
+		}
+		String cuid = request.getString(Tag.AffectedSOPClassUID);
+		String iuid = request.getString(Tag.AffectedSOPInstanceUID);
 		File file = new File(storageDir, iuid);
-		if (file.exists())
+		if (file.exists()) {
 			throw new DicomServiceException(Status.DuplicateSOPinstance).setUID(Tag.AffectedSOPInstanceUID, iuid);
+		}
+		
 		DicomOutputStream out = null;
-		LOG.info(as + ": M-WRITE " + file);
+		LOG.info(association + ": M-WRITE " + file);
 		try {
 			out = new DicomOutputStream(file);
-			out.writeDataset(Attributes.createFileMetaInformation(iuid, cuid, UID.ExplicitVRLittleEndian), rqAttrs);
+			out.writeDataset(Attributes.createFileMetaInformation(iuid, cuid, UID.ExplicitVRLittleEndian),
+				requestAttributes);
 		}
 		catch (IOException e) {
-			LOG.warn(as + ": Failed to store MPPS:", e);
+			LOG.warn(association + ": Failed to store MPPS:", e);
 			throw new DicomServiceException(Status.ProcessingFailure, e);
 		}
 		finally {
@@ -243,6 +267,15 @@ public class MppsSCP {
 		return null;
 	}
 	
+	/**
+	 * Auto generated method comment
+	 * 
+	 * @param as
+	 * @param rq
+	 * @param rqAttrs
+	 * @return response attributes which will be sent back to the MPPS SCU in the N-SET response
+	 * @throws DicomServiceException
+	 */
 	private Attributes set(Association as, Attributes rq, Attributes rqAttrs) throws DicomServiceException {
 		if (mppsNSetIOD != null) {
 			ValidationResult result = rqAttrs.validate(mppsNSetIOD);

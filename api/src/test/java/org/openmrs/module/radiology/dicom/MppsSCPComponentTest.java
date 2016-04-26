@@ -8,10 +8,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
+import org.dcm4che3.data.Attributes;
+import org.dcm4che3.net.Association;
 import org.junit.Test;
 
+
 public class MppsSCPComponentTest {
+	
 	
 	/**
 	 * @see MppsSCP#MppsSCP(String,String,String)
@@ -22,7 +27,8 @@ public class MppsSCPComponentTest {
 		
 		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
 		assertThat(mppsSCP.getStorageDirectory()
-				.getPath(), is("mpps"));
+				.getPath(),
+			is("mpps"));
 	}
 	
 	/**
@@ -133,5 +139,25 @@ public class MppsSCPComponentTest {
 		
 		mppsSCP.setStorageDirectory(null);
 		assertThat(mppsSCP.getStorageDirectory(), is(nullValue()));
+	}
+	
+	/**
+	 * @see MppsSCP#create(Association,Attributes,Attributes)
+	 * @verifies DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in request
+	 */
+	@Test
+	public void create_shouldDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
+			throws Exception {
+		
+		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
+		try {
+			mppsSCP.start();
+			Method createMethod = MppsSCP.class.getDeclaredMethod("create",
+				new Class[] { Association.class, Attributes.class, Attributes.class });
+			createMethod.invoke(mppsSCP, args);
+		}
+		finally {
+			mppsSCP.stop();
+		}
 	}
 }
