@@ -4,14 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,8 +32,6 @@ import org.dcm4che3.tool.common.CLIUtils;
 import org.dcm4che3.util.SafeClose;
 
 public class MppsSCP {
-	
-	private static ResourceBundle rb = ResourceBundle.getBundle("org.dcm4che3.tool.mppsscp.messages");
 	
 	private static final Log LOG = LogFactory.getLog(MppsSCP.class);
 	
@@ -69,31 +63,6 @@ public class MppsSCP {
 	};
 	
 	private boolean started = false;
-	
-	public MppsSCP() throws IOException {
-		device.addConnection(conn);
-		device.addApplicationEntity(ae);
-		ae.setAssociationAcceptor(true);
-		ae.addConnection(conn);
-		DicomServiceRegistry serviceRegistry = new DicomServiceRegistry();
-		serviceRegistry.addDicomService(new BasicCEchoSCP());
-		serviceRegistry.addDicomService(mppsSCP);
-		ae.setDimseRQHandler(serviceRegistry);
-	}
-	
-	/**
-	 * Bind the MPPS SCP to the provided preconfigured ae
-	 *
-	 * @param applicationEntity
-	 */
-	public MppsSCP(ApplicationEntity applicationEntity) {
-		device = applicationEntity.getDevice();
-		applicationEntity.setAssociationAcceptor(true);
-		DicomServiceRegistry serviceRegistry = new DicomServiceRegistry();
-		serviceRegistry.addDicomService(new BasicCEchoSCP());
-		serviceRegistry.addDicomService(mppsSCP);
-		applicationEntity.setDimseRQHandler(serviceRegistry);
-	}
 	
 	/**
 	 * Creates an instance of MppsSCP with configured aeTitle, aePort and storageDirectory.
@@ -147,11 +116,25 @@ public class MppsSCP {
 	/**
 	 * Return true if started is true and false otherwise.
 	 * 
-	 * @return
+	 * @return true if started is true and false otherwise
+	 * @should return true if started is true
+	 * @should return false if started is false
 	 */
 	public boolean isStarted() {
 		
 		return this.started == true;
+	}
+	
+	/**
+	 * Return true if started is false and false otherwise.
+	 * 
+	 * @return true if started is false and true otherwise
+	 * @should return true if started is false
+	 * @should return false if started is true
+	 */
+	public boolean isStopped() {
+		
+		return this.started == false;
 	}
 	
 	/**
@@ -173,7 +156,7 @@ public class MppsSCP {
 	 */
 	public void stop() {
 		
-		if (!this.started)
+		if (this.isStopped())
 			return;
 		
 		this.started = false;
@@ -222,66 +205,6 @@ public class MppsSCP {
 		this.mppsNSetIOD = mppsNSetIOD;
 	}
 	
-	public static MppsSCP createFromCommandLineArgs(String[] args) throws IOException, ParseException,
-			GeneralSecurityException {
-		CommandLine cl = parseComandLine(args);
-		MppsSCP result = new MppsSCP();
-		
-		CLIUtils.configureBindServer(result.conn, result.ae, cl);
-		CLIUtils.configure(result.conn, cl);
-		configureTransferCapability(result.ae, cl);
-		
-		result.configure(cl.getOptionValue("mpps-ncreate-iod", "resource:dicom/mpps-ncreate-iod.xml"),
-			cl.getOptionValue("mpps-nset-iod", "resource:dicom/mpps-nset-iod.xml"), cl.getOptionValue("directory", "."));
-		
-		return result;
-	}
-	
-	private static CommandLine parseComandLine(String[] args) throws ParseException {
-		Options opts = new Options();
-		CLIUtils.addBindServerOption(opts);
-		CLIUtils.addAEOptions(opts);
-		CLIUtils.addCommonOptions(opts);
-		addStorageDirectoryOptions(opts);
-		addTransferCapabilityOptions(opts);
-		addIODOptions(opts);
-		return CLIUtils.parseComandLine(args, opts, rb, MppsSCP.class);
-	}
-	
-	@SuppressWarnings("static-access")
-	private static void addStorageDirectoryOptions(Options opts) {
-		opts.addOption(null, "ignore", false, rb.getString("ignore"));
-		opts.addOption(OptionBuilder.hasArg()
-				.withArgName("path")
-				.withDescription(rb.getString("directory"))
-				.withLongOpt("directory")
-				.create(null));
-	}
-	
-	@SuppressWarnings("static-access")
-	private static void addTransferCapabilityOptions(Options opts) {
-		opts.addOption(OptionBuilder.hasArg()
-				.withArgName("file|url")
-				.withDescription(rb.getString("sop-classes"))
-				.withLongOpt("sop-classes")
-				.create(null));
-	}
-	
-	@SuppressWarnings("static-access")
-	private static void addIODOptions(Options opts) {
-		opts.addOption(null, "no-validate", false, rb.getString("no-validate"));
-		opts.addOption(OptionBuilder.hasArg()
-				.withArgName("file|url")
-				.withDescription(rb.getString("ncreate-iod"))
-				.withLongOpt("ncreate-iod")
-				.create(null));
-		opts.addOption(OptionBuilder.hasArg()
-				.withArgName("file|url")
-				.withDescription(rb.getString("nset-iod"))
-				.withLongOpt("nset-iod")
-				.create(null));
-	}
-	
 	private static void configureTransferCapability(ApplicationEntity ae, String sopClassPropertiesUrl) throws IOException {
 		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
 		for (String cuid : p.stringPropertyNames()) {
@@ -289,28 +212,6 @@ public class MppsSCP {
 			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
 					CLIUtils.toUIDs(ts)));
 		}
-	}
-	
-	private static void configureTransferCapability(ApplicationEntity ae, CommandLine cl) throws IOException {
-		Properties p = CLIUtils.loadProperties(cl.getOptionValue("sop-classes", "resource:dicom/sop-classes.properties"),
-			null);
-		for (String cuid : p.stringPropertyNames()) {
-			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
-					CLIUtils.toUIDs(ts)));
-		}
-	}
-	
-	private void configure(String mppsNCreateIOD, String mppsNSetIOD, String directory) throws IOException,
-			GeneralSecurityException {
-		this.setStorageDirectory(new File(directory));
-		this.setMppsNCreateIOD(IOD.load(mppsNCreateIOD));
-		this.setMppsNSetIOD(IOD.load(mppsNSetIOD));
-		
-		ExecutorService executorService = Executors.newCachedThreadPool();
-		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-		device.setScheduledExecutor(scheduledExecutorService);
-		device.setExecutor(executorService);
 	}
 	
 	private Attributes create(Association as, Attributes rq, Attributes rqAttrs) throws DicomServiceException {
