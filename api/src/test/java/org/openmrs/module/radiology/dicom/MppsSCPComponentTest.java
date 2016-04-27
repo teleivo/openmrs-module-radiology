@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.UID;
 import org.dcm4che3.net.ApplicationEntity;
@@ -30,6 +32,8 @@ import org.junit.rules.TemporaryFolder;
  * Tests {@link MppsSCP}.
  */
 public class MppsSCPComponentTest {
+	
+	private static final Log LOG = LogFactory.getLog(MppsSCPComponentTest.class);
 	
 	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
 	
@@ -169,33 +173,55 @@ public class MppsSCPComponentTest {
 	public void create_shouldDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
 			throws Exception {
 		
-		MppsSCU mppsScu = null;
+		// setup MPPS SCU
+		Connection mppsScuConnection = new Connection();
+		// mppsScuConnection.setProtocol(Connection.Protocol.DICOM);
+		mppsScuConnection.setPort(MPPS_SCU_PORT);
+		mppsScuConnection.setReceivePDULength(Connection.DEF_MAX_PDU_LENGTH);
+		mppsScuConnection.setSendPDULength(Connection.DEF_MAX_PDU_LENGTH);
+		mppsScuConnection.setMaxOpsInvoked(0);
+		mppsScuConnection.setMaxOpsPerformed(0);
+		mppsScuConnection.setConnectTimeout(0);
+		mppsScuConnection.setRequestTimeout(0);
+		mppsScuConnection.setAcceptTimeout(0);
+		mppsScuConnection.setReleaseTimeout(0);
+		mppsScuConnection.setResponseTimeout(0);
+		mppsScuConnection.setRetrieveTimeout(0);
+		mppsScuConnection.setIdleTimeout(0);
+		mppsScuConnection.setSocketCloseDelay(Connection.DEF_SOCKETDELAY);
+		mppsScuConnection.setSendBufferSize(0);
+		mppsScuConnection.setReceiveBufferSize(0);
+		
+		Device mppsScuDevice = new Device("mppsscu");
+		mppsScuDevice.addConnection(mppsScuConnection);
+		// mppsScuConnection.setConnectionInstalled(true);
+		
+		ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
+		mppsScuDevice.addApplicationEntity(mppsScuAe);
+		mppsScuAe.setAssociationAcceptor(true);
+		mppsScuAe.setAssociationInitiator(true);
+		mppsScuAe.addConnection(mppsScuConnection);
+		
+		MppsSCU mppsScu = new MppsSCU(mppsScuAe);
+		
+		mppsScu.getAAssociateRQ()
+				.setCalledAET(MPPS_SCP_AE_TITLE);
+		mppsScu.getRemoteConnection()
+				.setHostname("localhost");
+		mppsScu.getRemoteConnection()
+				.setPort(MPPS_SCP_PORT);
+		
+		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
+				UID.ExplicitVRBigEndianRetired });
+		mppsScu.setAttributes(new Attributes());
+		
+		// create executor
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		mppsScuDevice.setExecutor(executorService);
+		mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
 		
 		try {
-			// setup MPPS SCU
-			Device mppsScuDevice = new Device("mppsscu");
-			Connection mppsScuConnection = new Connection();
-			mppsScuConnection.setPort(MPPS_SCU_PORT);
-			mppsScuDevice.addConnection(mppsScuConnection);
-			
-			ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
-			mppsScuDevice.addApplicationEntity(mppsScuAe);
-			mppsScuAe.addConnection(mppsScuConnection);
-			
-			mppsScu = new MppsSCU(mppsScuAe);
-			mppsScu.getAAssociateRQ()
-					.setCalledAET(MPPS_SCP_AE_TITLE);
-			mppsScu.getRemoteConnection()
-					.setPort(MPPS_SCP_PORT);
-			mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
-					UID.ExplicitVRBigEndianRetired });
-			
-			// create executor
-			ExecutorService executorService = Executors.newSingleThreadExecutor();
-			ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-			mppsScuDevice.setExecutor(executorService);
-			mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
-			
 			// Start MPPS SCP
 			mppsSCP.start();
 			
@@ -203,13 +229,19 @@ public class MppsSCPComponentTest {
 			mppsScu.open();
 			
 			// Create MPPS N-CREATE
-			mppsScu.createMpps();
-			
+			// mppsScu.createMpps();
+			// mppsScu.echo();
 		}
 		finally {
 			mppsSCP.stop();
 			if (mppsScu != null) {
 				mppsScu.close();
+			}
+			if (executorService != null) {
+				executorService.shutdown();
+			}
+			if (scheduledExecutorService != null) {
+				scheduledExecutorService.shutdown();
 			}
 		}
 	}
