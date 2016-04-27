@@ -8,10 +8,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.lang.reflect.Method;
+import java.io.IOException;
 
+import org.apache.commons.cli.ParseException;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.net.Association;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -19,6 +21,18 @@ import org.junit.Test;
  */
 public class MppsSCPComponentTest {
 	
+	private static String MPPS_STORAGE_DIR = "mpps";
+	
+	private File mppsStorageDirectory;
+	
+	private MppsSCP mppsSCP;
+	
+	@Before
+	public void runBeforeAllTests() throws ParseException, IOException {
+		
+		mppsStorageDirectory = new File(MPPS_STORAGE_DIR);
+		mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", mppsStorageDirectory);
+	}
 	
 	/**
 	 * @see MppsSCP#MppsSCP(String,String,String)
@@ -27,10 +41,7 @@ public class MppsSCPComponentTest {
 	@Test
 	public void MppsSCP_shouldCreateAnMppsSCPConfiguredWithGivenParameters() throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
-		assertThat(mppsSCP.getStorageDirectory()
-				.getPath(),
-			is("mpps"));
+		assertThat(mppsSCP.getStorageDirectory(), is(mppsStorageDirectory));
 	}
 	
 	/**
@@ -40,7 +51,6 @@ public class MppsSCPComponentTest {
 	@Test
 	public void isStarted_shouldReturnTrueIfStartedIsTrue() throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
 		try {
 			mppsSCP.start();
 			
@@ -58,8 +68,6 @@ public class MppsSCPComponentTest {
 	@Test
 	public void isStarted_shouldReturnFalseIfStartedIsFalse() throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
-		
 		assertFalse(mppsSCP.isStarted());
 	}
 	
@@ -69,8 +77,6 @@ public class MppsSCPComponentTest {
 	 */
 	@Test
 	public void isStopped_shouldReturnTrueIfStartedIsFalse() throws Exception {
-		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
 		
 		assertTrue(mppsSCP.isStopped());
 	}
@@ -82,7 +88,6 @@ public class MppsSCPComponentTest {
 	@Test
 	public void isStopped_shouldReturnFalseIfStartedIsTrue() throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
 		try {
 			mppsSCP.start();
 			
@@ -100,7 +105,6 @@ public class MppsSCPComponentTest {
 	@Test
 	public void start_shouldStartListeningOnDeviceConnectionsAndSetStartedToTrue() throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
 		try {
 			mppsSCP.start();
 			
@@ -118,10 +122,7 @@ public class MppsSCPComponentTest {
 	@Test
 	public void setStorageDirectory_shouldSetThisStorageDirToGivenStorageDirAndCreateIt() throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
-		
-		String mppsDirName = "new-mpps-dir";
-		File mppsDir = new File(mppsDirName);
+		File mppsDir = new File("new-mpps-dir");
 		mppsSCP.setStorageDirectory(mppsDir);
 		
 		assertNotNull(mppsSCP.getStorageDirectory());
@@ -137,8 +138,6 @@ public class MppsSCPComponentTest {
 	@Test
 	public void setStorageDirectory_shouldSetThisStorageDirToNullGivenNull() throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
-		
 		mppsSCP.setStorageDirectory(null);
 		assertThat(mppsSCP.getStorageDirectory(), is(nullValue()));
 	}
@@ -151,13 +150,12 @@ public class MppsSCPComponentTest {
 	public void create_shouldDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
 			throws Exception {
 		
-		MppsSCP mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", "mpps");
 		try {
 			mppsSCP.start();
-			Method createMethod = MppsSCP.class.getDeclaredMethod("create",
-				new Class[] { Association.class, Attributes.class, Attributes.class });
-//			createMethod.invoke(mppsSCP, args);
-//			MppsSCU mppsSCU = new MppsSCU();
+			// Method createMethod = MppsSCP.class.getDeclaredMethod("create",
+			// new Class[] { Association.class, Attributes.class, Attributes.class });
+			// createMethod.invoke(mppsSCP, args);
+			// MppsSCU mppsSCU = new MppsSCU();
 		}
 		finally {
 			mppsSCP.stop();
