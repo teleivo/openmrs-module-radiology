@@ -17,9 +17,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link RadiologyOrderFormController}.
+ * Tests {@link MppsSCP}.
  */
 public class MppsSCPComponentTest {
+	
 	
 	private static String MPPS_STORAGE_DIR = "mpps";
 	
