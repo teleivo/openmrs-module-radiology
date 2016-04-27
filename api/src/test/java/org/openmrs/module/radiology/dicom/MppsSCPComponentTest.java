@@ -9,10 +9,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.commons.cli.ParseException;
 import org.dcm4che3.data.Attributes;
+import org.dcm4che3.data.UID;
+import org.dcm4che3.net.ApplicationEntity;
 import org.dcm4che3.net.Association;
+import org.dcm4che3.net.Connection;
+import org.dcm4che3.net.Device;
+import org.dcm4che3.tool.mppsscu.MppsSCU;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,7 +31,13 @@ import org.junit.rules.TemporaryFolder;
  */
 public class MppsSCPComponentTest {
 	
-	private static String MPPS_STORAGE_DIR = "mpps";
+	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
+	
+	private static Integer MPPS_SCP_PORT = 11114;
+	
+	private static String MPPS_SCP_STORAGE_DIR = "mpps";
+	
+	private static Integer MPPS_SCU_PORT = 11115;
 	
 	@Rule
 	public TemporaryFolder temporaryBaseFolder = new TemporaryFolder();
@@ -35,8 +49,8 @@ public class MppsSCPComponentTest {
 	@Before
 	public void runBeforeAllTests() throws ParseException, IOException {
 		
-		mppsStorageDirectory = temporaryBaseFolder.newFolder(MPPS_STORAGE_DIR);
-		mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", mppsStorageDirectory);
+		mppsStorageDirectory = temporaryBaseFolder.newFolder(MPPS_SCP_STORAGE_DIR);
+		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), mppsStorageDirectory);
 	}
 	
 	/**
@@ -155,15 +169,48 @@ public class MppsSCPComponentTest {
 	public void create_shouldDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
 			throws Exception {
 		
+		MppsSCU mppsScu = null;
+		
 		try {
+			// setup MPPS SCU
+			Device mppsScuDevice = new Device("mppsscu");
+			Connection mppsScuConnection = new Connection();
+			mppsScuConnection.setPort(MPPS_SCU_PORT);
+			mppsScuDevice.addConnection(mppsScuConnection);
+			
+			ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
+			mppsScuDevice.addApplicationEntity(mppsScuAe);
+			mppsScuAe.addConnection(mppsScuConnection);
+			
+			mppsScu = new MppsSCU(mppsScuAe);
+			mppsScu.getAAssociateRQ()
+					.setCalledAET(MPPS_SCP_AE_TITLE);
+			mppsScu.getRemoteConnection()
+					.setPort(MPPS_SCP_PORT);
+			mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
+					UID.ExplicitVRBigEndianRetired });
+			
+			// create executor
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
+			ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+			mppsScuDevice.setExecutor(executorService);
+			mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
+			
+			// Start MPPS SCP
 			mppsSCP.start();
-			// Method createMethod = MppsSCP.class.getDeclaredMethod("create",
-			// new Class[] { Association.class, Attributes.class, Attributes.class });
-			// createMethod.invoke(mppsSCP, args);
-			// MppsSCU mppsSCU = new MppsSCU();
+			
+			// Open connection from MPPS SCU to MPPS SCP
+			mppsScu.open();
+			
+			// Create MPPS N-CREATE
+			mppsScu.createMpps();
+			
 		}
 		finally {
 			mppsSCP.stop();
+			if (mppsScu != null) {
+				mppsScu.close();
+			}
 		}
 	}
 }
