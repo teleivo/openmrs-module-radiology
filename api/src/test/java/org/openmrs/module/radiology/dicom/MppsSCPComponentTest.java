@@ -226,7 +226,8 @@ public class MppsSCPComponentTest {
 			mppsSCP.start();
 			
 			// Open connection from MPPS SCU to MPPS SCP
-			mppsScu.open();
+			// mppsScu.open();
+			MppsSCU.main(new String[] { "-b", "MPPSSCU@:11115", "-c", "RADIOLOGY_MODULE@localhost:11114" });
 			
 			// Create MPPS N-CREATE
 			// mppsScu.createMpps();
