@@ -14,7 +14,9 @@ import org.dcm4che3.data.Attributes;
 import org.dcm4che3.net.Association;
 import org.junit.Test;
 
-
+/**
+ * Tests {@link RadiologyOrderFormController}.
+ */
 public class MppsSCPComponentTest {
 	
 	
