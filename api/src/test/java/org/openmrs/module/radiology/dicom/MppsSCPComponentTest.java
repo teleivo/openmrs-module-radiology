@@ -14,15 +14,19 @@ import org.apache.commons.cli.ParseException;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.net.Association;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests {@link MppsSCP}.
  */
 public class MppsSCPComponentTest {
 	
-	
 	private static String MPPS_STORAGE_DIR = "mpps";
+	
+	@Rule
+	public TemporaryFolder temporaryBaseFolder = new TemporaryFolder();
 	
 	private File mppsStorageDirectory;
 	
@@ -31,7 +35,7 @@ public class MppsSCPComponentTest {
 	@Before
 	public void runBeforeAllTests() throws ParseException, IOException {
 		
-		mppsStorageDirectory = new File(MPPS_STORAGE_DIR);
+		mppsStorageDirectory = temporaryBaseFolder.newFolder(MPPS_STORAGE_DIR);
 		mppsSCP = new MppsSCP("RADIOLOGY_MODULE", "11114", mppsStorageDirectory);
 	}
 	
@@ -123,7 +127,7 @@ public class MppsSCPComponentTest {
 	@Test
 	public void setStorageDirectory_shouldSetThisStorageDirToGivenStorageDirAndCreateIt() throws Exception {
 		
-		File mppsDir = new File("new-mpps-dir");
+		File mppsDir = temporaryBaseFolder.newFolder("new-mpps-dir");
 		mppsSCP.setStorageDirectory(mppsDir);
 		
 		assertNotNull(mppsSCP.getStorageDirectory());
