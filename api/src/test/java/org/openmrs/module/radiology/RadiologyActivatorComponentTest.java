@@ -14,15 +14,19 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.module.radiology.dicom.MppsSCP;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Tests {@link RadiologyActivator}
@@ -36,14 +40,27 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 	@Autowired
 	private RadiologyProperties radiologyProperties;
 	
+	@Autowired
+	@Qualifier("adminService")
+	private AdministrationService administrationService;
+	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
+	
+	@Rule
+	public TemporaryFolder temporaryBaseFolder = new TemporaryFolder();
+	
+	File temporaryDicomMppsSCPStorageDirectory;
 	
 	@Before
 	public void runBeforeAllTests() throws Exception {
 		
 		radiologyActivator = new RadiologyActivator();
 		executeDataSet(ACTIVATOR_TEST_DATASET);
+		
+		temporaryDicomMppsSCPStorageDirectory = temporaryBaseFolder.newFolder(radiologyProperties.getDicomMppsSCPStorageDirectory());
+		administrationService.setGlobalProperty(RadiologyConstants.GP_DICOM_MPPS_SCP_STORAGE_DIRECTORY,
+			temporaryDicomMppsSCPStorageDirectory.getAbsolutePath());
 	}
 	
 	/**
@@ -110,7 +127,7 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 		assertThat(dicomOrderFillerArguments[0], is("--bind"));
 		assertThat(dicomOrderFillerArguments[1], is("RADIOLOGY_MODULE:11114"));
 		assertThat(dicomOrderFillerArguments[2], is("--directory"));
-		assertThat(dicomOrderFillerArguments[3], is("mpps"));
+		assertThat(dicomOrderFillerArguments[3], is(temporaryDicomMppsSCPStorageDirectory.getAbsolutePath()));
 	}
 	
 }
