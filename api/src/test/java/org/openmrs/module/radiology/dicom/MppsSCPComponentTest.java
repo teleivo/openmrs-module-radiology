@@ -8,6 +8,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -232,10 +234,18 @@ public class MppsSCPComponentTest {
 			// Open connection from MPPS SCU to MPPS SCP
 			mppsScu.open();
 			// MppsSCU.main(new String[] { "-b", "MPPSSCU@:11115", "-c", "RADIOLOGY_MODULE@localhost:11114" });
-			
+			List<String> mppsFiles = new ArrayList<String>();
+			// ClassLoader classLoader = getClass().getClassLoader();
+			// File file = new File(classLoader.getResource(
+			// "dicom/mpps/1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30.dcm")
+			// .getFile());
+			File mppsDirectory = new File("src/test/resources/dicom/mpps");
+			System.out.println(mppsDirectory.getAbsolutePath());
+			mppsFiles.add(mppsDirectory.getAbsolutePath());
+			mppsScu.scanFiles(mppsFiles, true);
 			// Create MPPS N-CREATE
-			// mppsScu.createMpps();
-			mppsScu.echo();
+			mppsScu.createMpps();
+			// mppsScu.echo();
 			// mppsScu.createMpps();
 		}
 		finally {
