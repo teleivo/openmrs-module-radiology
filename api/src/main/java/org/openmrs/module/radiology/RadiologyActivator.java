@@ -65,8 +65,9 @@ public class RadiologyActivator extends BaseModuleActivator {
 			RadiologyProperties.class);
 		
 		try {
-			this.mppsSCP = new MppsSCP(radiologyProperties.getDicomAeTitle(), radiologyProperties.getDicomMppsPort(),
-					new File(radiologyProperties.getMppsDir()));
+			this.mppsSCP = new MppsSCP(radiologyProperties.getDicomMppsSCPAeTitle(),
+					radiologyProperties.getDicomMppsSCPPort(), new File(
+							radiologyProperties.getDicomMppsSCPStorageDirectory()));
 		}
 		catch (IOException ioException) {
 			log.error("Error creating OpenMRS MPPS SCP Client", ioException);
@@ -99,8 +100,8 @@ public class RadiologyActivator extends BaseModuleActivator {
 		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
 			RadiologyProperties.class);
 		return new String[] { "--bind",
-				radiologyProperties.getDicomAeTitle() + ":" + radiologyProperties.getDicomMppsPort(), "--directory",
-				radiologyProperties.getMppsDir(), };
+				radiologyProperties.getDicomMppsSCPAeTitle() + ":" + radiologyProperties.getDicomMppsSCPPort(),
+				"--directory", radiologyProperties.getDicomMppsSCPStorageDirectory(), };
 	}
 	
 	/**

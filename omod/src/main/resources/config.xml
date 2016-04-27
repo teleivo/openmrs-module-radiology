@@ -42,17 +42,6 @@
 
 	<!--Required Global Properties -->
 	<globalProperty>
-		<property>@MODULE_ID@.mwlDirectory</property>
-		<defaultValue>mwl</defaultValue>
-		<description>Directory for mwl entries. Ex: d:/tmp/mwl or /tmp/mwl
-		</description>
-	</globalProperty>
-	<globalProperty>
-		<property>@MODULE_ID@.mppsDirectory</property>
-		<defaultValue>mpps</defaultValue>
-		<description>Directory for mpps entries</description>
-	</globalProperty>
-	<globalProperty>
 		<property>@MODULE_ID@.pacsAddress</property>
 		<defaultValue>localhost</defaultValue>
 		<description>IP address or hostname of the PACS</description>
@@ -70,17 +59,34 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomMppsPort</property>
+		<property>@MODULE_ID@.dicomMppsSCPPort</property>
 		<defaultValue>11114</defaultValue>
-		<description>DICOM port of the radiology module MPPS SCU to receive
+		<description>Port of the radiology module's DICOM MPPS SCP where it
+			listens for
 			DICOM MPPS
-			updates
+			updates from an MPPS SCU. Note: changes only
+			take effect
+			after a
+			module restart!
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomAeTitle</property>
+		<property>@MODULE_ID@.dicomMppsSCPAeTitle</property>
 		<defaultValue>RADIOLOGY_MODULE</defaultValue>
-		<description>DICOM AE title of the radiology module
+		<description>AE title of the radiology module's DICOM MPPS SCP. Note:
+			changes only take
+			effect after a module restart!
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.dicomMppsSCPStorageDirectory</property>
+		<defaultValue>mpps</defaultValue>
+		<description>Directory where the radiology module's DICOM MPPS SCP
+			stores
+			DICOM MPPS
+			updates received from an MPPS SCU. Note: changes only
+			take
+			effect after a module restart!
 		</description>
 	</globalProperty>
 	<globalProperty>

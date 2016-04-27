@@ -31,9 +31,9 @@ public class RadiologyActivatorTest extends BaseContextMockTest {
 	
 	@Before
 	public void runBeforeAllTests() {
-		when(radiologyProperties.getDicomAeTitle()).thenReturn("RADIOLOGY_MODULE");
-		when(radiologyProperties.getDicomMppsPort()).thenReturn("11114");
-		when(radiologyProperties.getMppsDir()).thenReturn("mpps");
+		when(radiologyProperties.getDicomMppsSCPAeTitle()).thenReturn("RADIOLOGY_MODULE");
+		when(radiologyProperties.getDicomMppsSCPPort()).thenReturn("11114");
+		when(radiologyProperties.getDicomMppsSCPStorageDirectory()).thenReturn("mpps");
 		PowerMockito.mockStatic(Context.class);
 		Mockito.when(Context.getRegisteredComponent("radiologyProperties", RadiologyProperties.class))
 				.thenReturn(radiologyProperties);
