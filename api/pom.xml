@@ -68,7 +68,6 @@
 			<groupId>org.dcm4che.tool</groupId>
 			<artifactId>dcm4che-tool-mppsscu</artifactId>
 			<version>${dcm4che3Version}</version>
-			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
