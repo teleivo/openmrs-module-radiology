@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class RadiologyActivator extends BaseModuleActivator {
 		
 		try {
 			this.mppsSCP = new MppsSCP(radiologyProperties.getDicomAeTitle(), radiologyProperties.getDicomMppsPort(),
-					radiologyProperties.getMppsDir());
+					new File(radiologyProperties.getMppsDir()));
 		}
 		catch (IOException ioException) {
 			log.error("Error creating OpenMRS MPPS SCP Client", ioException);

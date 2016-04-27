@@ -33,7 +33,6 @@ import org.dcm4che3.util.SafeClose;
 
 public class MppsSCP {
 	
-	
 	private static final Log LOG = LogFactory.getLog(MppsSCP.class);
 	
 	private Device device = new Device("mppsscp");
@@ -49,7 +48,6 @@ public class MppsSCP {
 	private IOD mppsNSetIOD;
 	
 	protected final BasicMPPSSCP mppsSCP = new BasicMPPSSCP() {
-		
 		
 		@Override
 		protected Attributes create(Association as, Attributes rq, Attributes rqAttrs, Attributes rsp)
@@ -76,7 +74,7 @@ public class MppsSCP {
 	 * @throws IOException
 	 * @should create an MppsSCP configured with given parameters
 	 */
-	public MppsSCP(String aeTitle, String aePort, String storageDirectory) throws ParseException, IOException {
+	public MppsSCP(String aeTitle, String aePort, File storageDirectory) throws ParseException, IOException {
 		this.device.addConnection(this.conn);
 		this.device.addApplicationEntity(this.ae);
 		this.ae.setAssociationAcceptor(true);
@@ -105,7 +103,7 @@ public class MppsSCP {
 		this.conn.setReceiveBufferSize(0);
 		configureTransferCapability(this.ae, "resource:dicom/sop-classes.properties");
 		
-		this.setStorageDirectory(new File(storageDirectory));
+		this.setStorageDirectory(storageDirectory);
 		this.setMppsNCreateIOD(IOD.load("resource:dicom/mpps-ncreate-iod.xml"));
 		this.setMppsNSetIOD(IOD.load("resource:dicom/mpps-nset-iod.xml"));
 		
@@ -144,8 +142,8 @@ public class MppsSCP {
 		Properties p = CLIUtils.loadProperties(sopClassPropertiesUrl, null);
 		for (String cuid : p.stringPropertyNames()) {
 			String ts = p.getProperty(cuid);
-			ae.addTransferCapability(
-				new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP, CLIUtils.toUIDs(ts)));
+			ae.addTransferCapability(new TransferCapability(null, CLIUtils.toUID(cuid), TransferCapability.Role.SCP,
+					CLIUtils.toUIDs(ts)));
 		}
 	}
 	
@@ -254,8 +252,7 @@ public class MppsSCP {
 		LOG.info(association + ": M-WRITE " + file);
 		try {
 			out = new DicomOutputStream(file);
-			out.writeDataset(Attributes.createFileMetaInformation(iuid, cuid, UID.ExplicitVRLittleEndian),
-				requestAttributes);
+			out.writeDataset(Attributes.createFileMetaInformation(iuid, cuid, UID.ExplicitVRLittleEndian), requestAttributes);
 		}
 		catch (IOException e) {
 			LOG.warn(association + ": Failed to store MPPS:", e);
