@@ -140,56 +140,84 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
 	}
 	
 	/**
-	 * @see RadiologyProperties#getDicomMppsPort()
-	 * @verifies return dicom mpps port
+	 * @see RadiologyProperties#getDicomMppsSCPPort()
+	 * @verifies return dicom mpps scp port
 	 */
 	@Test
-	public void getDicomMppsPort_shouldReturnPacsDicomMppsPort() throws Exception {
+	public void getDicomMppsPort_shouldReturnPacsDicomMppsSCPPort() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_MPPS_PORT, "11114"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_MPPS_SCP_PORT, "11114"));
 		
-		assertThat(radiologyProperties.getDicomMppsPort(), is("11114"));
+		assertThat(radiologyProperties.getDicomMppsSCPPort(), is("11114"));
 	}
 	
 	/**
-	 * @see RadiologyProperties#getDicomMppsPort()
-	 * @verifies throw illegal state exception if global property for dicom mpps port cannot be
+	 * @see RadiologyProperties#getDicomMppsSCPPort()
+	 * @verifies throw illegal state exception if global property for dicom mpps scp port cannot be
 	 *           found
 	 */
 	@Test
-	public void getDicomMppsPort_shouldThrowIllegalStateExceptionIfGlobalPropertyForPacsDicomMppsPortCannotBeFound()
+	public void getDicomMppsPort_shouldThrowIllegalStateExceptionIfGlobalPropertyForPacsDicomMppsSCPPortCannotBeFound()
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_MPPS_PORT);
+		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_MPPS_SCP_PORT);
 		
-		radiologyProperties.getDicomMppsPort();
+		radiologyProperties.getDicomMppsSCPPort();
 	}
 	
 	/**
-	 * @see RadiologyProperties#getDicomAeTitle()
-	 * @verifies return dicom ae title
+	 * @see RadiologyProperties#getDicomMppsSCPAeTitle()
+	 * @verifies return dicom mpps scp ae title
 	 */
 	@Test
 	public void getDicomAeTitle_shouldReturnDicomAeTitle() throws Exception {
 		
-		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_AE_TITLE, "RADIOLOGY_MODULE"));
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_MPPS_SCP_AE_TITLE,
+				"RADIOLOGY_MODULE"));
 		
-		assertThat(radiologyProperties.getDicomAeTitle(), is("RADIOLOGY_MODULE"));
+		assertThat(radiologyProperties.getDicomMppsSCPAeTitle(), is("RADIOLOGY_MODULE"));
 	}
 	
 	/**
-	 * @see RadiologyProperties#getDicomAeTitle()
-	 * @verifies throw illegal state exception if global property for dicom ae title cannot be found
+	 * @see RadiologyProperties#getDicomMppsSCPAeTitle()
+	 * @verifies throw illegal state exception if global property for dicom mpps scp ae title cannot be found
 	 */
 	@Test
 	public void getDicomAeTitle_shouldThrowIllegalStateExceptionIfGlobalPropertyForDicomAeTitleCannotBeFound()
 			throws Exception {
 		
 		expectedException.expect(IllegalStateException.class);
-		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_AE_TITLE);
+		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_MPPS_SCP_AE_TITLE);
 		
-		radiologyProperties.getDicomAeTitle();
+		radiologyProperties.getDicomMppsSCPAeTitle();
+	}
+	
+	/**
+	 * @see RadiologyProperties#getDicomMppsSCPStorageDirectory()
+	 * @verifies return dicom mpps scp storage directory
+	 */
+	@Test
+	public void getDicomMppsSCPStorageDirectory_shouldReturnDicomMppsScpStorageDirectory() throws Exception {
+		
+		administrationService.saveGlobalProperty(new GlobalProperty(RadiologyConstants.GP_DICOM_MPPS_SCP_STORAGE_DIRECTORY,
+				"mpps"));
+		
+		assertThat(radiologyProperties.getDicomMppsSCPStorageDirectory(), is("mpps"));
+	}
+	
+	/**
+	 * @see RadiologyProperties#getDicomMppsSCPStorageDirectory()
+	 * @verifies throw illegal state exception if global property for dicom mpps storage directory cannot be found
+	 */
+	@Test
+	public void getDicomMppsSCPStorageDirectory_shouldThrowIllegalStateExceptionIfGlobalPropertyForDicomMppsStorageDirectoryCannotBeFound()
+			throws Exception {
+		
+		expectedException.expect(IllegalStateException.class);
+		expectedException.expectMessage("Configuration required: " + RadiologyConstants.GP_DICOM_MPPS_SCP_STORAGE_DIRECTORY);
+		
+		radiologyProperties.getDicomMppsSCPStorageDirectory();
 	}
 	
 	/**

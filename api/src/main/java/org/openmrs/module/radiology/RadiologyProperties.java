@@ -25,24 +25,6 @@ import org.springframework.stereotype.Component;
 public class RadiologyProperties extends ModuleProperties {
 	
 	/**
-	 * Return mpps directory.
-	 * 
-	 * @return mpps directory
-	 */
-	public String getMppsDir() {
-		return getGlobalProperty(RadiologyConstants.GP_MPPS_DIR, true);
-	}
-	
-	/**
-	 * Return mwl directory.
-	 * 
-	 * @return mwl directory
-	 */
-	public String getMwlDir() {
-		return getGlobalProperty(RadiologyConstants.GP_MWL_DIR, true);
-	}
-	
-	/**
 	 * Return PACS address.
 	 * 
 	 * @return pacs address
@@ -80,27 +62,39 @@ public class RadiologyProperties extends ModuleProperties {
 	}
 	
 	/**
-	 * Return DICOM MPPS port.
+	 * Return DICOM MPPS SCP port.
 	 * 
-	 * @return dicom mpps port
-	 * @throws IllegalStateException if global property for dicom mpps port cannot be found
-	 * @should return pacs dicom mpps port
-	 * @should throw illegal state exception if global property for dicom mpps port cannot be found
+	 * @return dicom mpps scp port
+	 * @throws IllegalStateException if global property for dicom mpps scp port cannot be found
+	 * @should return pacs dicom mpps scp port
+	 * @should throw illegal state exception if global property for dicom mpps scp port cannot be found
 	 */
-	public String getDicomMppsPort() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_MPPS_PORT, true);
+	public String getDicomMppsSCPPort() {
+		return getGlobalProperty(RadiologyConstants.GP_DICOM_MPPS_SCP_PORT, true);
 	}
 	
 	/**
-	 * Return DICOM AE title.
+	 * Return DICOM MPPS SCP AE title.
 	 * 
-	 * @return dicom ae title
-	 * @throws IllegalStateException if global property for dicom ae title cannot be found
-	 * @should return dicom ae title
-	 * @should throw illegal state exception if global property for dicom ae title cannot be found
+	 * @return dicom mpps scp ae title
+	 * @throws IllegalStateException if global property for dicom mpps scp ae title cannot be found
+	 * @should return dicom mpps scp ae title
+	 * @should throw illegal state exception if global property for dicom mpps scp ae title cannot be found
 	 */
-	public String getDicomAeTitle() {
-		return getGlobalProperty(RadiologyConstants.GP_DICOM_AE_TITLE, true);
+	public String getDicomMppsSCPAeTitle() {
+		return getGlobalProperty(RadiologyConstants.GP_DICOM_MPPS_SCP_AE_TITLE, true);
+	}
+	
+	/**
+	 * Return DICOM MPPS SCP storage directory.
+	 * 
+	 * @return dicom mpps scp storage directory
+	 * @throws IllegalStateException if global property for dicom mpps scp storage directory cannot be found
+	 * @should return dicom mpps scp storage directory
+	 * @should throw illegal state exception if global property for dicom mpps storage directory cannot be found
+	 */
+	public String getDicomMppsSCPStorageDirectory() {
+		return getGlobalProperty(RadiologyConstants.GP_DICOM_MPPS_SCP_STORAGE_DIRECTORY, true);
 	}
 	
 	/**
