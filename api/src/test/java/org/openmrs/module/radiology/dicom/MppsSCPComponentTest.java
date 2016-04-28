@@ -239,7 +239,7 @@ public class MppsSCPComponentTest {
 			System.out.println(mppsDirectory.getAbsolutePath());
 			mppsFiles.add(mppsDirectory.getAbsolutePath());
 			mppsScu.scanFiles(mppsFiles, true);
-
+			
 			// Create MPPS N-CREATE
 			mppsScu.createMpps();
 			// mppsScu.echo();
