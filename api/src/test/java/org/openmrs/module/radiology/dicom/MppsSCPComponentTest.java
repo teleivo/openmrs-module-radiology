@@ -34,6 +34,7 @@ import org.junit.rules.TemporaryFolder;
  */
 public class MppsSCPComponentTest {
 	
+	
 	private static final Log LOG = LogFactory.getLog(MppsSCPComponentTest.class);
 	
 	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
@@ -216,8 +217,8 @@ public class MppsSCPComponentTest {
 		mppsScu.getRemoteConnection()
 				.setPort(MPPS_SCP_PORT);
 		
-		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
-				UID.ExplicitVRBigEndianRetired });
+		mppsScu.setTransferSyntaxes(
+			new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian, UID.ExplicitVRBigEndianRetired });
 		mppsScu.setAttributes(new Attributes());
 		
 		// create executor
