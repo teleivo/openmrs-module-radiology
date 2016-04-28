@@ -34,7 +34,6 @@ import org.junit.rules.TemporaryFolder;
  */
 public class MppsSCPComponentTest {
 	
-	
 	private static final Log LOG = LogFactory.getLog(MppsSCPComponentTest.class);
 	
 	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
@@ -217,8 +216,8 @@ public class MppsSCPComponentTest {
 		mppsScu.getRemoteConnection()
 				.setPort(MPPS_SCP_PORT);
 		
-		mppsScu.setTransferSyntaxes(
-			new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian, UID.ExplicitVRBigEndianRetired });
+		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
+				UID.ExplicitVRBigEndianRetired });
 		mppsScu.setAttributes(new Attributes());
 		
 		// create executor
@@ -236,14 +235,11 @@ public class MppsSCPComponentTest {
 			mppsScu.open();
 			// MppsSCU.main(new String[] { "-b", "MPPSSCU@:11115", "-c", "RADIOLOGY_MODULE@localhost:11114" });
 			List<String> mppsFiles = new ArrayList<String>();
-			// ClassLoader classLoader = getClass().getClassLoader();
-			// File file = new File(classLoader.getResource(
-			// "dicom/mpps/1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30.dcm")
-			// .getFile());
-			File mppsDirectory = new File("src/test/resources/dicom/mpps");
+			File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
 			System.out.println(mppsDirectory.getAbsolutePath());
 			mppsFiles.add(mppsDirectory.getAbsolutePath());
 			mppsScu.scanFiles(mppsFiles, true);
+
 			// Create MPPS N-CREATE
 			mppsScu.createMpps();
 			// mppsScu.echo();
