@@ -244,6 +244,10 @@ public class MppsSCPComponentTest {
 			mppsScu.createMpps();
 			// mppsScu.echo();
 			// mppsScu.createMpps();
+			File mppsFileCreated = new File(mppsStorageDirectory,
+					"1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
+			System.out.println("We did it: " + mppsFileCreated.getAbsolutePath());
+			assertTrue(mppsFileCreated.exists());
 		}
 		finally {
 			// mppsSCP.stop();
