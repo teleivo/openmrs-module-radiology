@@ -301,10 +301,10 @@ public class MppsSCPComponentTest {
 	
 	/**
 	 * @see MppsSCP#create(Association,Attributes,Attributes)
-	 * @verifies DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in request
+	 * @verifies throw DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in request
 	 */
 	@Test
-	public void create_shouldDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
+	public void create_shouldthrowDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
 			throws Exception {
 		
 		// // setup MPPS SCU

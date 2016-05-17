@@ -226,8 +226,8 @@ public class MppsSCP {
 	 * @throws DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in <code>request</code>
 	 * @throws DicomServiceException if MPPS file cannot be stored
 	 * @should throw DicomServiceException if requestAttributes are not conform with DICOM IOD mppsNCreateIOD
-	 * @should DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in request
-	 * @should DicomServiceException if MPPS file cannot be stored
+	 * @should throw DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in request
+	 * @should throw DicomServiceException if MPPS file cannot be stored
 	 */
 	private Attributes create(Association association, Attributes request, Attributes requestAttributes)
 			throws DicomServiceException {
