@@ -12,7 +12,7 @@
 	</appender>
 
 	<root>
-		<level value="ON" />
+		<level value="OFF" />
 		<appender-ref ref="CONSOLE" />
 	</root>
 

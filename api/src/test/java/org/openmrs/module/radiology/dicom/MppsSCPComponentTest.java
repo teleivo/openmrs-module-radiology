@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -17,12 +18,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dcm4che3.data.Attributes;
+import org.dcm4che3.data.Tag;
 import org.dcm4che3.data.UID;
 import org.dcm4che3.net.ApplicationEntity;
 import org.dcm4che3.net.Association;
 import org.dcm4che3.net.Connection;
 import org.dcm4che3.net.Device;
+import org.dcm4che3.net.DimseRSPHandler;
+import org.dcm4che3.net.Status;
 import org.dcm4che3.tool.mppsscu.MppsSCU;
+import org.dcm4che3.tool.mppsscu.MppsSCU.MppsWithIUID;
+import org.dcm4che3.tool.mppsscu.MppsSCU.RSPHandlerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,17 +57,78 @@ public class MppsSCPComponentTest {
 	
 	private MppsSCP mppsSCP;
 	
+	private MppsSCU mppsScu;
+	
+	private ExecutorService executorService;
+	
+	private ScheduledExecutorService scheduledExecutorService;
+	
 	@Before
 	public void setUp() throws Exception {
 		
 		mppsStorageDirectory = temporaryBaseFolder.newFolder(MPPS_SCP_STORAGE_DIR);
 		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), mppsStorageDirectory);
+		
+		// setup MPPS SCU
+		Connection mppsScuConnection = new Connection();
+		mppsScuConnection.setPort(MPPS_SCU_PORT);
+		mppsScuConnection.setReceivePDULength(Connection.DEF_MAX_PDU_LENGTH);
+		mppsScuConnection.setSendPDULength(Connection.DEF_MAX_PDU_LENGTH);
+		mppsScuConnection.setMaxOpsInvoked(0);
+		mppsScuConnection.setMaxOpsPerformed(0);
+		mppsScuConnection.setConnectTimeout(0);
+		mppsScuConnection.setRequestTimeout(0);
+		mppsScuConnection.setAcceptTimeout(0);
+		mppsScuConnection.setReleaseTimeout(0);
+		mppsScuConnection.setResponseTimeout(0);
+		mppsScuConnection.setRetrieveTimeout(0);
+		mppsScuConnection.setIdleTimeout(0);
+		mppsScuConnection.setSocketCloseDelay(Connection.DEF_SOCKETDELAY);
+		mppsScuConnection.setSendBufferSize(0);
+		mppsScuConnection.setReceiveBufferSize(0);
+		
+		Device mppsScuDevice = new Device("mppsscu");
+		mppsScuDevice.addConnection(mppsScuConnection);
+		
+		ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
+		mppsScuDevice.addApplicationEntity(mppsScuAe);
+		mppsScuAe.setAssociationAcceptor(true);
+		mppsScuAe.setAssociationInitiator(true);
+		mppsScuAe.addConnection(mppsScuConnection);
+		
+		mppsScu = new MppsSCU(mppsScuAe);
+		mppsScu.getAAssociateRQ()
+				.setCalledAET(MPPS_SCP_AE_TITLE);
+		mppsScu.getRemoteConnection()
+				.setHostname("localhost");
+		mppsScu.getRemoteConnection()
+				.setPort(MPPS_SCP_PORT);
+		
+		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
+				UID.ExplicitVRBigEndianRetired });
+		mppsScu.setAttributes(new Attributes());
+		
+		// create executor
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		mppsScuDevice.setExecutor(executorService);
+		mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
 	}
 	
 	@After
-	public void tearDown() {
+	public void tearDown() throws IOException, InterruptedException {
 		
 		// mppsSCP.stop();
+		if (mppsScu != null) {
+			mppsScu.close();
+		}
+		if (executorService != null) {
+			executorService.shutdown();
+		}
+		if (scheduledExecutorService != null) {
+			scheduledExecutorService.shutdown();
+		}
+		mppsSCP.stop();
 	}
 	
 	/**
@@ -180,86 +247,120 @@ public class MppsSCPComponentTest {
 	public void create_shouldDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
 			throws Exception {
 		
-		// setup MPPS SCU
-		Connection mppsScuConnection = new Connection();
-		mppsScuConnection.setPort(MPPS_SCU_PORT);
-		mppsScuConnection.setReceivePDULength(Connection.DEF_MAX_PDU_LENGTH);
-		mppsScuConnection.setSendPDULength(Connection.DEF_MAX_PDU_LENGTH);
-		mppsScuConnection.setMaxOpsInvoked(0);
-		mppsScuConnection.setMaxOpsPerformed(0);
-		mppsScuConnection.setConnectTimeout(0);
-		mppsScuConnection.setRequestTimeout(0);
-		mppsScuConnection.setAcceptTimeout(0);
-		mppsScuConnection.setReleaseTimeout(0);
-		mppsScuConnection.setResponseTimeout(0);
-		mppsScuConnection.setRetrieveTimeout(0);
-		mppsScuConnection.setIdleTimeout(0);
-		mppsScuConnection.setSocketCloseDelay(Connection.DEF_SOCKETDELAY);
-		mppsScuConnection.setSendBufferSize(0);
-		mppsScuConnection.setReceiveBufferSize(0);
+		// // setup MPPS SCU
+		// Connection mppsScuConnection = new Connection();
+		// mppsScuConnection.setPort(MPPS_SCU_PORT);
+		// mppsScuConnection.setReceivePDULength(Connection.DEF_MAX_PDU_LENGTH);
+		// mppsScuConnection.setSendPDULength(Connection.DEF_MAX_PDU_LENGTH);
+		// mppsScuConnection.setMaxOpsInvoked(0);
+		// mppsScuConnection.setMaxOpsPerformed(0);
+		// mppsScuConnection.setConnectTimeout(0);
+		// mppsScuConnection.setRequestTimeout(0);
+		// mppsScuConnection.setAcceptTimeout(0);
+		// mppsScuConnection.setReleaseTimeout(0);
+		// mppsScuConnection.setResponseTimeout(0);
+		// mppsScuConnection.setRetrieveTimeout(0);
+		// mppsScuConnection.setIdleTimeout(0);
+		// mppsScuConnection.setSocketCloseDelay(Connection.DEF_SOCKETDELAY);
+		// mppsScuConnection.setSendBufferSize(0);
+		// mppsScuConnection.setReceiveBufferSize(0);
+		//
+		// Device mppsScuDevice = new Device("mppsscu");
+		// mppsScuDevice.addConnection(mppsScuConnection);
+		//
+		// ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
+		// mppsScuDevice.addApplicationEntity(mppsScuAe);
+		// mppsScuAe.setAssociationAcceptor(true);
+		// mppsScuAe.setAssociationInitiator(true);
+		// mppsScuAe.addConnection(mppsScuConnection);
+		//
+		// MppsSCU mppsScu = new MppsSCU(mppsScuAe);
 		
-		Device mppsScuDevice = new Device("mppsscu");
-		mppsScuDevice.addConnection(mppsScuConnection);
+		// mppsScu.getAAssociateRQ()
+		// .setCalledAET(MPPS_SCP_AE_TITLE);
+		// mppsScu.getRemoteConnection()
+		// .setHostname("localhost");
+		// mppsScu.getRemoteConnection()
+		// .setPort(MPPS_SCP_PORT);
+		//
+		// mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
+		// UID.ExplicitVRBigEndianRetired });
+		// mppsScu.setAttributes(new Attributes());
+		//
+		// // create executor
+		// ExecutorService executorService = Executors.newSingleThreadExecutor();
+		// ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		// mppsScuDevice.setExecutor(executorService);
+		// mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
 		
-		ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
-		mppsScuDevice.addApplicationEntity(mppsScuAe);
-		mppsScuAe.setAssociationAcceptor(true);
-		mppsScuAe.setAssociationInitiator(true);
-		mppsScuAe.addConnection(mppsScuConnection);
+		// try {
+		LOG.info("start MPPS SCP");
+		// Start MPPS SCP
+		mppsSCP.start();
 		
-		MppsSCU mppsScu = new MppsSCU(mppsScuAe);
-		
-		mppsScu.getAAssociateRQ()
-				.setCalledAET(MPPS_SCP_AE_TITLE);
-		mppsScu.getRemoteConnection()
-				.setHostname("localhost");
-		mppsScu.getRemoteConnection()
-				.setPort(MPPS_SCP_PORT);
-		
-		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
-				UID.ExplicitVRBigEndianRetired });
-		mppsScu.setAttributes(new Attributes());
-		
-		// create executor
-		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-		mppsScuDevice.setExecutor(executorService);
-		mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
-		
-		try {
-			LOG.info("start MPPS SCP");
-			// Start MPPS SCP
-			mppsSCP.start();
+		// default response handler
+		RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
 			
-			// Open connection from MPPS SCU to MPPS SCP
-			mppsScu.open();
-			// MppsSCU.main(new String[] { "-b", "MPPSSCU@:11115", "-c", "RADIOLOGY_MODULE@localhost:11114" });
-			List<String> mppsFiles = new ArrayList<String>();
-			File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
-			System.out.println(mppsDirectory.getAbsolutePath());
-			mppsFiles.add(mppsDirectory.getAbsolutePath());
-			mppsScu.scanFiles(mppsFiles, true);
+			@Override
+			public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
+				
+				return new DimseRSPHandler(
+											12) {
+					
+					@Override
+					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
+						switch (cmd.getInt(Tag.Status, -1)) {
+							case Status.Success:
+							case Status.AttributeListError:
+							case Status.AttributeValueOutOfRange:
+								mppsWithUID.iuid = cmd.getString(Tag.AffectedSOPInstanceUID, mppsWithUID.iuid);
+								mppsScu.addCreatedMpps(mppsWithUID);
+						}
+						super.onDimseRSP(as, cmd, data);
+					}
+				};
+			}
 			
-			// Create MPPS N-CREATE
-			mppsScu.createMpps();
-			// mppsScu.echo();
-			// mppsScu.createMpps();
-			File mppsFileCreated = new File(mppsStorageDirectory,
-					"1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
-			System.out.println("We did it: " + mppsFileCreated.getAbsolutePath());
-			assertTrue(mppsFileCreated.exists());
-		}
-		finally {
-			// mppsSCP.stop();
-			if (mppsScu != null) {
-				mppsScu.close();
+			@Override
+			public DimseRSPHandler createDimseRSPHandlerForNSet() {
+				
+				return new DimseRSPHandler(12);
 			}
-			if (executorService != null) {
-				executorService.shutdown();
-			}
-			if (scheduledExecutorService != null) {
-				scheduledExecutorService.shutdown();
-			}
-		}
+		};
+		mppsScu.setRspHandlerFactory(rspHandlerFactory);
+		
+		// Open connection from MPPS SCU to MPPS SCP
+		mppsScu.open();
+		// MppsSCU.main(new String[] { "-b", "MPPSSCU@:11115", "-c", "RADIOLOGY_MODULE@localhost:11114" });
+		List<String> mppsFiles = new ArrayList<String>();
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		System.out.println(mppsDirectory.getAbsolutePath());
+		mppsFiles.add(mppsDirectory.getAbsolutePath());
+		mppsScu.scanFiles(mppsFiles, true);
+		
+		// Create MPPS N-CREATE
+		mppsScu.createMpps();
+		
+		// mppsScu.scanFiles(mppsFiles, true);
+		// mppsScu.createMpps();
+		// mppsScu.createMpps();
+		// mppsScu.echo();
+		// mppsScu.createMpps();
+		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
+		// System.out.println("We did it: " + mppsFileCreated.getAbsolutePath());
+		assertTrue(mppsFileCreated.exists());
+		// }
+		// finally {
+		// // mppsSCP.stop();
+		// if (mppsScu != null) {
+		// mppsScu.close();
+		// }
+		// if (executorService != null) {
+		// executorService.shutdown();
+		// }
+		// if (scheduledExecutorService != null) {
+		// scheduledExecutorService.shutdown();
+		// }
+		// }
 	}
 }
