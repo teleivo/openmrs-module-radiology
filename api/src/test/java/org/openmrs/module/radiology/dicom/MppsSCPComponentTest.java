@@ -60,7 +60,7 @@ public class MppsSCPComponentTest {
 	
 	private MppsSCU mppsScu;
 	
-	public static int mppsScpRspStatus;
+	public int mppsScpRspStatus;
 	
 	private Connection mppsScuConnection;
 	
@@ -270,7 +270,7 @@ public class MppsSCPComponentTest {
 					
 					@Override
 					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
-						MppsSCPComponentTest.mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+						mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
 						super.onDimseRSP(as, cmd, data);
 					}
 				};
@@ -295,7 +295,7 @@ public class MppsSCPComponentTest {
 		mppsScu.createMpps();
 		
 		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
-		assertEquals("Status MISSING_ATTRIBUTE", Status.MissingAttribute, MppsSCPComponentTest.mppsScpRspStatus);
+		assertEquals("Status MISSING_ATTRIBUTE", Status.MissingAttribute, mppsScpRspStatus);
 		assertFalse(mppsFileCreated.exists());
 	}
 	
@@ -375,7 +375,7 @@ public class MppsSCPComponentTest {
 						// case Status.AttributeValueOutOfRange:
 						// mppsWithUID.iuid = cmd.getString(Tag.AffectedSOPInstanceUID, mppsWithUID.iuid);
 						// mppsScu.addCreatedMpps(mppsWithUID);
-						MppsSCPComponentTest.mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+						mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
 						// }
 						super.onDimseRSP(as, cmd, data);
 					}
@@ -411,7 +411,7 @@ public class MppsSCPComponentTest {
 		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
 		// System.out.println("We did it: " + mppsFileCreated.getAbsolutePath());
 		// assertEquals(Status.Success, MppsSCPComponentTest.mppsScpRspStatus);
-		assertEquals("Status SUCCESS", Status.Success, MppsSCPComponentTest.mppsScpRspStatus);
+		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
 		assertTrue(mppsFileCreated.exists());
 		// }
 		// finally {
