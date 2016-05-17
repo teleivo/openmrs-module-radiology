@@ -307,58 +307,9 @@ public class MppsSCPComponentTest {
 	public void create_shouldthrowDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
 			throws Exception {
 		
-		// // setup MPPS SCU
-		// Connection mppsScuConnection = new Connection();
-		// mppsScuConnection.setPort(MPPS_SCU_PORT);
-		// mppsScuConnection.setReceivePDULength(Connection.DEF_MAX_PDU_LENGTH);
-		// mppsScuConnection.setSendPDULength(Connection.DEF_MAX_PDU_LENGTH);
-		// mppsScuConnection.setMaxOpsInvoked(0);
-		// mppsScuConnection.setMaxOpsPerformed(0);
-		// mppsScuConnection.setConnectTimeout(0);
-		// mppsScuConnection.setRequestTimeout(0);
-		// mppsScuConnection.setAcceptTimeout(0);
-		// mppsScuConnection.setReleaseTimeout(0);
-		// mppsScuConnection.setResponseTimeout(0);
-		// mppsScuConnection.setRetrieveTimeout(0);
-		// mppsScuConnection.setIdleTimeout(0);
-		// mppsScuConnection.setSocketCloseDelay(Connection.DEF_SOCKETDELAY);
-		// mppsScuConnection.setSendBufferSize(0);
-		// mppsScuConnection.setReceiveBufferSize(0);
-		//
-		// Device mppsScuDevice = new Device("mppsscu");
-		// mppsScuDevice.addConnection(mppsScuConnection);
-		//
-		// ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
-		// mppsScuDevice.addApplicationEntity(mppsScuAe);
-		// mppsScuAe.setAssociationAcceptor(true);
-		// mppsScuAe.setAssociationInitiator(true);
-		// mppsScuAe.addConnection(mppsScuConnection);
-		//
-		// MppsSCU mppsScu = new MppsSCU(mppsScuAe);
-		
-		// mppsScu.getAAssociateRQ()
-		// .setCalledAET(MPPS_SCP_AE_TITLE);
-		// mppsScu.getRemoteConnection()
-		// .setHostname("localhost");
-		// mppsScu.getRemoteConnection()
-		// .setPort(MPPS_SCP_PORT);
-		//
-		// mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
-		// UID.ExplicitVRBigEndianRetired });
-		// mppsScu.setAttributes(new Attributes());
-		//
-		// // create executor
-		// ExecutorService executorService = Executors.newSingleThreadExecutor();
-		// ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-		// mppsScuDevice.setExecutor(executorService);
-		// mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
-		
-		// try {
 		LOG.info("start MPPS SCP");
-		// Start MPPS SCP
 		mppsSCP.start();
 		
-		// default response handler
 		RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
 			
 			@Override
