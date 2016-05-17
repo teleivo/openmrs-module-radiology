@@ -288,7 +288,7 @@ public class MppsSCPComponentTest {
 		mppsScu.open();
 		
 		List<String> mppsFiles = new ArrayList<String>();
-		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate-missing-patientid.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, true);
 		
