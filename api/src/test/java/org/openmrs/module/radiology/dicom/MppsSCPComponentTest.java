@@ -378,4 +378,53 @@ public class MppsSCPComponentTest {
 		// }
 		// }
 	}
+	
+	/**
+	 * @see MppsSCP#create(Association,Attributes,Attributes)
+	 * @verifies create mpps file in storage directory containing request attributes
+	 */
+	@Test
+	public void create_shouldCreateMppsFileInStorageDirectoryContainingRequestAttributes() throws Exception {
+		
+		mppsSCP.start();
+		
+		RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
+			
+			@Override
+			public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
+				
+				return new DimseRSPHandler(
+											12) {
+					
+					@Override
+					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
+						mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+						super.onDimseRSP(as, cmd, data);
+					}
+				};
+			}
+			
+			@Override
+			public DimseRSPHandler createDimseRSPHandlerForNSet() {
+				
+				return new DimseRSPHandler(12);
+			}
+		};
+		mppsScu.setRspHandlerFactory(rspHandlerFactory);
+		
+		// Open connection from MPPS SCU to MPPS SCP
+		mppsScu.open();
+		
+		List<String> mppsFiles = new ArrayList<String>();
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		mppsFiles.add(mppsDirectory.getAbsolutePath());
+		mppsScu.scanFiles(mppsFiles, true);
+		
+		// Create MPPS N-CREATE
+		mppsScu.createMpps();
+		
+		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
+		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
+		assertTrue(mppsFileCreated.exists());
+	}
 }
