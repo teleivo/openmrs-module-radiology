@@ -44,9 +44,6 @@
 </Alphabetic>
 </PersonName>
 </DicomAttribute>
-<DicomAttribute keyword="PatientID" tag="00100020" vr="LO">
-<Value number="1">1237</Value>
-</DicomAttribute>
 <DicomAttribute keyword="IssuerOfPatientID" tag="00100021"
 	vr="LO">
 <Value number="1">OpenMRS</Value>

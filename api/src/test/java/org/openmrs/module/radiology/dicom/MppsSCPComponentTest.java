@@ -3,6 +3,7 @@ package org.openmrs.module.radiology.dicom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -44,7 +45,7 @@ public class MppsSCPComponentTest {
 	
 	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
 	
-	private static Integer MPPS_SCP_PORT = 11114;
+	private static Integer MPPS_SCP_PORT = 11118;
 	
 	private static String MPPS_SCP_STORAGE_DIR = "mpps";
 	
@@ -59,9 +60,19 @@ public class MppsSCPComponentTest {
 	
 	private MppsSCU mppsScu;
 	
+	public static int mppsScpRspStatus;
+	
+	private Connection mppsScuConnection;
+	
+	private ApplicationEntity mppsScuAe;
+	
+	private Device mppsScuDevice;
+	
 	private ExecutorService executorService;
 	
-	private ScheduledExecutorService scheduledExecutorService;
+	private Association mppsScuScpAssociation;
+	
+	ScheduledExecutorService scheduledExecutorService;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -70,7 +81,7 @@ public class MppsSCPComponentTest {
 		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), mppsStorageDirectory);
 		
 		// setup MPPS SCU
-		Connection mppsScuConnection = new Connection();
+		mppsScuConnection = new Connection();
 		mppsScuConnection.setPort(MPPS_SCU_PORT);
 		mppsScuConnection.setReceivePDULength(Connection.DEF_MAX_PDU_LENGTH);
 		mppsScuConnection.setSendPDULength(Connection.DEF_MAX_PDU_LENGTH);
@@ -87,10 +98,10 @@ public class MppsSCPComponentTest {
 		mppsScuConnection.setSendBufferSize(0);
 		mppsScuConnection.setReceiveBufferSize(0);
 		
-		Device mppsScuDevice = new Device("mppsscu");
+		mppsScuDevice = new Device("mppsscu");
 		mppsScuDevice.addConnection(mppsScuConnection);
 		
-		ApplicationEntity mppsScuAe = new ApplicationEntity("MPPSSCU");
+		mppsScuAe = new ApplicationEntity("MPPSSCU");
 		mppsScuDevice.addApplicationEntity(mppsScuAe);
 		mppsScuAe.setAssociationAcceptor(true);
 		mppsScuAe.setAssociationInitiator(true);
@@ -109,8 +120,8 @@ public class MppsSCPComponentTest {
 		mppsScu.setAttributes(new Attributes());
 		
 		// create executor
-		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		executorService = Executors.newSingleThreadExecutor();
+		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 		mppsScuDevice.setExecutor(executorService);
 		mppsScuDevice.setScheduledExecutor(scheduledExecutorService);
 	}
@@ -309,13 +320,14 @@ public class MppsSCPComponentTest {
 					
 					@Override
 					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
-						switch (cmd.getInt(Tag.Status, -1)) {
-							case Status.Success:
-							case Status.AttributeListError:
-							case Status.AttributeValueOutOfRange:
-								mppsWithUID.iuid = cmd.getString(Tag.AffectedSOPInstanceUID, mppsWithUID.iuid);
-								mppsScu.addCreatedMpps(mppsWithUID);
-						}
+						// switch (cmd.getInt(Tag.Status, -1)) {
+						// case Status.Success:
+						// case Status.AttributeListError:
+						// case Status.AttributeValueOutOfRange:
+						// mppsWithUID.iuid = cmd.getString(Tag.AffectedSOPInstanceUID, mppsWithUID.iuid);
+						// mppsScu.addCreatedMpps(mppsWithUID);
+						MppsSCPComponentTest.mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+						// }
 						super.onDimseRSP(as, cmd, data);
 					}
 				};
@@ -330,8 +342,9 @@ public class MppsSCPComponentTest {
 		mppsScu.setRspHandlerFactory(rspHandlerFactory);
 		
 		// Open connection from MPPS SCU to MPPS SCP
+		// mppsScuScpAssociation = mppsScuAe.connect(mppsScuConnection, mppsScu.getAAssociateRQ());
 		mppsScu.open();
-		// MppsSCU.main(new String[] { "-b", "MPPSSCU@:11115", "-c", "RADIOLOGY_MODULE@localhost:11114" });
+		
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
 		System.out.println(mppsDirectory.getAbsolutePath());
@@ -348,6 +361,8 @@ public class MppsSCPComponentTest {
 		// mppsScu.createMpps();
 		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
 		// System.out.println("We did it: " + mppsFileCreated.getAbsolutePath());
+		// assertEquals(Status.Success, MppsSCPComponentTest.mppsScpRspStatus);
+		assertEquals("Status SUCCESS", Status.Success, MppsSCPComponentTest.mppsScpRspStatus);
 		assertTrue(mppsFileCreated.exists());
 		// }
 		// finally {
