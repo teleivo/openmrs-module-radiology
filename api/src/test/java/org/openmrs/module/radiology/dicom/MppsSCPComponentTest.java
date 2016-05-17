@@ -252,6 +252,55 @@ public class MppsSCPComponentTest {
 	
 	/**
 	 * @see MppsSCP#create(Association,Attributes,Attributes)
+	 * @verifies throw DicomServiceException if requestAttributes are not conform with DICOM IOD mppsNCreateIOD
+	 */
+	@Test
+	public void create_shouldThrowDicomServiceExceptionIfRequestAttributesAreNotConformWithDICOMIODMppsNCreateIOD()
+			throws Exception {
+		
+		mppsSCP.start();
+		
+		RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
+			
+			@Override
+			public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
+				
+				return new DimseRSPHandler(
+											12) {
+					
+					@Override
+					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
+						MppsSCPComponentTest.mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+						super.onDimseRSP(as, cmd, data);
+					}
+				};
+			}
+			
+			@Override
+			public DimseRSPHandler createDimseRSPHandlerForNSet() {
+				
+				return new DimseRSPHandler(12);
+			}
+		};
+		mppsScu.setRspHandlerFactory(rspHandlerFactory);
+		
+		// Open connection from MPPS SCU to MPPS SCP
+		mppsScu.open();
+		
+		List<String> mppsFiles = new ArrayList<String>();
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		mppsFiles.add(mppsDirectory.getAbsolutePath());
+		mppsScu.scanFiles(mppsFiles, true);
+		
+		mppsScu.createMpps();
+		
+		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
+		assertEquals("Status MISSING_ATTRIBUTE", Status.MissingAttribute, MppsSCPComponentTest.mppsScpRspStatus);
+		assertFalse(mppsFileCreated.exists());
+	}
+	
+	/**
+	 * @see MppsSCP#create(Association,Attributes,Attributes)
 	 * @verifies DicomServiceException if an MPPS file exists for DICOM MPPS SOP Instance UID given in request
 	 */
 	@Test
