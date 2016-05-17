@@ -70,9 +70,30 @@ public class MppsSCPComponentTest {
 	
 	private ExecutorService executorService;
 	
-	private Association mppsScuScpAssociation;
-	
 	ScheduledExecutorService scheduledExecutorService;
+	
+	RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
+		
+		@Override
+		public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
+			
+			return new DimseRSPHandler(
+										12) {
+				
+				@Override
+				public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
+					mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+					super.onDimseRSP(as, cmd, data);
+				}
+			};
+		}
+		
+		@Override
+		public DimseRSPHandler createDimseRSPHandlerForNSet() {
+			
+			return new DimseRSPHandler(12);
+		}
+	};
 	
 	@Before
 	public void setUp() throws Exception {
@@ -118,6 +139,8 @@ public class MppsSCPComponentTest {
 		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
 				UID.ExplicitVRBigEndianRetired });
 		mppsScu.setAttributes(new Attributes());
+		
+		mppsScu.setRspHandlerFactory(rspHandlerFactory);
 		
 		// create executor
 		executorService = Executors.newSingleThreadExecutor();
@@ -260,30 +283,6 @@ public class MppsSCPComponentTest {
 		
 		mppsSCP.start();
 		
-		RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
-			
-			@Override
-			public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
-				
-				return new DimseRSPHandler(
-											12) {
-					
-					@Override
-					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
-						mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
-						super.onDimseRSP(as, cmd, data);
-					}
-				};
-			}
-			
-			@Override
-			public DimseRSPHandler createDimseRSPHandlerForNSet() {
-				
-				return new DimseRSPHandler(12);
-			}
-		};
-		mppsScu.setRspHandlerFactory(rspHandlerFactory);
-		
 		// Open connection from MPPS SCU to MPPS SCP
 		mppsScu.open();
 		
@@ -309,37 +308,6 @@ public class MppsSCPComponentTest {
 		
 		LOG.info("start MPPS SCP");
 		mppsSCP.start();
-		
-		RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
-			
-			@Override
-			public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
-				
-				return new DimseRSPHandler(
-											12) {
-					
-					@Override
-					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
-						// switch (cmd.getInt(Tag.Status, -1)) {
-						// case Status.Success:
-						// case Status.AttributeListError:
-						// case Status.AttributeValueOutOfRange:
-						// mppsWithUID.iuid = cmd.getString(Tag.AffectedSOPInstanceUID, mppsWithUID.iuid);
-						// mppsScu.addCreatedMpps(mppsWithUID);
-						mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
-						// }
-						super.onDimseRSP(as, cmd, data);
-					}
-				};
-			}
-			
-			@Override
-			public DimseRSPHandler createDimseRSPHandlerForNSet() {
-				
-				return new DimseRSPHandler(12);
-			}
-		};
-		mppsScu.setRspHandlerFactory(rspHandlerFactory);
 		
 		// Open connection from MPPS SCU to MPPS SCP
 		// mppsScuScpAssociation = mppsScuAe.connect(mppsScuConnection, mppsScu.getAAssociateRQ());
@@ -387,30 +355,6 @@ public class MppsSCPComponentTest {
 	public void create_shouldCreateMppsFileInStorageDirectoryContainingRequestAttributes() throws Exception {
 		
 		mppsSCP.start();
-		
-		RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
-			
-			@Override
-			public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
-				
-				return new DimseRSPHandler(
-											12) {
-					
-					@Override
-					public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
-						mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
-						super.onDimseRSP(as, cmd, data);
-					}
-				};
-			}
-			
-			@Override
-			public DimseRSPHandler createDimseRSPHandlerForNSet() {
-				
-				return new DimseRSPHandler(12);
-			}
-		};
-		mppsScu.setRspHandlerFactory(rspHandlerFactory);
 		
 		// Open connection from MPPS SCU to MPPS SCP
 		mppsScu.open();
