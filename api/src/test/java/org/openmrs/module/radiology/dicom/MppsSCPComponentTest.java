@@ -315,7 +315,6 @@ public class MppsSCPComponentTest {
 		
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
-		System.out.println(mppsDirectory.getAbsolutePath());
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, true);
 		
@@ -328,7 +327,6 @@ public class MppsSCPComponentTest {
 		// mppsScu.echo();
 		// mppsScu.createMpps();
 		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
-		// System.out.println("We did it: " + mppsFileCreated.getAbsolutePath());
 		// assertEquals(Status.Success, MppsSCPComponentTest.mppsScpRspStatus);
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
 		assertTrue(mppsFileCreated.exists());
