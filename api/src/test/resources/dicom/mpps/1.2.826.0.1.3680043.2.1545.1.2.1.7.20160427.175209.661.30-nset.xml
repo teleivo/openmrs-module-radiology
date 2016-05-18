@@ -29,7 +29,7 @@
 <Value number="1">ISO_IR 196</Value>
 </DicomAttribute>
 <DicomAttribute keyword="Modality" tag="00080060" vr="CS">
-<Value number="1">CT</Value>
+<Value number="1">MR</Value>
 </DicomAttribute>
 <DicomAttribute keyword="ProcedureCodeSequence" tag="00081032"
 	vr="SQ" />
@@ -65,11 +65,11 @@
 </DicomAttribute>
 <DicomAttribute keyword="PerformedStationAETitle" tag="00400241"
 	vr="AE">
-<Value number="1">CT01</Value>
+<Value number="1">MR01</Value>
 </DicomAttribute>
 <DicomAttribute keyword="PerformedStationName" tag="00400242"
 	vr="SH">
-	<Value number="1">CT Machine</Value>
+	<Value number="1">MR01</Value>
 </DicomAttribute>
 <DicomAttribute keyword="PerformedLocation" tag="00400243"
 	vr="SH">

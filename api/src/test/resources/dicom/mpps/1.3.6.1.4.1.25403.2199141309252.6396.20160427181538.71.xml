@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NativeDicomModel xml:space="preserve"><DicomAttribute
+	keyword="FileMetaInformationVersion" tag="00020001" vr="OB"><InlineBinary>AAE=</InlineBinary></DicomAttribute><DicomAttribute
+	keyword="MediaStorageSOPClassUID" tag="00020002" vr="UI"><Value
+	number="1">1.2.840.10008.5.1.4.1.1.4</Value></DicomAttribute><DicomAttribute
+	keyword="MediaStorageSOPInstanceUID" tag="00020003" vr="UI"><Value
+	number="1">1.3.6.1.4.1.25403.2199141309252.6396.20160427181538.71</Value></DicomAttribute><DicomAttribute
+	keyword="TransferSyntaxUID" tag="00020010" vr="UI"><Value number="1">1.2.840.10008.1.2.1</Value></DicomAttribute><DicomAttribute
+	keyword="ImplementationClassUID" tag="00020012" vr="UI"><Value number="1">1.2.40.0.13.1.1</Value></DicomAttribute><DicomAttribute
+	keyword="ImplementationVersionName" tag="00020013" vr="SH"><Value
+	number="1">dcm4che-3.3.7</Value></DicomAttribute><DicomAttribute
+	keyword="SourceApplicationEntityTitle" tag="00020016" vr="AE" /><DicomAttribute
+	keyword="SpecificCharacterSet" tag="00080005" vr="CS"><Value number="1">ISO_IR 196</Value></DicomAttribute><DicomAttribute
+	keyword="ImageType" tag="00080008" vr="CS"><Value number="1">ORIGINAL</Value><Value
+	number="2">PRIMARY</Value><Value number="3">M_SE</Value><Value
+	number="4">M</Value><Value number="5">SE</Value></DicomAttribute><DicomAttribute
+	keyword="InstanceCreationDate" tag="00080012" vr="DA"><Value number="1">20160427</Value></DicomAttribute><DicomAttribute
+	keyword="InstanceCreationTime" tag="00080013" vr="TM"><Value number="1">182138</Value></DicomAttribute><DicomAttribute
+	keyword="SOPClassUID" tag="00080016" vr="UI"><Value number="1">1.2.840.10008.5.1.4.1.1.4</Value></DicomAttribute><DicomAttribute
+	keyword="SOPInstanceUID" tag="00080018" vr="UI"><Value number="1">1.3.6.1.4.1.25403.2199141309252.6396.20160427181538.71</Value></DicomAttribute><DicomAttribute
+	keyword="StudyDate" tag="00080020" vr="DA"><Value number="1">20160427</Value></DicomAttribute><DicomAttribute
+	keyword="SeriesDate" tag="00080021" vr="DA"><Value number="1">20160427</Value></DicomAttribute><DicomAttribute
+	keyword="AcquisitionDate" tag="00080022" vr="DA"><Value number="1">20160427</Value></DicomAttribute><DicomAttribute
+	keyword="ContentDate" tag="00080023" vr="DA"><Value number="1">20160427</Value></DicomAttribute><DicomAttribute
+	keyword="StudyTime" tag="00080030" vr="TM"><Value number="1">181538</Value></DicomAttribute><DicomAttribute
+	keyword="SeriesTime" tag="00080031" vr="TM"><Value number="1">181549.69</Value></DicomAttribute><DicomAttribute
+	keyword="AcquisitionTime" tag="00080032" vr="TM"><Value number="1">181549.69</Value></DicomAttribute><DicomAttribute
+	keyword="ContentTime" tag="00080033" vr="TM"><Value number="1">181549.69</Value></DicomAttribute><DicomAttribute
+	keyword="AccessionNumber" tag="00080050" vr="SH"><Value number="1"></Value></DicomAttribute><DicomAttribute
+	keyword="Modality" tag="00080060" vr="CS"><Value number="1">MR</Value></DicomAttribute><DicomAttribute
+	keyword="Manufacturer" tag="00080070" vr="LO"><Value number="1">Medical Manufacturer</Value></DicomAttribute><DicomAttribute
+	keyword="InstitutionName" tag="00080080" vr="LO" /><DicomAttribute
+	keyword="ReferringPhysicianName" tag="00080090" vr="PN" /><DicomAttribute
+	keyword="CodeValue" tag="00080100" vr="SH" /><DicomAttribute
+	keyword="CodingSchemeDesignator" tag="00080102" vr="SH"><Value number="1">DCM</Value></DicomAttribute><DicomAttribute
+	keyword="CodeMeaning" tag="00080104" vr="LO" /><DicomAttribute
+	keyword="StationName" tag="00081010" vr="SH" /><DicomAttribute
+	keyword="StudyDescription" tag="00081030" vr="LO"><Value number="1">mrknee left</Value></DicomAttribute><DicomAttribute
+	keyword="ProcedureCodeSequence" tag="00081032" vr="SQ"><Item number="1"><DicomAttribute
+	keyword="CodeValue" tag="00080100" vr="SH"><Value number="1">mrknee</Value></DicomAttribute><DicomAttribute
+	keyword="CodingSchemeDesignator" tag="00080102" vr="SH"><Value number="1">MR knee</Value></DicomAttribute><DicomAttribute
+	keyword="CodeMeaning" tag="00080104" vr="LO"><Value number="1">mrknee</Value></DicomAttribute><DicomAttribute
+	keyword="ContextGroupExtensionFlag" tag="0008010B" vr="CS"><Value
+	number="1">N</Value></DicomAttribute></Item></DicomAttribute><DicomAttribute
+	keyword="SeriesDescription" tag="0008103E" vr="LO"><Value number="1">left knee</Value></DicomAttribute><DicomAttribute
+	keyword="InstitutionalDepartmentName" tag="00081040" vr="LO" /><DicomAttribute
+	keyword="OperatorsName" tag="00081070" vr="PN" /><DicomAttribute
+	keyword="AdmittingDiagnosesDescription" tag="00081080" vr="LO" /><DicomAttribute
+	keyword="ManufacturerModelName" tag="00081090" vr="LO"><Value number="1">New Model</Value></DicomAttribute><DicomAttribute
+	keyword="ReferencedStudySequence" tag="00081110" vr="SQ"><Item number="1"><DicomAttribute
+	keyword="ReferencedSOPClassUID" tag="00081150" vr="UI"><Value number="1">1.2.840.10008.3.1.2.3.1</Value></DicomAttribute><DicomAttribute
+	keyword="ReferencedSOPInstanceUID" tag="00081155" vr="UI"><Value
+	number="1">999.999.999.1.1.2</Value></DicomAttribute></Item></DicomAttribute><DicomAttribute
+	keyword="ReferencedPerformedProcedureStepSequence" tag="00081111" vr="SQ"><Item
+	number="1"><DicomAttribute keyword="InstanceCreationDate"
+	tag="00080012" vr="DA"><Value number="1">20150217</Value></DicomAttribute><DicomAttribute
+	keyword="ReferencedSOPClassUID" tag="00081150" vr="UI"><Value number="1">1.2.840.10008.3.1.2.3.3</Value></DicomAttribute><DicomAttribute
+	keyword="ReferencedSOPInstanceUID" tag="00081155" vr="UI"><Value
+	number="1">1.3.6.1.4.1.25403.2199141309252.6396.20150217121431.4</Value></DicomAttribute><DicomAttribute
+	keyword="InstanceNumber" tag="00200013" vr="IS"><Value number="1">0</Value></DicomAttribute></Item></DicomAttribute><DicomAttribute
+	keyword="ReferencedImageSequence" tag="00081140" vr="SQ"><Item number="1"><DicomAttribute
+	keyword="ReferencedSOPClassUID" tag="00081150" vr="UI"><Value number="1">1.2.840.10008.5.1.4.1.1.4</Value></DicomAttribute><DicomAttribute
+	keyword="ReferencedSOPInstanceUID" tag="00081155" vr="UI"><Value
+	number="1">1.3.6.1.4.1.25403.2199141309252.6396.20150217121431.7</Value></DicomAttribute></Item><Item
+	number="2"><DicomAttribute keyword="ReferencedSOPClassUID"
+	tag="00081150" vr="UI"><Value number="1">1.2.840.10008.5.1.4.1.1.4</Value></DicomAttribute><DicomAttribute
+	keyword="ReferencedSOPInstanceUID" tag="00081155" vr="UI"><Value
+	number="1">1.3.6.1.4.1.25403.2199141309252.6396.20150217121431.6</Value></DicomAttribute></Item><Item
+	number="3"><DicomAttribute keyword="ReferencedSOPClassUID"
+	tag="00081150" vr="UI"><Value number="1">1.2.840.10008.5.1.4.1.1.4</Value></DicomAttribute><DicomAttribute
+	keyword="ReferencedSOPInstanceUID" tag="00081155" vr="UI"><Value
+	number="1">1.3.6.1.4.1.25403.2199141309252.6396.20150217121431.33</Value></DicomAttribute></Item></DicomAttribute><DicomAttribute
+	keyword="AcquisitionContrast" tag="00089209" vr="CS"><Value number="1">T2</Value></DicomAttribute><DicomAttribute
+	keyword="PatientName" tag="00100010" vr="PN"><PersonName number="1"><Alphabetic><FamilyName>Peterson</FamilyName><GivenName>Peter</GivenName></Alphabetic></PersonName></DicomAttribute><DicomAttribute
+	keyword="PatientID" tag="00100020" vr="LO"><Value number="1">1237</Value></DicomAttribute><DicomAttribute
+	keyword="PatientBirthDate" tag="00100030" vr="DA"><Value number="1">19750101</Value></DicomAttribute><DicomAttribute
+	keyword="PatientSex" tag="00100040" vr="CS"><Value number="1">M</Value></DicomAttribute><DicomAttribute
+	keyword="OtherPatientIDs" tag="00101000" vr="LO" /><DicomAttribute
+	keyword="PatientWeight" tag="00101030" vr="DS" /><DicomAttribute
+	keyword="PregnancyStatus" tag="001021C0" vr="US"><Value number="1">4</Value></DicomAttribute><DicomAttribute
+	keyword="BodyPartExamined" tag="00180015" vr="CS"><Value number="1">KNEE</Value></DicomAttribute><DicomAttribute
+	keyword="MRAcquisitionType" tag="00180023" vr="CS"><Value number="1">2D</Value></DicomAttribute><DicomAttribute
+	keyword="StudyInstanceUID" tag="0020000D" vr="UI"><Value number="1">999.999.999.1.1.2</Value></DicomAttribute><DicomAttribute
+	keyword="SeriesInstanceUID" tag="0020000E" vr="UI"><Value number="1">999.999.999.1.1.2.31</Value></DicomAttribute><DicomAttribute
+	keyword="StudyID" tag="00200010" vr="SH" /><DicomAttribute
+	keyword="SeriesNumber" tag="00200011" vr="IS"><Value number="1">201</Value></DicomAttribute><DicomAttribute
+	keyword="AcquisitionNumber" tag="00200012" vr="IS"><Value number="1">1</Value></DicomAttribute><DicomAttribute
+	keyword="InstanceNumber" tag="00200013" vr="IS"><Value number="1">1</Value></DicomAttribute><DicomAttribute
+	keyword="Laterality" tag="00200060" vr="CS"><Value number="1">L</Value></DicomAttribute><DicomAttribute
+	keyword="RequestedProcedureDescription" tag="00321060" vr="LO"><Value
+	number="1">mrknee</Value></DicomAttribute><DicomAttribute
+	keyword="StudyComments" tag="00324000" vr="LT"><Value number="1">left knee</Value></DicomAttribute><DicomAttribute
+	keyword="ScheduledPerformingPhysicianName" tag="00400006" vr="PN" /><DicomAttribute
+	keyword="PerformedStationAETitle" tag="00400241" vr="AE"><Value
+	number="1">MR01</Value></DicomAttribute><DicomAttribute
+	keyword="PerformedProcedureStepStartDate" tag="00400244" vr="DA"><Value
+	number="1">20160427</Value></DicomAttribute><DicomAttribute
+	keyword="PerformedProcedureStepStartTime" tag="00400245" vr="TM"><Value
+	number="1">175145</Value></DicomAttribute><DicomAttribute
+	keyword="PerformedProcedureStepEndDate" tag="00400250" vr="DA"><Value
+	number="1">20160427</Value></DicomAttribute><DicomAttribute
+	keyword="PerformedProcedureStepEndTime" tag="00400251" vr="TM"><Value
+	number="1">181549.69</Value></DicomAttribute><DicomAttribute
+	keyword="PerformedProcedureStepID" tag="00400253" vr="SH"><Value
+	number="1">1605.0</Value></DicomAttribute><DicomAttribute
+	keyword="PerformedProcedureStepDescription" tag="00400254" vr="LO"><Value
+	number="1">mrknee left</Value></DicomAttribute><DicomAttribute
+	keyword="PerformedProtocolCodeSequence" tag="00400260" vr="SQ"><Item
+	number="1"><DicomAttribute keyword="CodeValue" tag="00080100"
+	vr="SH"><Value number="1">mrknee</Value></DicomAttribute><DicomAttribute
+	keyword="CodingSchemeDesignator" tag="00080102" vr="SH"><Value number="1">MR knee</Value></DicomAttribute><DicomAttribute
+	keyword="CodeMeaning" tag="00080104" vr="LO"><Value number="1">mrknee</Value></DicomAttribute><DicomAttribute
+	keyword="ContextGroupExtensionFlag" tag="0008010B" vr="CS"><Value
+	number="1">N</Value></DicomAttribute></Item></DicomAttribute><DicomAttribute
+	keyword="CommentsOnThePerformedProcedureStep" tag="00400280" vr="ST"><Value
+	number="1">left knee</Value></DicomAttribute><DicomAttribute
+	keyword="RequestedProcedureID" tag="00401001" vr="SH"><Value number="1">3627544</Value></DicomAttribute><DicomAttribute
+	keyword="RequestedProcedureComments" tag="00401400" vr="LT"><Value
+	number="1">left</Value></DicomAttribute><DicomAttribute
+	keyword="PixelData" tag="7FE00010" vr="OW"><BulkData
+	uri="file:1.3.6.1.4.1.25403.2199141309252.6396.20160427181538.71.dcm?offset=4258&amp;length=2097152" /></DicomAttribute></NativeDicomModel>

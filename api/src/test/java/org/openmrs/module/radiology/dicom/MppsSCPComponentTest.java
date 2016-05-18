@@ -164,7 +164,8 @@ public class MppsSCPComponentTest {
 		
 		// setup MPPS SCP
 		mppsStorageDirectory = temporaryBaseFolder.newFolder(MPPS_SCP_STORAGE_DIR);
-		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), mppsStorageDirectory);
+		File test = new File("mpps");
+		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), test);
 		
 		// setup MPPS SCU
 		mppsScuConnection = new Connection();
@@ -471,7 +472,7 @@ public class MppsSCPComponentTest {
 	/**
 	 * UPDATE method signature and javadocs with generate test case plugin
 	 */
-	// @Test
+	@Test
 	public void set_shouldUpdateExistingMppsFileInStorageDirectoryContainingRequestAttributes() throws Exception {
 		
 		mppsSCP.start();
@@ -488,13 +489,16 @@ public class MppsSCPComponentTest {
 		
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
 		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
-		assertTrue(mppsFileCreated.exists());
+		// assertTrue(mppsFileCreated.exists());
 		
 		// Create MPPS N-SET
+		// DicomFile instance =
+		// scanFile("src/test/resources/dicom/mpps/1.3.6.1.4.1.25403.2199141309252.6396.20160427181538.71.xml");
+		// assertTrue(mppsScu.addInstance(instance.content));
 		mppsScu.updateMpps();
 		
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
-		assertTrue(mppsFileCreated.exists());
+		// assertTrue(mppsFileCreated.exists());
 		
 		DicomFile mppsFile = scanFile(mppsFileCreated.getAbsolutePath());
 		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPClassUID),
@@ -502,6 +506,8 @@ public class MppsSCPComponentTest {
 		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
 		assertThat(mppsFile.metaInformation.getString(Tag.TransferSyntaxUID), is(UID.ExplicitVRLittleEndian));
 		assertThat(mppsFile.content.getString(Tag.PatientID), is("1237"));
-		assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepStatus), is("COMPLETED"));
+		// assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepStatus), is("COMPLETED"));
+		assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepEndDate), is("20160427"));
+		assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepEndTime), is("181549.69"));
 	}
 }
