@@ -41,12 +41,11 @@ import org.junit.rules.TemporaryFolder;
  */
 public class MppsSCPComponentTest {
 	
-	
 	private static final Log LOG = LogFactory.getLog(MppsSCPComponentTest.class);
 	
 	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
 	
-	private static Integer MPPS_SCP_PORT = 11118;
+	private static Integer MPPS_SCP_PORT = 11114;
 	
 	private static String MPPS_SCP_STORAGE_DIR = "mpps";
 	
@@ -77,12 +76,11 @@ public class MppsSCPComponentTest {
 	
 	RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
 		
-		
 		@Override
 		public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
 			
-			return new DimseRSPHandler(12) {
-				
+			return new DimseRSPHandler(
+										12) {
 				
 				@Override
 				public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
@@ -140,8 +138,8 @@ public class MppsSCPComponentTest {
 		mppsScu.getRemoteConnection()
 				.setPort(MPPS_SCP_PORT);
 		
-		mppsScu.setTransferSyntaxes(
-			new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian, UID.ExplicitVRBigEndianRetired });
+		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
+				UID.ExplicitVRBigEndianRetired });
 		mppsScu.setAttributes(new Attributes());
 		
 		mppsScu.setRspHandlerFactory(rspHandlerFactory);
