@@ -297,11 +297,11 @@ public class MppsSCPComponentTest {
 		// Open connection from MPPS SCU to MPPS SCP
 		mppsScu.open();
 		
+		// Create MPPS N-CREATE
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate-missing-patientid.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, false);
-		
 		mppsScu.createMpps();
 		
 		assertEquals("Status MISSING_ATTRIBUTE", Status.MissingAttribute, mppsScpRspStatus);
@@ -324,12 +324,11 @@ public class MppsSCPComponentTest {
 		// mppsScuScpAssociation = mppsScuAe.connect(mppsScuConnection, mppsScu.getAAssociateRQ());
 		mppsScu.open();
 		
+		// Create MPPS N-CREATE
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, false);
-		
-		// Create MPPS N-CREATE
 		mppsScu.createMpps();
 		
 		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
@@ -355,16 +354,15 @@ public class MppsSCPComponentTest {
 		// Open connection from MPPS SCU to MPPS SCP
 		mppsScu.open();
 		
+		// Create MPPS N-CREATE
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, false);
-		
-		// Create MPPS N-CREATE
 		mppsScu.createMpps();
 		
-		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
+		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertTrue(mppsFileCreated.exists());
 		// TODO: test content
 	}
