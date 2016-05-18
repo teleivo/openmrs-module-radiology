@@ -74,6 +74,10 @@ public class MppsSCPComponentTest {
 	
 	private int mppsScpRspStatus;
 	
+	private Attributes mppsScpRspCmd;
+	
+	private Attributes mppsScpRspData;
+	
 	private RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
 		
 		@Override
@@ -85,6 +89,8 @@ public class MppsSCPComponentTest {
 				@Override
 				public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
 					mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+					mppsScpRspCmd = cmd;
+					mppsScpRspData = data;
 					super.onDimseRSP(as, cmd, data);
 				}
 			};
@@ -323,14 +329,14 @@ public class MppsSCPComponentTest {
 		// Create MPPS N-CREATE
 		mppsScu.createMpps();
 		
-		mppsScu.scanFiles(mppsFiles, false);
+		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
+		assertTrue(mppsFileCreated.exists());
 		
 		// Create same MPPS N-CREATE again
+		mppsScu.scanFiles(mppsFiles, false);
 		mppsScu.createMpps();
 		
-		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertEquals("Status DUPLICATE_SOP_INSTANCE", Status.DuplicateSOPinstance, mppsScpRspStatus);
-		assertTrue(mppsFileCreated.exists());
 	}
 	
 	/**
@@ -356,5 +362,6 @@ public class MppsSCPComponentTest {
 		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
 		assertTrue(mppsFileCreated.exists());
+		// TODO: test content
 	}
 }
