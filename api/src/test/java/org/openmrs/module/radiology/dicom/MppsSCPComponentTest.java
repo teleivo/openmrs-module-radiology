@@ -118,7 +118,7 @@ public class MppsSCPComponentTest {
 					mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
 					mppsScpRspCmd = cmd;
 					mppsScpRspData = data;
-					super.onDimseRSP(as, cmd, data);
+					// super.onDimseRSP(as, cmd, data);
 				}
 			};
 		}
@@ -380,7 +380,7 @@ public class MppsSCPComponentTest {
 		
 		// Create MPPS N-CREATE
 		List<String> mppsFiles = new ArrayList<String>();
-		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/" + MPPS_NCREATE_INSTANCE_UID + "-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, false);
 		mppsScu.createMpps();
@@ -410,7 +410,7 @@ public class MppsSCPComponentTest {
 		
 		// Create MPPS N-CREATE
 		List<String> mppsFiles = new ArrayList<String>();
-		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/" + MPPS_NCREATE_INSTANCE_UID + "-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, false);
 		mppsScu.createMpps();
@@ -443,7 +443,7 @@ public class MppsSCPComponentTest {
 		
 		// Create MPPS N-CREATE
 		List<String> mppsFiles = new ArrayList<String>();
-		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/" + MPPS_NCREATE_INSTANCE_UID + "-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, false);
 		mppsScu.createMpps();
@@ -481,7 +481,7 @@ public class MppsSCPComponentTest {
 		
 		// Create MPPS N-CREATE
 		List<String> mppsFiles = new ArrayList<String>();
-		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/" + MPPS_NCREATE_INSTANCE_UID + "-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
 		mppsScu.scanFiles(mppsFiles, false);
 		mppsScu.createMpps();

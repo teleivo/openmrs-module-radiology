@@ -89,7 +89,7 @@
 	tag="00400251" vr="TM" />
 <DicomAttribute keyword="PerformedProcedureStepStatus"
 	tag="00400252" vr="CS">
-<Value number="1">IN PROGRESS</Value>
+<Value number="1">COMPLETED</Value>
 </DicomAttribute>
 <DicomAttribute keyword="PerformedProcedureStepID" tag="00400253"
 	vr="SH">
