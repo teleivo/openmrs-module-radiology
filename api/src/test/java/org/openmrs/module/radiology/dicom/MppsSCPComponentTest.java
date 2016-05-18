@@ -306,7 +306,6 @@ public class MppsSCPComponentTest {
 	public void create_shouldthrowDicomServiceExceptionIfAnMPPSFileExistsForDICOMMPPSSOPInstanceUIDGivenInRequest()
 			throws Exception {
 		
-		LOG.info("start MPPS SCP");
 		mppsSCP.start();
 		
 		// Open connection from MPPS SCU to MPPS SCP
@@ -321,28 +320,14 @@ public class MppsSCPComponentTest {
 		// Create MPPS N-CREATE
 		mppsScu.createMpps();
 		
-		// mppsScu.scanFiles(mppsFiles, true);
-		// mppsScu.createMpps();
-		// mppsScu.createMpps();
-		// mppsScu.echo();
-		// mppsScu.createMpps();
+		mppsScu.scanFiles(mppsFiles, true);
+		
+		// Create same MPPS N-CREATE again
+		mppsScu.createMpps();
+		
 		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
-		// assertEquals(Status.Success, MppsSCPComponentTest.mppsScpRspStatus);
-		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
+		assertEquals("Status DUPLICATE_SOP_INSTANCE", Status.DuplicateSOPinstance, mppsScpRspStatus);
 		assertTrue(mppsFileCreated.exists());
-		// }
-		// finally {
-		// // mppsSCP.stop();
-		// if (mppsScu != null) {
-		// mppsScu.close();
-		// }
-		// if (executorService != null) {
-		// executorService.shutdown();
-		// }
-		// if (scheduledExecutorService != null) {
-		// scheduledExecutorService.shutdown();
-		// }
-		// }
 	}
 	
 	/**
