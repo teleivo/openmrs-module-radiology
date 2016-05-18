@@ -84,9 +84,13 @@
 <Value number="1">175145</Value>
 </DicomAttribute>
 <DicomAttribute keyword="PerformedProcedureStepEndDate"
-	tag="00400250" vr="DA" />
+	tag="00400250" vr="DA">
+<Value number="1">20160427</Value>
+</DicomAttribute>
 <DicomAttribute keyword="PerformedProcedureStepEndTime"
-	tag="00400251" vr="TM" />
+	tag="00400251" vr="TM">
+<Value number="1">181312</Value>
+</DicomAttribute>
 <DicomAttribute keyword="PerformedProcedureStepStatus"
 	tag="00400252" vr="CS">
 <Value number="1">COMPLETED</Value>

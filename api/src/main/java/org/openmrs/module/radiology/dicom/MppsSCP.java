@@ -239,10 +239,11 @@ public class MppsSCP {
 				throw DicomServiceException.valueOf(result, requestAttributes);
 			}
 		}
+
 		if (storageDir == null) {
 			return null;
 		}
-		String cuid = request.getString(Tag.AffectedSOPClassUID);
+
 		String iuid = request.getString(Tag.AffectedSOPInstanceUID);
 		File file = new File(storageDir, iuid);
 		if (file.exists()) {
@@ -253,7 +254,8 @@ public class MppsSCP {
 		LOG.info(association + ": M-WRITE " + file);
 		try {
 			out = new DicomOutputStream(file);
-			out.writeDataset(Attributes.createFileMetaInformation(iuid, cuid, UID.ExplicitVRLittleEndian), requestAttributes);
+			out.writeDataset(Attributes.createFileMetaInformation(iuid, request.getString(Tag.AffectedSOPClassUID),
+				UID.ExplicitVRLittleEndian), requestAttributes);
 		}
 		catch (IOException e) {
 			LOG.warn(association + ": Failed to store MPPS:", e);
@@ -283,18 +285,23 @@ public class MppsSCP {
 	 * @should update existing mpps file in storage directory containing request attributes
 	 */
 	private Attributes set(Association as, Attributes rq, Attributes rqAttrs) throws DicomServiceException {
+
 		if (mppsNSetIOD != null) {
 			ValidationResult result = rqAttrs.validate(mppsNSetIOD);
 			if (!result.isValid())
 				throw DicomServiceException.valueOf(result, rqAttrs);
 		}
-		if (storageDir == null)
+
+		if (storageDir == null) {
 			return null;
-		String cuid = rq.getString(Tag.RequestedSOPClassUID);
+		}
+
 		String iuid = rq.getString(Tag.RequestedSOPInstanceUID);
 		File file = new File(storageDir, iuid);
-		if (!file.exists())
+		if (!file.exists()) {
 			throw new DicomServiceException(Status.NoSuchObjectInstance).setUID(Tag.AffectedSOPInstanceUID, iuid);
+		}
+
 		LOG.info(as + ": M-UPDATE " + file);
 		Attributes data;
 		DicomInputStream in = null;
@@ -309,14 +316,17 @@ public class MppsSCP {
 		finally {
 			SafeClose.close(in);
 		}
-		if (!"IN PROGRESS".equals(data.getString(Tag.PerformedProcedureStepStatus)))
+
+		if (!"IN PROGRESS".equals(data.getString(Tag.PerformedProcedureStepStatus))) {
 			BasicMPPSSCP.mayNoLongerBeUpdated();
+		}
 		
 		data.addAll(rqAttrs);
 		DicomOutputStream out = null;
 		try {
 			out = new DicomOutputStream(file);
-			out.writeDataset(Attributes.createFileMetaInformation(iuid, cuid, UID.ExplicitVRLittleEndian), data);
+			out.writeDataset(Attributes.createFileMetaInformation(iuid, rq.getString(Tag.RequestedSOPClassUID),
+				UID.ExplicitVRLittleEndian), data);
 		}
 		catch (IOException e) {
 			LOG.warn(as + ": Failed to update MPPS:", e);

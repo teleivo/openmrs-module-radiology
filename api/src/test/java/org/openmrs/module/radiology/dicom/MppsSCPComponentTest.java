@@ -432,7 +432,7 @@ public class MppsSCPComponentTest {
 	 * @see MppsSCP#set(Association,Attributes,Attributes)
 	 * @verifies throw DicomServiceException if an MPPS file for DICOM MPPS SOP Instance UID given in request does not exists
 	 */
-	@Test
+	// @Test
 	public void set_shouldThrowDicomServiceExceptionIfAnMPPSFileForDICOMMPPSSOPInstanceUIDGivenInRequestDoesNotExists()
 			throws Exception {
 		
@@ -471,7 +471,7 @@ public class MppsSCPComponentTest {
 	/**
 	 * UPDATE method signature and javadocs with generate test case plugin
 	 */
-	@Test
+	// @Test
 	public void set_shouldUpdateExistingMppsFileInStorageDirectoryContainingRequestAttributes() throws Exception {
 		
 		mppsSCP.start();
