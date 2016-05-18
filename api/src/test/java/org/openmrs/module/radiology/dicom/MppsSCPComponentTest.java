@@ -291,7 +291,7 @@ public class MppsSCPComponentTest {
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate-missing-patientid.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
-		mppsScu.scanFiles(mppsFiles, true);
+		mppsScu.scanFiles(mppsFiles, false);
 		
 		mppsScu.createMpps();
 		
@@ -317,12 +317,12 @@ public class MppsSCPComponentTest {
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
-		mppsScu.scanFiles(mppsFiles, true);
+		mppsScu.scanFiles(mppsFiles, false);
 		
 		// Create MPPS N-CREATE
 		mppsScu.createMpps();
 		
-		mppsScu.scanFiles(mppsFiles, true);
+		mppsScu.scanFiles(mppsFiles, false);
 		
 		// Create same MPPS N-CREATE again
 		mppsScu.createMpps();
@@ -347,7 +347,7 @@ public class MppsSCPComponentTest {
 		List<String> mppsFiles = new ArrayList<String>();
 		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
 		mppsFiles.add(mppsDirectory.getAbsolutePath());
-		mppsScu.scanFiles(mppsFiles, true);
+		mppsScu.scanFiles(mppsFiles, false);
 		
 		// Create MPPS N-CREATE
 		mppsScu.createMpps();
