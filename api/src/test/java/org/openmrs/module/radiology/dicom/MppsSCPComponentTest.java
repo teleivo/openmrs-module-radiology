@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +30,7 @@ import org.dcm4che3.net.Connection;
 import org.dcm4che3.net.Device;
 import org.dcm4che3.net.DimseRSPHandler;
 import org.dcm4che3.net.Status;
+import org.dcm4che3.tool.common.DicomFiles;
 import org.dcm4che3.tool.mppsscu.MppsSCU;
 import org.dcm4che3.tool.mppsscu.MppsSCU.MppsWithIUID;
 import org.dcm4che3.tool.mppsscu.MppsSCU.RSPHandlerFactory;
@@ -365,5 +367,35 @@ public class MppsSCPComponentTest {
 		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertTrue(mppsFileCreated.exists());
 		// TODO: test content
+		
+		class DicomFile {
+			
+			Attributes metaInformation;
+			
+			Attributes content;
+			
+			// DicomFile (Attributes fileMetaInformation, Attributes content) {
+			// this.metaInformation = fileMetaInformation;
+			// this.content = content;
+			// }
+			
+			public void scanFile(String fileName) {
+				
+				DicomFiles.scan(Arrays.asList(fileName), new DicomFiles.Callback() {
+					
+					@Override
+					public boolean dicomFile(File f, Attributes fmi, long dsPos, Attributes ds) throws Exception {
+						
+						DicomFile.this.metaInformation = fmi;
+						DicomFile.this.content = ds;
+						return false;
+					}
+				});
+			}
+		}
+		
+		DicomFile mppsFile = new DicomFile();
+		mppsFile.scanFile(mppsFileCreated.getAbsolutePath());
+		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
 	}
 }
