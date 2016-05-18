@@ -366,7 +366,6 @@ public class MppsSCPComponentTest {
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
 		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertTrue(mppsFileCreated.exists());
-		// TODO: test content
 		
 		class DicomFile {
 			
@@ -396,6 +395,8 @@ public class MppsSCPComponentTest {
 		
 		DicomFile mppsFile = new DicomFile();
 		mppsFile.scanFile(mppsFileCreated.getAbsolutePath());
+		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPClassUID),
+			is(UID.ModalityPerformedProcedureStepSOPClass));
 		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
 	}
 }
