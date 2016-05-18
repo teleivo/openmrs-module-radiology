@@ -398,5 +398,6 @@ public class MppsSCPComponentTest {
 		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPClassUID),
 			is(UID.ModalityPerformedProcedureStepSOPClass));
 		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
+		assertThat(mppsFile.metaInformation.getString(Tag.TransferSyntaxUID), is(UID.ExplicitVRLittleEndian));
 	}
 }
