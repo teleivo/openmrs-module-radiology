@@ -100,6 +100,7 @@ public class MppsSCPComponentTest {
 	@Before
 	public void setUp() throws Exception {
 		
+		// setup MPPS SCP
 		mppsStorageDirectory = temporaryBaseFolder.newFolder(MPPS_SCP_STORAGE_DIR);
 		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), mppsStorageDirectory);
 		
