@@ -337,6 +337,7 @@ public class MppsSCPComponentTest {
 		mppsScu.createMpps();
 		
 		assertEquals("Status DUPLICATE_SOP_INSTANCE", Status.DuplicateSOPinstance, mppsScpRspStatus);
+		assertThat(mppsScpRspCmd.getString(Tag.AffectedSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
 	}
 	
 	/**
