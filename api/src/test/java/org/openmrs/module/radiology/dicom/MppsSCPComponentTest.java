@@ -62,7 +62,7 @@ public class MppsSCPComponentTest {
 	
 	private MppsSCU mppsScu;
 	
-	public int mppsScpRspStatus;
+	private int mppsScpRspStatus;
 	
 	private Connection mppsScuConnection;
 	
@@ -72,9 +72,9 @@ public class MppsSCPComponentTest {
 	
 	private ExecutorService executorService;
 	
-	ScheduledExecutorService scheduledExecutorService;
+	private ScheduledExecutorService scheduledExecutorService;
 	
-	RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
+	private RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
 		
 		@Override
 		public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
