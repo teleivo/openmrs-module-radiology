@@ -95,6 +95,13 @@ public class MppsSCPComponentTest {
 					mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
 					mppsScpRspCmd = cmd;
 					mppsScpRspData = data;
+					switch (cmd.getInt(Tag.Status, -1)) {
+						case Status.Success:
+						case Status.AttributeListError:
+						case Status.AttributeValueOutOfRange:
+							mppsWithUID.iuid = cmd.getString(Tag.AffectedSOPInstanceUID, mppsWithUID.iuid);
+							mppsScu.addCreatedMpps(mppsWithUID);
+					}
 					super.onDimseRSP(as, cmd, data);
 				}
 			};
@@ -103,18 +110,32 @@ public class MppsSCPComponentTest {
 		@Override
 		public DimseRSPHandler createDimseRSPHandlerForNSet() {
 			
-			return new DimseRSPHandler(12);
+			return new DimseRSPHandler(
+										12) {
+				
+				@Override
+				public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
+					mppsScpRspStatus = cmd.getInt(Tag.Status, -1);
+					mppsScpRspCmd = cmd;
+					mppsScpRspData = data;
+					super.onDimseRSP(as, cmd, data);
+				}
+			};
 		}
 	};
 	
 	/**
 	 * Helper class so tests get access to content of DICOM MPPS objects created by MPPS SCP.
 	 */
-	class DicomFile {
+	static final class DicomFile {
 		
 		Attributes metaInformation;
 		
 		Attributes content;
+		
+		DicomFile() {
+			
+		}
 	}
 	
 	/**
@@ -122,7 +143,7 @@ public class MppsSCPComponentTest {
 	 */
 	public static DicomFile scanFile(String fileName) {
 		
-		final DicomFile result = new MppsSCPComponentTest().new DicomFile();
+		final DicomFile result = new DicomFile();
 		
 		DicomFiles.scan(Arrays.asList(fileName), new DicomFiles.Callback() {
 			
@@ -405,5 +426,82 @@ public class MppsSCPComponentTest {
 		assertThat(mppsFile.metaInformation.getString(Tag.TransferSyntaxUID), is(UID.ExplicitVRLittleEndian));
 		assertThat(mppsFile.content.getString(Tag.PatientID), is("1237"));
 		assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepStatus), is("IN PROGRESS"));
+	}
+	
+	/**
+	 * @see MppsSCP#set(Association,Attributes,Attributes)
+	 * @verifies throw DicomServiceException if an MPPS file for DICOM MPPS SOP Instance UID given in request does not exists
+	 */
+	@Test
+	public void set_shouldThrowDicomServiceExceptionIfAnMPPSFileForDICOMMPPSSOPInstanceUIDGivenInRequestDoesNotExists()
+			throws Exception {
+		
+		mppsSCP.start();
+		
+		// Open connection from MPPS SCU to MPPS SCP
+		mppsScu.open();
+		
+		// Create MPPS N-CREATE
+		List<String> mppsFiles = new ArrayList<String>();
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		mppsFiles.add(mppsDirectory.getAbsolutePath());
+		mppsScu.scanFiles(mppsFiles, false);
+		mppsScu.createMpps();
+		
+		// DicomFile mpps = scanFile(mppsDirectory.getAbsolutePath());
+		// mppsScu.addMPPS(MPPS_NCREATE_INSTANCE_UID, mpps.content);
+		// mppsScu.addCreatedMpps(mpps);
+		
+		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
+		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
+		assertTrue(mppsFileCreated.exists());
+		
+		// delete MPPS file, so it will not be found when N-SET RQ comes in
+		assertTrue(mppsFileCreated.delete());
+		assertFalse(mppsFileCreated.exists());
+		
+		// Create MPPS N-SET
+		mppsScu.updateMpps();
+		assertTrue(mppsFileCreated.exists());
+		
+		assertEquals("Status NO_SUCH_OBJECT_INSTANCE", Status.NoSuchObjectInstance, mppsScpRspStatus);
+		assertThat(mppsScpRspCmd.getString(Tag.AffectedSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
+	}
+	
+	/**
+	 * UPDATE method signature and javadocs with generate test case plugin
+	 */
+	@Test
+	public void set_shouldUpdateExistingMppsFileInStorageDirectoryContainingRequestAttributes() throws Exception {
+		
+		mppsSCP.start();
+		
+		// Open connection from MPPS SCU to MPPS SCP
+		mppsScu.open();
+		
+		// Create MPPS N-CREATE
+		List<String> mppsFiles = new ArrayList<String>();
+		File mppsDirectory = new File("src/test/resources/dicom/mpps/mpps-ncreate.xml");
+		mppsFiles.add(mppsDirectory.getAbsolutePath());
+		mppsScu.scanFiles(mppsFiles, false);
+		mppsScu.createMpps();
+		
+		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
+		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
+		assertTrue(mppsFileCreated.exists());
+		
+		// Create MPPS N-SET
+		mppsScu.updateMpps();
+		
+		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
+		assertTrue(mppsFileCreated.exists());
+		
+		DicomFile mppsFile = scanFile(mppsFileCreated.getAbsolutePath());
+		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPClassUID),
+			is(UID.ModalityPerformedProcedureStepSOPClass));
+		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
+		assertThat(mppsFile.metaInformation.getString(Tag.TransferSyntaxUID), is(UID.ExplicitVRLittleEndian));
+		assertThat(mppsFile.content.getString(Tag.PatientID), is("1237"));
+		assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepStatus), is("COMPLETED"));
 	}
 }

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NativeDicomModel xml:space="preserve">
+<DicomAttribute keyword="FileMetaInformationVersion"
+	tag="00020001" vr="OB">
+<InlineBinary>AAE=</InlineBinary>
+</DicomAttribute>
+<DicomAttribute keyword="MediaStorageSOPClassUID" tag="00020002"
+	vr="UI">
+<Value number="1">1.2.840.10008.3.1.2.3.3</Value>
+</DicomAttribute>
+<DicomAttribute keyword="MediaStorageSOPInstanceUID"
+	tag="00020003" vr="UI">
+<Value number="1">1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30</Value>
+</DicomAttribute>
+<DicomAttribute keyword="TransferSyntaxUID" tag="00020010"
+	vr="UI">
+<Value number="1">1.2.840.10008.1.2.1</Value>
+</DicomAttribute>
+<DicomAttribute keyword="ImplementationClassUID" tag="00020012"
+	vr="UI">
+<Value number="1">1.2.40.0.13.1.1</Value>
+</DicomAttribute>
+<DicomAttribute keyword="ImplementationVersionName" tag="00020013"
+	vr="SH">
+<Value number="1">dcm4che-3.3.7</Value>
+</DicomAttribute>
+<DicomAttribute keyword="SpecificCharacterSet" tag="00080005"
+	vr="CS">
+<Value number="1">ISO_IR 196</Value>
+</DicomAttribute>
+<DicomAttribute keyword="Modality" tag="00080060" vr="CS">
+<Value number="1">CT</Value>
+</DicomAttribute>
+<DicomAttribute keyword="ProcedureCodeSequence" tag="00081032"
+	vr="SQ" />
+<DicomAttribute keyword="ReferencedPatientSequence" tag="00081120"
+	vr="SQ" />
+<DicomAttribute keyword="PatientName" tag="00100010" vr="PN">
+<PersonName number="1">
+<Alphabetic>
+<FamilyName>Peterson</FamilyName>
+<GivenName>Peter</GivenName>
+<MiddleName></MiddleName>
+</Alphabetic>
+</PersonName>
+</DicomAttribute>
+<DicomAttribute keyword="PatientID" tag="00100020" vr="LO">
+<Value number="1">1237</Value>
+</DicomAttribute>
+<DicomAttribute keyword="IssuerOfPatientID" tag="00100021"
+	vr="LO">
+<Value number="1">OpenMRS</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PatientBirthDate" tag="00100030"
+	vr="DA">
+<Value number="1">19750101</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PatientSex" tag="00100040" vr="CS">
+<Value number="1">M</Value>
+</DicomAttribute>
+<DicomAttribute keyword="ImageAndFluoroscopyAreaDoseProduct"
+	tag="0018115E" vr="DS" />
+<DicomAttribute keyword="StudyID" tag="00200010" vr="SH">
+<Value number="1">2</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedStationAETitle" tag="00400241"
+	vr="AE">
+<Value number="1">CT01</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedStationName" tag="00400242"
+	vr="SH">
+	<Value number="1">CT Machine</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedLocation" tag="00400243"
+	vr="SH">
+<Value number="1">OUTPATIENT</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepStartDate"
+	tag="00400244" vr="DA">
+<Value number="1">20160427</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepStartTime"
+	tag="00400245" vr="TM">
+<Value number="1">175145</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepEndDate"
+	tag="00400250" vr="DA" />
+<DicomAttribute keyword="PerformedProcedureStepEndTime"
+	tag="00400251" vr="TM" />
+<DicomAttribute keyword="PerformedProcedureStepStatus"
+	tag="00400252" vr="CS">
+<Value number="1">IN PROGRESS</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepID" tag="00400253"
+	vr="SH">
+<Value number="1">1605.0</Value>
+</DicomAttribute>
+<DicomAttribute keyword="PerformedProcedureStepDescription"
+	tag="00400254" vr="LO" />
+<DicomAttribute keyword="PerformedProcedureTypeDescription"
+	tag="00400255" vr="LO" />
+<DicomAttribute keyword="PerformedProtocolCodeSequence"
+	tag="00400260" vr="SQ" />
+<DicomAttribute keyword="ScheduledStepAttributesSequence"
+	tag="00400270" vr="SQ">
+<Item number="1">
+<DicomAttribute keyword="AccessionNumber" tag="00080050"
+	vr="SH" />
+<DicomAttribute keyword="ReferencedStudySequence" tag="00081110"
+	vr="SQ">
+<Item number="1">
+<DicomAttribute keyword="ReferencedSOPClassUID" tag="00081150"
+	vr="UI">
+<Value number="1">1.2.840.10008.3.1.2.3.1</Value>
+</DicomAttribute>
+<DicomAttribute keyword="ReferencedSOPInstanceUID" tag="00081155"
+	vr="UI">
+<Value number="1">1.2.840.10008.5.1.4.1.1.9.1.2.1.1.1</Value>
+</DicomAttribute>
+</Item>
+</DicomAttribute>
+<DicomAttribute keyword="StudyInstanceUID" tag="0020000D"
+	vr="UI">
+<Value number="1">999.999.999.1.1.2</Value>
+</DicomAttribute>
+<DicomAttribute keyword="RequestedProcedureDescription"
+	tag="00321060" vr="LO" />
+<DicomAttribute keyword="ScheduledProcedureStepDescription"
+	tag="00400007" vr="LO" />
+<DicomAttribute keyword="ScheduledProtocolCodeSequence"
+	tag="00400008" vr="SQ" />
+<DicomAttribute keyword="ScheduledProcedureStepID" tag="00400009"
+	vr="SH">
+<Value number="1">2</Value>
+</DicomAttribute>
+<DicomAttribute keyword="RequestedProcedureID" tag="00401001"
+	vr="SH">
+<Value number="1">ORD-2001</Value>
+</DicomAttribute>
+</Item>
+</DicomAttribute>
+<DicomAttribute
+	keyword="PerformedProcedureStepDiscontinuationReasonCodeSequence" tag="00400281"
+	vr="SQ" />
+<DicomAttribute keyword="TotalNumberOfExposures" tag="00400301"
+	vr="US" />
+<DicomAttribute keyword="ExposureDoseSequence" tag="0040030E"
+	vr="SQ" />
+<DicomAttribute keyword="CommentsOnRadiationDose" tag="00400310"
+	vr="ST" />
+<DicomAttribute keyword="FilmConsumptionSequence" tag="00400321"
+	vr="SQ" />
+<DicomAttribute keyword="PerformedSeriesSequence" tag="00400340"
+	vr="SQ" />
+</NativeDicomModel>

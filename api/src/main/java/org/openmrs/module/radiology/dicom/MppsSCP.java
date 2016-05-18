@@ -266,13 +266,21 @@ public class MppsSCP {
 	}
 	
 	/**
-	 * Auto generated method comment
+	 * Implements the DIMSE Service Element N-SET for the Modality Performed Procedure Step SOP Class Role SCP.
 	 * 
-	 * @param as
-	 * @param rq
-	 * @param rqAttrs
+	 * @param association DICOM association on which MPPS N-SET RQ was sent
+	 * @param request Attributes of DICOM MPPS N-SET RQ
+	 * @param requestAttributes Request attributes of DICOM MPPS N-SET RQ
 	 * @return response attributes which will be sent back to the MPPS SCU in the N-SET response
-	 * @throws DicomServiceException
+	 * @throws DicomServiceException if <code>requestAttributes</code> are not conform with DICOM IOD
+	 *         <code>mppsNSetIOD</code> //TODO: check these
+	 * @throws DicomServiceException if an MPPS file for DICOM MPPS SOP Instance UID given in <code>request</code> does not
+	 *         exists
+	 * @throws DicomServiceException if MPPS file cannot be updated
+	 * @should throw DicomServiceException if requestAttributes are not conform with DICOM IOD mppsNSetIOD
+	 * @should throw DicomServiceException if an MPPS file for DICOM MPPS SOP Instance UID given in request does not exists
+	 * @should throw DicomServiceException if MPPS file cannot be udpated
+	 * @should update existing mpps file in storage directory containing request attributes
 	 */
 	private Attributes set(Association as, Attributes rq, Attributes rqAttrs) throws DicomServiceException {
 		if (mppsNSetIOD != null) {
