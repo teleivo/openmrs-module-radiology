@@ -62,8 +62,6 @@ public class MppsSCPComponentTest {
 	
 	private MppsSCU mppsScu;
 	
-	private int mppsScpRspStatus;
-	
 	private Connection mppsScuConnection;
 	
 	private ApplicationEntity mppsScuAe;
@@ -73,6 +71,8 @@ public class MppsSCPComponentTest {
 	private ExecutorService executorService;
 	
 	private ScheduledExecutorService scheduledExecutorService;
+	
+	private int mppsScpRspStatus;
 	
 	private RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
 		
