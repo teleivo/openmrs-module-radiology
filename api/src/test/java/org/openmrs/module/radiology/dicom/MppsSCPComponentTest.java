@@ -107,6 +107,37 @@ public class MppsSCPComponentTest {
 		}
 	};
 	
+	/**
+	 * Helper class so tests get access to content of DICOM MPPS objects created by MPPS SCP.
+	 */
+	class DicomFile {
+		
+		Attributes metaInformation;
+		
+		Attributes content;
+	}
+	
+	/**
+	 * Helper method so tests get access to content of DICOM MPPS objects created by MPPS SCP.
+	 */
+	public static DicomFile scanFile(String fileName) {
+		
+		final DicomFile result = new MppsSCPComponentTest().new DicomFile();
+		
+		DicomFiles.scan(Arrays.asList(fileName), new DicomFiles.Callback() {
+			
+			@Override
+			public boolean dicomFile(File f, Attributes fmi, long dsPos, Attributes ds) throws Exception {
+				
+				result.metaInformation = fmi;
+				result.content = ds;
+				return false;
+			}
+		});
+		
+		return result;
+	}
+	
 	@Before
 	public void setUp() throws Exception {
 		
@@ -367,37 +398,12 @@ public class MppsSCPComponentTest {
 		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertTrue(mppsFileCreated.exists());
 		
-		class DicomFile {
-			
-			Attributes metaInformation;
-			
-			Attributes content;
-			
-			// DicomFile (Attributes fileMetaInformation, Attributes content) {
-			// this.metaInformation = fileMetaInformation;
-			// this.content = content;
-			// }
-			
-			public void scanFile(String fileName) {
-				
-				DicomFiles.scan(Arrays.asList(fileName), new DicomFiles.Callback() {
-					
-					@Override
-					public boolean dicomFile(File f, Attributes fmi, long dsPos, Attributes ds) throws Exception {
-						
-						DicomFile.this.metaInformation = fmi;
-						DicomFile.this.content = ds;
-						return false;
-					}
-				});
-			}
-		}
-		
-		DicomFile mppsFile = new DicomFile();
-		mppsFile.scanFile(mppsFileCreated.getAbsolutePath());
+		DicomFile mppsFile = scanFile(mppsFileCreated.getAbsolutePath());
 		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPClassUID),
 			is(UID.ModalityPerformedProcedureStepSOPClass));
 		assertThat(mppsFile.metaInformation.getString(Tag.MediaStorageSOPInstanceUID), is(MPPS_NCREATE_INSTANCE_UID));
 		assertThat(mppsFile.metaInformation.getString(Tag.TransferSyntaxUID), is(UID.ExplicitVRLittleEndian));
+		assertThat(mppsFile.content.getString(Tag.PatientID), is("1237"));
+		assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepStatus), is("IN PROGRESS"));
 	}
 }
