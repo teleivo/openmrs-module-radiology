@@ -41,6 +41,7 @@ import org.junit.rules.TemporaryFolder;
  */
 public class MppsSCPComponentTest {
 	
+	
 	private static final Log LOG = LogFactory.getLog(MppsSCPComponentTest.class);
 	
 	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
@@ -50,6 +51,8 @@ public class MppsSCPComponentTest {
 	private static String MPPS_SCP_STORAGE_DIR = "mpps";
 	
 	private static Integer MPPS_SCU_PORT = 11115;
+	
+	private static String MPPS_NCREATE_INSTANCE_UID = "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30";
 	
 	@Rule
 	public TemporaryFolder temporaryBaseFolder = new TemporaryFolder();
@@ -74,11 +77,12 @@ public class MppsSCPComponentTest {
 	
 	RSPHandlerFactory rspHandlerFactory = new RSPHandlerFactory() {
 		
+		
 		@Override
 		public DimseRSPHandler createDimseRSPHandlerForNCreate(final MppsWithIUID mppsWithUID) {
 			
-			return new DimseRSPHandler(
-										12) {
+			return new DimseRSPHandler(12) {
+				
 				
 				@Override
 				public void onDimseRSP(Association as, Attributes cmd, Attributes data) {
@@ -136,8 +140,8 @@ public class MppsSCPComponentTest {
 		mppsScu.getRemoteConnection()
 				.setPort(MPPS_SCP_PORT);
 		
-		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
-				UID.ExplicitVRBigEndianRetired });
+		mppsScu.setTransferSyntaxes(
+			new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian, UID.ExplicitVRBigEndianRetired });
 		mppsScu.setAttributes(new Attributes());
 		
 		mppsScu.setRspHandlerFactory(rspHandlerFactory);
@@ -293,7 +297,7 @@ public class MppsSCPComponentTest {
 		
 		mppsScu.createMpps();
 		
-		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
+		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertEquals("Status MISSING_ATTRIBUTE", Status.MissingAttribute, mppsScpRspStatus);
 		assertFalse(mppsFileCreated.exists());
 	}
@@ -325,7 +329,7 @@ public class MppsSCPComponentTest {
 		// Create same MPPS N-CREATE again
 		mppsScu.createMpps();
 		
-		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
+		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertEquals("Status DUPLICATE_SOP_INSTANCE", Status.DuplicateSOPinstance, mppsScpRspStatus);
 		assertTrue(mppsFileCreated.exists());
 	}
@@ -350,7 +354,7 @@ public class MppsSCPComponentTest {
 		// Create MPPS N-CREATE
 		mppsScu.createMpps();
 		
-		File mppsFileCreated = new File(mppsStorageDirectory, "1.2.826.0.1.3680043.2.1545.1.2.1.7.20160427.175209.661.30");
+		File mppsFileCreated = new File(mppsStorageDirectory, MPPS_NCREATE_INSTANCE_UID);
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
 		assertTrue(mppsFileCreated.exists());
 	}
