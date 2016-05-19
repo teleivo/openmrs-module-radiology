@@ -163,9 +163,10 @@ public class MppsSCPComponentTest {
 	public void setUp() throws Exception {
 		
 		// setup MPPS SCP
+		// File test = new File("mpps");
+		// mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), test);
 		mppsStorageDirectory = temporaryBaseFolder.newFolder(MPPS_SCP_STORAGE_DIR);
-		File test = new File("mpps");
-		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), test);
+		mppsSCP = new MppsSCP(MPPS_SCP_AE_TITLE, MPPS_SCP_PORT.toString(), mppsStorageDirectory);
 		
 		// setup MPPS SCU
 		mppsScuConnection = new Connection();
@@ -205,6 +206,7 @@ public class MppsSCPComponentTest {
 		mppsScu.setTransferSyntaxes(new String[] { UID.ImplicitVRLittleEndian, UID.ExplicitVRLittleEndian,
 				UID.ExplicitVRBigEndianRetired });
 		mppsScu.setAttributes(new Attributes());
+		mppsScu.setUIDSuffix("78");
 		
 		mppsScu.setRspHandlerFactory(rspHandlerFactory);
 		
@@ -427,6 +429,10 @@ public class MppsSCPComponentTest {
 		assertThat(mppsFile.metaInformation.getString(Tag.TransferSyntaxUID), is(UID.ExplicitVRLittleEndian));
 		assertThat(mppsFile.content.getString(Tag.PatientID), is("1237"));
 		assertThat(mppsFile.content.getString(Tag.PerformedProcedureStepStatus), is("IN PROGRESS"));
+		
+		mppsScu.updateMpps();
+		DicomFile newfile = scanFile(mppsFileCreated.getAbsolutePath());
+		assertThat(newfile.content.getString(Tag.PerformedProcedureStepStatus), is("COMPLETED"));
 	}
 	
 	/**
@@ -496,6 +502,7 @@ public class MppsSCPComponentTest {
 		// scanFile("src/test/resources/dicom/mpps/1.3.6.1.4.1.25403.2199141309252.6396.20160427181538.71.xml");
 		// assertTrue(mppsScu.addInstance(instance.content));
 		Attributes instance = new Attributes();
+		// instance.setString(Tag.PerformedStationAETitle, VR.AE, )
 		mppsScu.addInstance(instance);
 		mppsScu.updateMpps();
 		
