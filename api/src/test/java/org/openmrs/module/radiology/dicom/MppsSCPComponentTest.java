@@ -495,6 +495,8 @@ public class MppsSCPComponentTest {
 		// DicomFile instance =
 		// scanFile("src/test/resources/dicom/mpps/1.3.6.1.4.1.25403.2199141309252.6396.20160427181538.71.xml");
 		// assertTrue(mppsScu.addInstance(instance.content));
+		Attributes instance = new Attributes();
+		mppsScu.addInstance(instance);
 		mppsScu.updateMpps();
 		
 		assertEquals("Status SUCCESS", Status.Success, mppsScpRspStatus);
