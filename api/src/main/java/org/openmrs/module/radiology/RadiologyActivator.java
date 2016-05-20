@@ -22,7 +22,7 @@ import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.module.radiology.dicom.MppsSCP;
 
 /**
- * This class contains the logic that is run every time this module is either started or shutdown
+ * This class contains the logic that is run every time this module is either started or stopped.
  */
 
 public class RadiologyActivator extends BaseModuleActivator {
