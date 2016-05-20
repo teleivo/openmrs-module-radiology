@@ -48,11 +48,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.radiology.study.RadiologyStudyService;
+import org.openmrs.test.BaseContextMockTest;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Tests {@link MppsSCP}.
  */
-public class MppsSCPComponentTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Context.class)
+public class MppsSCPComponentTest extends BaseContextMockTest {
 	
 	private static String MPPS_SCP_AE_TITLE = "RADIOLOGY_MODULE";
 	
@@ -69,6 +78,9 @@ public class MppsSCPComponentTest {
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
+	
+	@Mock
+	private RadiologyStudyService radiologyStudyService;
 	
 	private File mppsStorageDirectory;
 	

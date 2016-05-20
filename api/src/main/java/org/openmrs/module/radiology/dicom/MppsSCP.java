@@ -39,6 +39,9 @@ import org.dcm4che3.net.service.DicomServiceException;
 import org.dcm4che3.net.service.DicomServiceRegistry;
 import org.dcm4che3.tool.common.CLIUtils;
 import org.dcm4che3.util.SafeClose;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.radiology.dicom.code.PerformedProcedureStepStatus;
+import org.openmrs.module.radiology.study.RadiologyStudyService;
 
 /**
  * Represents a DICOM Application Entity conforming to the Modality Performed Procedure Step SOP Class as an SCP as described
@@ -60,6 +63,9 @@ public class MppsSCP {
 	private static final String IOD_NSET_RESOURCE = "resource:dicom/mpps-nset-iod.xml";
 	
 	private static final String IN_PROGRESS = "IN PROGRESS";
+	
+	private static RadiologyStudyService radiologyStudyService = Context.getRegisteredComponent("radiologyStudyService",
+		RadiologyStudyService.class);
 	
 	/**
 	 * Device of MPPS SCP.
@@ -332,6 +338,12 @@ public class MppsSCP {
 		finally {
 			SafeClose.close(out);
 		}
+		
+		String studyInstanceUID = requestAttributes.getSequence(Tag.ScheduledStepAttributesSequence)
+				.get(0)
+				.getString(Tag.StudyInstanceUID, "");
+		radiologyStudyService.updateStudyPerformedStatus(studyInstanceUID, PerformedProcedureStepStatus.IN_PROGRESS);
+		
 		return null;
 	}
 	
@@ -406,6 +418,17 @@ public class MppsSCP {
 		finally {
 			SafeClose.close(out);
 		}
+		
+		String studyInstanceUID = requestAttributes.getSequence(Tag.ScheduledStepAttributesSequence)
+				.get(0)
+				.getString(Tag.StudyInstanceUID, "");
+		
+		if (requestAttributes.getString(Tag.PerformedProcedureStepStatus) == "COMPLETED") {
+			radiologyStudyService.updateStudyPerformedStatus(studyInstanceUID, PerformedProcedureStepStatus.COMPLETED);
+		} else {
+			radiologyStudyService.updateStudyPerformedStatus(studyInstanceUID, PerformedProcedureStepStatus.DISCONTINUED);
+		}
+		
 		return null;
 	}
 }
