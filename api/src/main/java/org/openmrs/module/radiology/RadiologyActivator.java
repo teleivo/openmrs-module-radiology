@@ -37,7 +37,7 @@ public class RadiologyActivator extends BaseModuleActivator {
 	
 	@Override
 	public void started() {
-		startDicomOrderFiller();
+		startMppsSCP();
 		log.info("Radiology Module successfully started");
 	}
 	
@@ -48,16 +48,16 @@ public class RadiologyActivator extends BaseModuleActivator {
 	
 	@Override
 	public void stopped() {
-		stopDicomOrderFiller();
+		stopMppsSCP();
 		log.info("Radiology Module successfully stopped");
 	}
 	
 	/**
-	 * Start dicom order filler
+	 * Start <code>MppsSCP</code>
 	 * 
 	 * @should successfully start the dicom order filler
 	 */
-	void startDicomOrderFiller() {
+	void startMppsSCP() {
 		
 		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
 			RadiologyProperties.class);
@@ -91,12 +91,12 @@ public class RadiologyActivator extends BaseModuleActivator {
 	}
 	
 	/**
-	 * Stop dicom order filler
+	 * Stop <code>MppsSCP</code>
 	 * 
 	 * @should throw exception when unable to stop the dicom order filler
 	 * @should successfully stop the dicom order filler
 	 */
-	void stopDicomOrderFiller() {
+	void stopMppsSCP() {
 		log.info("Trying to stop MPPSScu : OpenMRS MPPS SCU Client (dcmof)");
 		this.mppsSCP.stop();
 	}

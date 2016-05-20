@@ -63,7 +63,7 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 	}
 	
 	/**
-	 * @see RadiologyActivator#startDicomOrderFiller()
+	 * @see RadiologyActivator#startMppsSCP()
 	 * @verifies should successfully start the dicom order filler
 	 */
 	@Test
@@ -75,14 +75,14 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 		MppsSCP mppsSCPFieldValue = (MppsSCP) mppsSCPField.get(radiologyActivator);
 		assertThat(mppsSCPFieldValue, nullValue());
 		
-		radiologyActivator.startDicomOrderFiller();
+		radiologyActivator.startMppsSCP();
 		
 		mppsSCPFieldValue = (MppsSCP) mppsSCPField.get(radiologyActivator);
 		assertThat(mppsSCPFieldValue, notNullValue());
 	}
 	
 	/**
-	 * @see RadiologyActivator#stopDicomOrderFiller()
+	 * @see RadiologyActivator#stopMppsSCP()
 	 * @verifies should successfully stop the dicom order filler
 	 */
 	@Test
@@ -100,7 +100,7 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 	}
 	
 	/**
-	 * @see RadiologyActivator#stopDicomOrderFiller()
+	 * @see RadiologyActivator#stopMppsSCP()
 	 * @verifies should throw exception when unable to stop the dicom order filler
 	 */
 	@Test
