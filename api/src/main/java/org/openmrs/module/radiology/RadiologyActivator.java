@@ -12,7 +12,6 @@ package org.openmrs.module.radiology;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
@@ -59,11 +58,13 @@ public class RadiologyActivator extends BaseModuleActivator {
 	 * @should successfully start the dicom order filler
 	 */
 	void startDicomOrderFiller() {
-		final String[] dicomOrderFillerArguments = getDicomOrderFillerArguments();
-		log.info("Trying to start OpenMRS MPPS SCP Client with: " + Arrays.asList(dicomOrderFillerArguments));
+		
 		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
 			RadiologyProperties.class);
 		
+		log.info("Creating OpenMRS MPPS SCP Client with: AE Title=" + radiologyProperties.getDicomMppsSCPAeTitle()
+				+ " AE Port=" + radiologyProperties.getDicomMppsSCPPort() + " storage directory= "
+				+ radiologyProperties.getDicomMppsSCPStorageDirectory());
 		try {
 			this.mppsSCP = new MppsSCP(radiologyProperties.getDicomMppsSCPAeTitle(),
 					radiologyProperties.getDicomMppsSCPPort(), new File(
@@ -87,21 +88,6 @@ public class RadiologyActivator extends BaseModuleActivator {
 		catch (GeneralSecurityException generalSecurityException) {
 			log.error("Error starting OpenMRS MPPS SCP Client", generalSecurityException);
 		}
-	}
-	
-	/**
-	 * Return dicom order filler arguments
-	 * 
-	 * @return dicom order filler arguments
-	 * @should return dicom order filler arguments
-	 */
-	String[] getDicomOrderFillerArguments() {
-		log.info("Loading dicom order filler arguments");
-		final RadiologyProperties radiologyProperties = Context.getRegisteredComponent("radiologyProperties",
-			RadiologyProperties.class);
-		return new String[] { "--bind",
-				radiologyProperties.getDicomMppsSCPAeTitle() + ":" + radiologyProperties.getDicomMppsSCPPort(),
-				"--directory", radiologyProperties.getDicomMppsSCPStorageDirectory(), };
 	}
 	
 	/**

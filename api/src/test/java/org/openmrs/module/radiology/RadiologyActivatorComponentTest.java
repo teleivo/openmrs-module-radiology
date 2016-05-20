@@ -9,7 +9,6 @@
  */
 package org.openmrs.module.radiology;
 
-import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -53,7 +52,7 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 	File temporaryDicomMppsSCPStorageDirectory;
 	
 	@Before
-	public void runBeforeAllTests() throws Exception {
+	public void setUp() throws Exception {
 		
 		radiologyActivator = new RadiologyActivator();
 		executeDataSet(ACTIVATOR_TEST_DATASET);
@@ -114,20 +113,4 @@ public class RadiologyActivatorComponentTest extends BaseModuleContextSensitiveT
 		// expectedException.expect(NullPointerException.class);
 		// radiologyActivator.stopDicomOrderFiller();
 	}
-	
-	/**
-	 * @see RadiologyActivator#getDicomOrderFillerArguments()
-	 * @verifies should return dicom order filler arguments
-	 */
-	@Test
-	public void getDicomOrderFillerArguments_shouldReturnDicomOrderFillerArguments() throws Exception {
-		
-		String[] dicomOrderFillerArguments = radiologyActivator.getDicomOrderFillerArguments();
-		
-		assertThat(dicomOrderFillerArguments[0], is("--bind"));
-		assertThat(dicomOrderFillerArguments[1], is("RADIOLOGY_MODULE:11114"));
-		assertThat(dicomOrderFillerArguments[2], is("--directory"));
-		assertThat(dicomOrderFillerArguments[3], is(temporaryDicomMppsSCPStorageDirectory.getAbsolutePath()));
-	}
-	
 }
