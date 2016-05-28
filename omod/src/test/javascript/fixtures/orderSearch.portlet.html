@@ -1,74 +1,49 @@
-<!DOCTYPE html>
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>http://localhost:8080/openmrs/module/radiology/portlets/orderSearch.portlet</title><link rel="stylesheet" type="text/css" href="orderSearch.portlet-Dateien/viewsource.css"></head><body contextmenu="actions" id="viewsource" class="highlight" style="-moz-tab-size: 4"><pre id="line1"><span>
-<span id="line2"></span>
-<span id="line3"></span>
-<span id="line4"></span>
-<span id="line5"></span>
-<span id="line6"></span>
-<span id="line7"></span>
-<span id="line8"></span>
-<span id="line9"></span>
-<span id="line10"></span>
-<span id="line11"></span>
-<span id="line12"></span>
-<span id="line13"></span>
-<span id="line14"></span>  
-<span id="line15"></span>    </span><span title="Start-Tag wurde entdeckt, ohne dass ein Doctype zuerst gesehen wurde. “&lt;!DOCTYPE html&gt;” erwartet." class="error">&lt;<span class="start-tag">table</span> <span class="attribute-name">id</span>="<a class="attribute-value">radiologyOrdersTable</a>" <span class="attribute-name">cellspacing</span>="<a class="attribute-value">0</a>" <span class="attribute-name">width</span>="<a class="attribute-value">100%</a>" <span class="attribute-name">class</span>="<a class="attribute-value">display nowrap</a>"&gt;</span><span>
-<span id="line16"></span>      </span><span>&lt;<span class="start-tag">thead</span>&gt;</span><span>
-<span id="line17"></span>        </span><span>&lt;<span class="start-tag">tr</span>&gt;</span><span>
-<span id="line18"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line19"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Edit</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line20"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Patient Id</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line21"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Patient Full Name</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line22"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Priority</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line23"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Order Start Date</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line24"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Modality</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line25"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Performed status</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line26"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Referring Physician</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line27"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Scheduled status</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line28"></span>          </span><span>&lt;<span class="start-tag">th</span>&gt;</span><span>Instructions</span><span>&lt;/<span class="end-tag">th</span>&gt;</span><span>
-<span id="line29"></span>        </span><span>&lt;/<span class="end-tag">tr</span>&gt;</span><span>
-<span id="line30"></span>      </span><span>&lt;/<span class="end-tag">thead</span>&gt;</span><span>
-<span id="line31"></span>      </span><span>&lt;<span class="start-tag">tbody</span> <span class="attribute-name">id</span>="<a class="attribute-value">radiologyOrdersTableBody</a>"&gt;</span><span>
-<span id="line32"></span>        
-<span id="line33"></span>          </span><span>&lt;<span class="start-tag">tr</span> <span class="attribute-name">data-child-order_id</span>="<a class="attribute-value">1</a>" <span class="attribute-name">data-child-physician</span>="<a class="attribute-value">Doctor Anne</a>"
-<span id="line34"></span>            <span class="attribute-name">data-child-status</span>="<a class="attribute-value"></a>"
-<span id="line35"></span>            <span class="attribute-name">data-child-instructions</span>="<a class="attribute-value"></a>"&gt;</span><span>
-<span id="line36"></span>            </span><span>&lt;<span class="start-tag">td</span> <span class="attribute-name">class</span>="<a class="attribute-value">details-control</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line37"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;<span class="start-tag">a</span> <span class="attribute-name">href</span>="<a href="view-source:http://localhost:8080/openmrs/module/radiology/portlets/radiologyOrder.form?orderId=1" class="attribute-value">radiologyOrder.form?orderId=1</a>"&gt;</span><span>1</span><span>&lt;/<span class="end-tag">a</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line38"></span>            </span><span>&lt;<span class="start-tag">td</span> <span class="attribute-name">style</span>="<a class="attribute-value">text-align: center</a>"&gt;</span><span></span><span>&lt;<span class="start-tag">a</span>
-<span id="line39"></span>              <span class="attribute-name">href</span>="<a href="view-source:http://localhost:8080/openmrs/patientDashboard.form?patientId=3" class="attribute-value">/openmrs/patientDashboard.form?patientId=3</a>"&gt;</span><span>100-8</span><span>&lt;/<span class="end-tag">a</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line40"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;<span class="start-tag">a</span> <span class="attribute-name">href</span>="<a href="view-source:http://localhost:8080/openmrs/patientDashboard.form?patientId=3" class="attribute-value">/openmrs/patientDashboard.form?patientId=3</a>"&gt;</span><span>Mr. John D Patient</span><span>&lt;/<span class="end-tag">a</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line41"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>Emergency</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line42"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>2016-05-27 13:13:25.0</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line43"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>X-Ray Angriography</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line44"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line45"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>Doctor Anne</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line46"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line47"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line48"></span>          </span><span>&lt;/<span class="end-tag">tr</span>&gt;</span><span>
-<span id="line49"></span>        
-<span id="line50"></span>          </span><span>&lt;<span class="start-tag">tr</span> <span class="attribute-name">data-child-order_id</span>="<a class="attribute-value">3</a>" <span class="attribute-name">data-child-physician</span>="<a class="attribute-value">Doctor Anne</a>"
-<span id="line51"></span>            <span class="attribute-name">data-child-status</span>="<a class="attribute-value"></a>"
-<span id="line52"></span>            <span class="attribute-name">data-child-instructions</span>="<a class="attribute-value"></a>"&gt;</span><span>
-<span id="line53"></span>            </span><span>&lt;<span class="start-tag">td</span> <span class="attribute-name">class</span>="<a class="attribute-value">details-control</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line54"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;<span class="start-tag">a</span> <span class="attribute-name">href</span>="<a href="view-source:http://localhost:8080/openmrs/module/radiology/portlets/radiologyOrder.form?orderId=3" class="attribute-value">radiologyOrder.form?orderId=3</a>"&gt;</span><span>3</span><span>&lt;/<span class="end-tag">a</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line55"></span>            </span><span>&lt;<span class="start-tag">td</span> <span class="attribute-name">style</span>="<a class="attribute-value">text-align: center</a>"&gt;</span><span></span><span>&lt;<span class="start-tag">a</span>
-<span id="line56"></span>              <span class="attribute-name">href</span>="<a href="view-source:http://localhost:8080/openmrs/patientDashboard.form?patientId=3" class="attribute-value">/openmrs/patientDashboard.form?patientId=3</a>"&gt;</span><span>100-8</span><span>&lt;/<span class="end-tag">a</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line57"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;<span class="start-tag">a</span> <span class="attribute-name">href</span>="<a href="view-source:http://localhost:8080/openmrs/patientDashboard.form?patientId=3" class="attribute-value">/openmrs/patientDashboard.form?patientId=3</a>"&gt;</span><span>Mr. John D Patient</span><span>&lt;/<span class="end-tag">a</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line58"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>Routine</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line59"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>2016-05-27 13:14:02.0</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line60"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>X-Ray Angriography</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line61"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>COMPLETED</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line62"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span>Doctor Anne</span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line63"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line64"></span>            </span><span>&lt;<span class="start-tag">td</span>&gt;</span><span></span><span>&lt;/<span class="end-tag">td</span>&gt;</span><span>
-<span id="line65"></span>          </span><span>&lt;/<span class="end-tag">tr</span>&gt;</span><span>
-<span id="line66"></span>        
-<span id="line67"></span>      </span><span>&lt;/<span class="end-tag">tbody</span>&gt;</span><span>
-<span id="line68"></span>    </span><span>&lt;/<span class="end-tag">table</span>&gt;</span><span>
-<span id="line69"></span>  
-<span id="line70"></span>
-<span id="line71"></span>
-<span id="line72"></span></span></pre><menu id="actions" type="context"><menuitem accesskey="L" label="Zu Zeile springen…" id="goToLine"></menuitem><menuitem type="checkbox" label="Lange Zeilen umbrechen" id="wrapLongLines"></menuitem><menuitem checked="true" type="checkbox" label="Syntax-Hervorhebung" id="highlightSyntax"></menuitem></menu></body></html>
+
+<table id="radiologyOrdersTable" cellspacing="0" width="100%" class="display nowrap">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Edit</th>
+      <th>Patient Id</th>
+      <th>Patient Full Name</th>
+      <th>Priority</th>
+      <th>Order Start Date</th>
+      <th>Modality</th>
+      <th>Performed status</th>
+      <th>Referring Physician</th>
+      <th>Scheduled status</th>
+      <th>Instructions</th>
+    </tr>
+  </thead>
+  <tbody id="radiologyOrdersTableBody">
+
+    <tr data-child-order_id="1" data-child-physician="Doctor Anne" data-child-status="" data-child-instructions="">
+      <td class="details-control"></td>
+      <td><a href="radiologyOrder.form?orderId=1">1</a></td>
+      <td style="text-align: center"><a href="/openmrs/patientDashboard.form?patientId=3">100-8</a></td>
+      <td><a href="/openmrs/patientDashboard.form?patientId=3">Mr. John D Patient</a></td>
+      <td>Emergency</td>
+      <td>2016-05-27 13:13:25.0</td>
+      <td>X-Ray Angriography</td>
+      <td></td>
+      <td>Doctor Anne</td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <tr data-child-order_id="3" data-child-physician="Doctor Anne" data-child-status="" data-child-instructions="">
+      <td class="details-control"></td>
+      <td><a href="radiologyOrder.form?orderId=3">3</a></td>
+      <td style="text-align: center"><a href="/openmrs/patientDashboard.form?patientId=3">100-8</a></td>
+      <td><a href="/openmrs/patientDashboard.form?patientId=3">Mr. John D Patient</a></td>
+      <td>Routine</td>
+      <td>2016-05-27 13:14:02.0</td>
+      <td>X-Ray Angriography</td>
+      <td>COMPLETED</td>
+      <td>Doctor Anne</td>
+      <td></td>
+      <td></td>
+    </tr>
+
+  </tbody>
+</table>
