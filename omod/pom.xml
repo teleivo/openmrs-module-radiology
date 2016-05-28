@@ -173,17 +173,21 @@
 				<version>2.1</version>
 				<configuration>
 					<jsSrcDir>${project.basedir}/src/main/webapp/resources/js</jsSrcDir>
+					<preloadSources>
+						<include>helpers/jquery-1.7.1.js</include>
+						<include>helpers/jasmine-jquery-2.1.1.js</include>
+					</preloadSources>
 					<sourceIncludes>
-						<include>**/*.js</include>
+						<include>**/radiologyOrderList.js</include>
 					</sourceIncludes>
 					<sourceExcludes>
 						<exclude>**/datatables/*.*</exclude>
 						<exclude>**/tinymce/*.*</exclude>
+						<exclude>**/tinymce/**/*.*</exclude>
 					</sourceExcludes>
 					<jsTestSrcDir>${project.basedir}/src/test/javascript</jsTestSrcDir>
 					<specIncludes>
-						<include>**/jasmine-*.js</include>
-						<include>**/*.js</include>
+						<include>**/*Spec.js</include>
 					</specIncludes>
 				</configuration>
 				<executions>
