@@ -178,6 +178,7 @@
 						<include>helpers/jasmine-jquery-2.1.1.js</include>
 					</preloadSources>
 					<sourceIncludes>
+						<exclude>**/datatables/jquery.dataTables.min.js</exclude>
 						<include>**/radiologyOrderList.js</include>
 					</sourceIncludes>
 					<sourceExcludes>
