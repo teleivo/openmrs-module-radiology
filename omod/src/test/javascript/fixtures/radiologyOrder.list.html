@@ -6,24 +6,10 @@
   <div id="pageBody">
 
     <div id="content">
-
-      <!-- Add, Edit, Delete, View Orders -->
-      <!-- Add, Edit, Delete, View Reports -->
-
       <ul id="menu">
         <li class="first"><a href="/openmrs/admin">Admin</a></li>
-
         <li class="active"><a href="/openmrs/module/radiology/radiologyOrder.list"> Manage Radiology Orders </a></li>
-
-
-
-
       </ul>
-
-      <script src="/openmrs/moduleResources/radiology/js/sortNumbers.js?v=1.11.4" type="text/javascript"></script>
-      <link href="/openmrs/moduleResources/radiology/css/jquery.dataTables.min.css?v=1.11.4" type="text/css" rel="stylesheet" />
-      <link href="/openmrs/moduleResources/radiology/css/details-control.dataTables.css?v=1.11.4" type="text/css"
-        rel="stylesheet" />
 
       <div id="calendar"></div>
 
@@ -31,44 +17,25 @@
       <div id="openmrs_msg" name="loading">Loading...</div>
 
       <a href="radiologyOrder.form">Add Radiology Order</a> <br> <br> <span class="boxHeader"> <b>Radiology
-          Orders</b> <a id="clearResults" href="#" style="float: right"> Clear Results </a>
-      </span>
-      <div class="box">
-        <table id="searchForm" cellspacing="10">
-          <tr>
-            <form id="radiologyOrderListForm">
-              <td><label>Patient:</label> <input name="patientQuery" type="text" style="width: 20em"
-                title="Minimum 3 Chars" /></td>
-              <td><label>Start Date:</label> <input name="startDate" type="text" onclick="showCalendar(this)" /></td>
-              <td><label>End Date:</label> <input name="endDate" type="text" onclick="showCalendar(this)" /></td>
-              <td><input id="findButton" type="button" value="Find" /></td>
-              <td id="errorSpan"></td>
-            </form>
-          </tr>
-        </table>
-        <br>
-        <div id="results"></div>
-
-      </div>
-      <br /> <br />
+              Orders</b> <a id="clearResults" href="#" style="float: right"> Clear Results </a>
+        </span>
+          <div class="box">
+            <table id="searchForm" cellspacing="10">
+              <tr>
+                <form id="radiologyOrderListForm">
+                  <td><label>Patient:</label> <input name="patientQuery" type="text" style="width: 20em"
+                    title="Minimum 3 Chars" /></td>
+                  <td><label>Start Date:</label> <input name="startDate" type="text" onclick="showCalendar(this)" /></td>
+                  <td><label>End Date:</label> <input name="endDate" type="text" onclick="showCalendar(this)" /></td>
+                  <td><input id="findButton" type="button" value="Find" /></td>
+                  <td id="errorSpan"></td>
+                </form>
+              </tr>
+            </table>
+            <br>
+              <div id="results"></div>
+          </div> <br /> <br />
     </div>
   </div>
-
-  <div id="footer" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-    xmlns:spring="http://www.springframework.org/tags">
-
-    <div id="footerInner">
-
-
-
-      <span id="localeOptions"> <a href="?&amp;lang=en_US">English (United States)</a> | <a href="?&amp;lang=en_GB">English
-          (United Kingdom)</a>
-
-      </span> <span id="buildDate">Last Build: 2015-09-21 20:38</span> <span id="codeVersion">Version: 1.11.4 Build 6ebcaf</span> <span
-        id="poweredBy"><a href="http://openmrs.org">Powered by OpenMRS <img border="0" align="top"
-          src="/openmrs/images/openmrs_logo_tiny.png" /></a></span>
-    </div>
-  </div>
-
 </body>
 </html>
