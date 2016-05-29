@@ -175,7 +175,7 @@
 					<jsSrcDir>${project.basedir}/src/main/webapp/resources/js</jsSrcDir>
 					<preloadSources>
 						<include>helpers/jquery-1.7.1.js</include>
-						<include>helpers/jasmine-jquery-2.1.1.js</include>
+						<include>helpers/jasmine-jquery-1.7.0.js</include>
 					</preloadSources>
 					<sourceIncludes>
 						<exclude>**/datatables/jquery.dataTables.min.js</exclude>
@@ -198,6 +198,13 @@
 						</goals>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.webjars.bower</groupId>
+						<artifactId>jasmine</artifactId>
+						<version>1.3.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>com.marvinformatics.formatter</groupId>
@@ -212,6 +219,7 @@
 						<include>**/*.js</include>
 					</includes>
 					<excludes>
+						<exclude>**/javascript/helpers/*.*</exclude>
 						<exclude>**/datatables/*.*</exclude>
 						<exclude>**/tinymce/*.*</exclude>
 						<exclude>**/tinymce/**/*.*</exclude>
