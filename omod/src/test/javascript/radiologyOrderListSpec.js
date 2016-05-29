@@ -7,7 +7,7 @@ describe("The radiology order list", function() {
   it("should have datatables defined", function() {
     expect(true).toBe(true);
 
-//    expect($("<div><span></span></div>")).toHaveHtml("<span></span>");
-    expect(jQuery.("<div><span></span></div>")).toHaveHtml("<span></span>");
+    expect(jQuery("<div><span></span></div>")).toHaveHtml("<span></span>");
+//    expect(jQuery.("<div><span></span></div>")).toHaveHtml("<span></span>");
   });
 });
