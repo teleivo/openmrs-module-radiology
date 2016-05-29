@@ -1,11 +1,13 @@
 describe("The radiology order list", function() {
 
-//  jasmine.getFixtures().fixturesPath = "spec/fixtures";
+  //  jasmine.getFixtures().fixturesPath = "spec/fixtures";
 
-//  loadFixtures('orderSearch.portlet.html');
+  //  loadFixtures('orderSearch.portlet.html');
 
   it("should have datatables defined", function() {
     expect(true).toBe(true);
-    expect($("<div><span></span></div>")).toHaveHtml("<span></span>");
+
+//    expect($("<div><span></span></div>")).toHaveHtml("<span></span>");
+    expect(jQuery.("<div><span></span></div>")).toHaveHtml("<span></span>");
   });
 });
