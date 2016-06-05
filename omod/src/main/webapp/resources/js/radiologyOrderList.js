@@ -43,7 +43,7 @@ $j(document)
 
                     loading.show();
                     $j('#errorSpan').html('');
-                                        $j
+                    $j
                             .get(
                                     'portlets/orderSearch.portlet',
                                     {
@@ -147,13 +147,15 @@ $j(document)
                   });
 
                   pQuery.keypress(function(event) {
+                      // replace this with jQuery.ui.keycode.ENTER
                     if (event.which == '13') {
                       sendRequest();
                     }
                   });
 
                   clearResults.click(function() {
-                    $j('table#searchForm input:text').val('');
+                    pQuery.val("XXX");
+                    $j('table#searchForm input:text').val('XXX');
                     $j('tbody#radiologyOrdersTableBody').html('');
                   });
                 });
