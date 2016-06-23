@@ -59,6 +59,20 @@ class HibernateRadiologyOrderDAO implements RadiologyOrderDAO {
     }
     
     /**
+     * @see org.openmrs.module.radiology.order.RadiologyOrderService#getRadiologyOrdersByPatient(Patient, boolean)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient, boolean includeDiscontinuedOrders) {
+        
+        final Criteria radiologyOrderCriteria = createRadiologyOrderCriteria();
+        addRestrictionOnPatient(radiologyOrderCriteria, patient);
+        
+        final List<RadiologyOrder> result = (List<RadiologyOrder>) radiologyOrderCriteria.list();
+        return result == null ? new ArrayList<RadiologyOrder>() : result;
+    }
+    
+    /**
      * @see org.openmrs.module.radiology.order.RadiologyOrderService#getRadiologyOrdersByPatient(Patient)
      */
     @SuppressWarnings("unchecked")

@@ -94,17 +94,33 @@ public interface RadiologyOrderService extends OpenmrsService {
     public RadiologyOrder getRadiologyOrderByUuid(String uuid);
     
     /**
-     * Get RadiologyOrder's by its associated Patient
+     * Get {@code RadiologyOrder's} by its associated {@code Patient} excluding discontinued ones.
      *
-     * @param patient patient of wanted RadiologyOrders
+     * @param patient Patient of wanted RadiologyOrders
      * @return RadiologyOrders associated with given patient
      * @throws IllegalArgumentException if patient is null
-     * @should return all radiology orders associated with given patient
+     * @should return radiology orders associated with given patient
+     * @should exclude radiology orders which are discontinued
+     * @should return empty list given patient without associated radiology orders
+     * @should return empty list given patient with only discontinued radiology orders
+     * @should throw illegal argument exception given null
+     */
+    @Authorized({ RadiologyPrivileges.GET_RADIOLOGY_ORDERS })
+    public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient);
+    
+    /**
+     * Get {@code RadiologyOrder's} by its associated {@code Patient} including discontinued ones.
+     *
+     * @param patient Patient of wanted RadiologyOrders
+     * @return RadiologyOrders associated with given patient
+     * @throws IllegalArgumentException if patient is null
+     * @should return radiology orders associated with given patient
+     * @should include radiology orders which are discontinued
      * @should return empty list given patient without associated radiology orders
      * @should throw illegal argument exception given null
      */
     @Authorized({ RadiologyPrivileges.GET_RADIOLOGY_ORDERS })
-    public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient) throws IllegalArgumentException;
+    public List<RadiologyOrder> getAllRadiologyOrdersByPatient(Patient patient);
     
     /**
      * Get RadiologyOrder's by its associated Patients

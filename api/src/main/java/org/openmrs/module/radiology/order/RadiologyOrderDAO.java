@@ -33,6 +33,11 @@ interface RadiologyOrderDAO {
     /**
      * @see org.openmrs.module.radiology.order.RadiologyOrderService#getRadiologyOrdersByPatient(Patient)
      */
+    public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient, boolean includeDiscontinuedOrders);
+
+    /**
+     * @see org.openmrs.module.radiology.order.RadiologyOrderService#getRadiologyOrdersByPatient(Patient)
+     */
     public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient);
     
     /**
