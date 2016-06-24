@@ -1,30 +1,42 @@
 package org.openmrs.module.radiology.order.web.resource;
 
+import org.openmrs.TestOrder;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.order.RadiologyOrder;
-import org.openmrs.module.radiology.order.RadiologyOrderService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
-import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
-import org.openmrs.module.webservices.rest.web.annotation.Resource;
+import org.openmrs.module.webservices.rest.web.annotation.SubClassHandler;
+import org.openmrs.module.webservices.rest.web.api.RestService;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
-import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
+import org.openmrs.module.webservices.rest.web.resource.impl.BaseDelegatingSubclassHandler;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingSubclassHandler;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
+import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs1_10.TestOrderSubclassHandler1_10;
 import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs2_0.RestConstants2_0;
 
 /**
- * {@link Resource} for {@link RadiologyOrder}, supporting GET operations.
+ * Exposes the {@link RadiologyOrder} subclass as a type in
+ * {@link org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs1_10.TestOrderSubclassHandler1_10}
  */
-@Resource(name = RestConstants.VERSION_1 + "/radiologyorder", supportedClass = RadiologyOrder.class,
-        supportedOpenmrsVersions = { "2.0.*" })
-public class RadiologyOrderResource extends DataDelegatingCrudResource<RadiologyOrder> {
+@SubClassHandler(supportedClass = RadiologyOrder.class, supportedOpenmrsVersions = { "2.0.*" })
+public class RadiologyOrderResource extends BaseDelegatingSubclassHandler<TestOrder, RadiologyOrder>
+        implements DelegatingSubclassHandler<TestOrder, RadiologyOrder> {
     
     
     /**
-     * @see org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource#getRepresentationDescription(org.openmrs.module.webservices.rest.web.representation.Representation)
+     * @see org.openmrs.module.webservices.rest.web.resource.impl.DelegatingSubclassHandler#getTypeName()
+     */
+    @Override
+    public String getTypeName() {
+        return "radiologyorder";
+    }
+    
+    /**
+     * @see org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceHandler#getRepresentationDescription(org.openmrs.module.webservices.rest.web.representation.Representation)
      * @should return default representation given instance of defaultrepresentation
      * @should return full representation given instance of fullrepresentation
      * @should return null for representation other then default or full
@@ -32,56 +44,32 @@ public class RadiologyOrderResource extends DataDelegatingCrudResource<Radiology
     @Override
     public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
         if (rep instanceof DefaultRepresentation) {
-            DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("uuid");
-            description.addProperty("orderNumber");
-            description.addProperty("patient", Representation.REF);
-            description.addProperty("concept", Representation.REF);
-            description.addProperty("action");
-            description.addProperty("careSetting", Representation.REF);
-            description.addProperty("previousOrder", Representation.REF);
-            description.addProperty("dateActivated");
-            description.addProperty("dateStopped");
-            description.addProperty("autoExpireDate");
-            description.addProperty("encounter", Representation.REF);
-            description.addProperty("orderer", Representation.REF);
-            description.addProperty("orderReason", Representation.REF);
-            description.addProperty("orderReasonNonCoded");
-            description.addProperty("urgency");
-            description.addProperty("scheduledDate");
-            description.addProperty("instructions");
-            description.addProperty("commentToFulfiller");
-            description.addProperty("display");
-            description.addSelfLink();
-            description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
+            TestOrderSubclassHandler1_10 testOrderResource =
+                    (TestOrderSubclassHandler1_10) Context.getService(RestService.class)
+                            .getResourceBySupportedClass(TestOrder.class);
+            DelegatingResourceDescription description = testOrderResource.getRepresentationDescription(rep);
             return description;
         } else if (rep instanceof FullRepresentation) {
-            DelegatingResourceDescription description = new DelegatingResourceDescription();
-            description.addProperty("uuid");
-            description.addProperty("orderNumber");
-            description.addProperty("patient", Representation.REF);
-            description.addProperty("concept", Representation.REF);
-            description.addProperty("action");
-            description.addProperty("careSetting", Representation.DEFAULT);
-            description.addProperty("previousOrder", Representation.REF);
-            description.addProperty("dateActivated");
-            description.addProperty("dateStopped");
-            description.addProperty("autoExpireDate");
-            description.addProperty("encounter", Representation.REF);
-            description.addProperty("orderer", Representation.REF);
-            description.addProperty("orderReason", Representation.REF);
-            description.addProperty("orderReasonNonCoded");
-            description.addProperty("urgency");
-            description.addProperty("scheduledDate");
-            description.addProperty("instructions");
-            description.addProperty("commentToFulfiller");
-            description.addProperty("display");
-            description.addProperty("auditInfo");
-            description.addSelfLink();
+            TestOrderSubclassHandler1_10 testOrderResource =
+                    (TestOrderSubclassHandler1_10) Context.getService(RestService.class)
+                            .getResourceBySupportedClass(TestOrder.class);
+            DelegatingResourceDescription description = testOrderResource.getRepresentationDescription(rep);
             return description;
         } else {
             return null;
         }
+    }
+    
+    /**
+     * @see org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceHandler#getCreatableProperties()
+     */
+    @Override
+    public DelegatingResourceDescription getCreatableProperties() {
+        
+        TestOrderSubclassHandler1_10 testOrderResource = (TestOrderSubclassHandler1_10) Context.getService(RestService.class)
+                .getResourceBySupportedClass(TestOrder.class);
+        DelegatingResourceDescription description = testOrderResource.getCreatableProperties();
+        return description;
     }
     
     /**
@@ -92,17 +80,6 @@ public class RadiologyOrderResource extends DataDelegatingCrudResource<Radiology
     public String getResourceVersion() {
         
         return RestConstants2_0.RESOURCE_VERSION;
-    }
-    
-    /**
-     * @see org.openmrs.module.webservices.rest.web.resource.impl.BaseDelegatingResource#getByUniqueId(java.lang.String)
-     * @should return radiology order given its uuid
-     */
-    @Override
-    public RadiologyOrder getByUniqueId(String uniqueId) {
-        
-        return Context.getService(RadiologyOrderService.class)
-                .getRadiologyOrderByUuid(uniqueId);
     }
     
     /**
@@ -144,18 +121,6 @@ public class RadiologyOrderResource extends DataDelegatingCrudResource<Radiology
     }
     
     /**
-     * @see org.openmrs.module.webservices.rest.web.resource.impl.BaseDelegatingResource#delete(java.lang.Object,
-     *      java.lang.String, org.openmrs.module.webservices.rest.web.RequestContext)
-     * @should throw ResourceDoesNotSupportOperationException
-     */
-    @Override
-    protected void delete(RadiologyOrder delegate, String reason, RequestContext context)
-            throws ResourceDoesNotSupportOperationException {
-        
-        throw new ResourceDoesNotSupportOperationException();
-    }
-    
-    /**
      * @see org.openmrs.module.webservices.rest.web.resource.impl.BaseDelegatingResource#purge(java.lang.Object,
      *      org.openmrs.module.webservices.rest.web.RequestContext)
      * @should throw ResourceDoesNotSupportOperationException
@@ -163,6 +128,15 @@ public class RadiologyOrderResource extends DataDelegatingCrudResource<Radiology
     @Override
     public void purge(RadiologyOrder delegate, RequestContext context) throws ResourceDoesNotSupportOperationException {
         
+        throw new ResourceDoesNotSupportOperationException();
+    }
+    
+    /**
+     * @see DelegatingSubclassHandler#getAllByType(org.openmrs.module.webservices.rest.web.RequestContext)
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public PageableResult getAllByType(RequestContext arg0) throws ResourceDoesNotSupportOperationException {
         throw new ResourceDoesNotSupportOperationException();
     }
 }

@@ -198,16 +198,6 @@ public class RadiologyOrderResourceTest {
     }
     
     /**
-     * @see RadiologyOrderResource#getByUniqueId(String)
-     * @verifies return radiology order given its uuid
-     */
-    @Test
-    public void getByUniqueId_shouldReturnRadiologyOrderGivenItsUuid() throws Exception {
-        
-        radiologyOrderResource.getByUniqueId(RADIOLOGY_ORDER_UUID);
-    }
-    
-    /**
      * @see RadiologyOrderResource#getDisplayString(RadiologyOrder)
      * @verifies return concept name of given radiologyOrder
      */
@@ -223,7 +213,6 @@ public class RadiologyOrderResourceTest {
         radiologyOrder.setConcept(concept);
         
         assertThat(radiologyOrderResource.getDisplayString(radiologyOrder), is("X-RAY, HEAD"));
-        
     }
     
     /**
@@ -254,17 +243,6 @@ public class RadiologyOrderResourceTest {
     public void save_shouldThrowResourceDoesNotSupportOperationException() throws Exception {
         
         radiologyOrderResource.save(radiologyOrder);
-    }
-    
-    /**
-     * @see RadiologyOrderResource#delete(RadiologyOrder,String,RequestContext)
-     * @verifies throw ResourceDoesNotSupportOperationException
-     */
-    @Test(expected = ResourceDoesNotSupportOperationException.class)
-    public void delete_shouldThrowResourceDoesNotSupportOperationException() throws Exception {
-        
-        RequestContext requestContext = new RequestContext();
-        radiologyOrderResource.delete(radiologyOrder, "wrong order", requestContext);
     }
     
     /**
