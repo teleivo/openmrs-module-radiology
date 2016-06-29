@@ -11,10 +11,15 @@ package org.openmrs.module.radiology.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.LockOptions;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.GlobalProperty;
 import org.openmrs.Patient;
+import org.openmrs.api.APIException;
+import org.openmrs.module.radiology.RadiologyConstants;
 
 /**
  * Hibernate specific RadiologyOrder related functions. This class should not be used directly. All
@@ -35,6 +40,43 @@ class HibernateRadiologyOrderDAO implements RadiologyOrderDAO {
      */
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+    
+    /**
+     * @see org.openmrs.module.radiology.order.RadiologyOrderService#getNextAccessionNumberSeedSequenceValue()
+     */
+    @Override
+    public Long getNextAccessionNumberSeedSequenceValue() {
+        
+        final GlobalProperty globalProperty = (GlobalProperty) sessionFactory.getCurrentSession()
+                .get(GlobalProperty.class, RadiologyConstants.GP_NEXT_ACCESSION_NUMBER_SEED, LockOptions.UPGRADE);
+        
+        if (globalProperty == null) {
+            throw new APIException("GlobalProperty.missing ",
+                    new Object[] { RadiologyConstants.GP_NEXT_ACCESSION_NUMBER_SEED });
+        }
+        
+        String gpTextValue = globalProperty.getPropertyValue();
+        if (StringUtils.isBlank(gpTextValue)) {
+            throw new APIException("GlobalProperty.invalid.value",
+                    new Object[] { RadiologyConstants.GP_NEXT_ACCESSION_NUMBER_SEED });
+        }
+        
+        Long globalPropertyValue = null;
+        try {
+            globalPropertyValue = Long.parseLong(gpTextValue);
+        }
+        catch (NumberFormatException ex) {
+            throw new APIException("GlobalProperty.invalid.value",
+                    new Object[] { RadiologyConstants.GP_NEXT_ACCESSION_NUMBER_SEED });
+        }
+        
+        globalProperty.setPropertyValue(String.valueOf(globalPropertyValue + 1));
+        
+        sessionFactory.getCurrentSession()
+                .save(globalProperty);
+        
+        return globalPropertyValue;
     }
     
     /**

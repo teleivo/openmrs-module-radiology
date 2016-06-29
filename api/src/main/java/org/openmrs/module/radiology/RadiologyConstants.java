@@ -37,6 +37,10 @@ public class RadiologyConstants {
     
     public static final String GP_RADIOLOGY_VISIT_TYPE = "radiology.radiologyVisitType";
     
+    public static final String GP_NEXT_ACCESSION_NUMBER_SEED = "radiology.nextAccessionNumberSeed";
+    
+    public static final String GP_ACCESSION_NUMBER_GENERATOR_BEAN_ID = "radiology.accessionNumberGeneratorBeanId";
+    
     private RadiologyConstants() {
         // Utility class not meant to be instantiated.
     }

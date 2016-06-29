@@ -28,6 +28,17 @@ public interface RadiologyOrderService extends OpenmrsService {
     
     
     /**
+     * Gets the next available accession number seed.
+     * 
+     * @return the accession number seed
+     * @throws APIException if global property radiology.nextAccessionNumberSeed is missing
+     * @throws APIException if global property radiology.nextAccessionNumberSeed value is empty or only contains whitespaces
+     * @throws APIException if global property radiology.nextAccessionNumberSeed value cannot be parsed to Long
+     */
+    @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_ORDERS)
+    public Long getNextAccessionNumberSeedSequenceValue();
+    
+    /**
      * Saves a new {@code RadiologyOrder} and its {@code RadiologyStudy} to the
      * database.
      *
@@ -38,6 +49,7 @@ public interface RadiologyOrderService extends OpenmrsService {
      * @throws IllegalArgumentException if radiologyOrder.study is null
      * @throws IllegalArgumentException if radiologyOrder.study.modality is null
      * @should create new radiology order and study from given radiology order object
+     * @should set the radiology order accession number if null or only containing whitespaces
      * @should create radiology order encounter with orderer and attached to existing active visit if patient has active
      *         visit
      * @should create radiology order encounter with orderer attached to new active visit if patient without active visit

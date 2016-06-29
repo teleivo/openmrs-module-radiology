@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
@@ -27,9 +28,10 @@ import org.openmrs.module.emrapi.encounter.EmrEncounterService;
 import org.openmrs.module.emrapi.encounter.domain.EncounterTransaction;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.study.RadiologyStudyService;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyOrderService {
+class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyOrderService, AccessionNumberGenerator {
     
     
     private static final Log log = LogFactory.getLog(RadiologyOrderServiceImpl.class);
@@ -92,6 +94,10 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
         if (radiologyOrder.getStudy()
                 .getModality() == null) {
             throw new IllegalArgumentException("radiologyOrder.study.modality cannot be null");
+        }
+        
+        if (StringUtils.isBlank(radiologyOrder.getAccessionNumber())) {
+            radiologyOrder.setAccessionNumber(getNewAccessionNumber());
         }
         
         final Encounter encounter =
@@ -236,5 +242,23 @@ class RadiologyOrderServiceImpl extends BaseOpenmrsService implements RadiologyO
         }
         
         return radiologyOrderDAO.getRadiologyOrdersByPatients(patients);
+    }
+    
+    /**
+     * @see AccessionNumberGenerator#getNewAccessionNumber()
+     */
+    @Override
+    public String getNewAccessionNumber() {
+        return getNextAccessionNumberSeedSequenceValue().toString();
+    }
+    
+    /**
+     * @see RadiologyOrderService#getNextAccessionNumberSeedSequenceValue()
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public synchronized Long getNextAccessionNumberSeedSequenceValue() {
+        
+        return radiologyOrderDAO.getNextAccessionNumberSeedSequenceValue();
     }
 }
