@@ -354,4 +354,12 @@
 			</column>
 		</addColumn>
 	</changeSet>
+	<changeSet id="radiology-32" author="teleivo">
+		<comment>Added RadiologyOrder.radiologyAccessionNumber</comment>
+		<addColumn tableName="radiology_order">
+			<column name="accession_number" type="varchar(255)">
+				<constraints nullable="false" unique="true" />
+			</column>
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

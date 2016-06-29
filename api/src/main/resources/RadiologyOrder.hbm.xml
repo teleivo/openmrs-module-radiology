@@ -6,7 +6,8 @@
 	<joined-subclass name="org.openmrs.module.radiology.order.RadiologyOrder"
 		extends="org.openmrs.TestOrder" table="radiology_order" lazy="false">
 		<key column="order_id" not-null="true" on-delete="cascade" />
-
+		<property name="radiologyAccessionNumber" type="java.lang.String"
+			column="accession_number" not-null="true" unique="true" />
 		<one-to-one name="study" property-ref="radiologyOrder" />
 	</joined-subclass>
 
