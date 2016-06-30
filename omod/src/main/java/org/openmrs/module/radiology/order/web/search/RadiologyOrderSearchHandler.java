@@ -35,13 +35,14 @@ public class RadiologyOrderSearchHandler implements SearchHandler {
     @Autowired
     RadiologyOrderService radiologyOrderService;
     
-    SearchQuery searchQuery = new SearchQuery.Builder("Allows you to search for RadiologyOrder's by patient")
-            .withRequiredParameters(REQUEST_PARAM_PATIENT)
-            .withOptionalParameters(REQUEST_PARAM_TOTAL_COUNT)
-            .build();
+    SearchQuery searchQuery =
+            new SearchQuery.Builder("Allows you to search for RadiologyOrder's by patient")
+                    .withRequiredParameters(REQUEST_PARAM_PATIENT)
+                    .withOptionalParameters(REQUEST_PARAM_TOTAL_COUNT)
+                    .build();
     
     private final SearchConfig searchConfig =
-            new SearchConfig("default", RestConstants.VERSION_1 + "/radiologyorder", Arrays.asList("2.0.*"), searchQuery);
+            new SearchConfig("default", RestConstants.VERSION_1 + "/order", Arrays.asList("2.0.*"), searchQuery);
     
     /**
      * @see org.openmrs.module.webservices.rest.web.resource.api.SearchHandler#getSearchConfig()
