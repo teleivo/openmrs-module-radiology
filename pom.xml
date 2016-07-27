@@ -193,13 +193,6 @@
 						<configLocation>checkstyle.xml</configLocation>
 						<linkXRef>false</linkXRef>
 					</configuration>
-					<dependencies>
-						<dependency>
-							<groupId>org.openmrs.tools</groupId>
-							<artifactId>openmrs-tools</artifactId>
-							<version>${openMRSVersion}</version>
-						</dependency>
-					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.jacoco</groupId>
@@ -302,6 +295,22 @@
 								<execution>
 									<id>format-code</id>
 									<phase>none</phase>
+								</execution>
+							</executions>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-checkstyle-plugin</artifactId>
+							<executions>
+								<execution>
+									<id>validate-code-style</id>
+									<phase>validate</phase>
+									<goals>
+										<goal>check</goal>
+									</goals>
+									<configuration>
+										<failOnViolation>true</failOnViolation>
+									</configuration>
 								</execution>
 							</executions>
 						</plugin>
