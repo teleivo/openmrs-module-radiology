@@ -381,6 +381,11 @@
 								<links>
 									<link>${mysql.image.alias}</link>
 								</links>
+								<volumes>
+									<bind>
+										<volume>${basedir}/src/main/webapp:/usr/local/tomcat/view/module/radiology</volume>
+									</bind>
+								</volumes>
 								<env>
 									<MYSQL_USER>${mysql.user}</MYSQL_USER>
 									<MYSQL_PASSWORD>${mysql.password}</MYSQL_PASSWORD>
