@@ -12,6 +12,7 @@ package org.openmrs.module.radiology.report.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.openmrs.Obs;
 import org.openmrs.api.APIException;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.RadiologyReport;
@@ -87,6 +88,9 @@ public class RadiologyReportFormController {
             getRadiologyReportFormWithExistingRadiologyReport(@RequestParam("reportId") RadiologyReport radiologyReport) {
         
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
+        if ( radiologyReport.getObs() == null) {
+            radiologyReport.setObs(new Obs());
+        }
         addObjectsToModelAndView(modelAndView, radiologyReport);
         modelAndView.addObject(new VoidRadiologyReportRequest());
         return modelAndView;

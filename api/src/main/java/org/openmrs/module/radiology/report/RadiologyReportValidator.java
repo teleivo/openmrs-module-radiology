@@ -45,7 +45,6 @@ public class RadiologyReportValidator implements Validator {
      * @see org.springframework.validation.Validator#validate(Object, Errors)
      * @should fail validation if radiology report is null
      * @should fail validation if principal results interpreter is null or empty or whitespaces only
-     * @should fail validation if report body is null or empty or whitespaces only
      * @should pass validation if all fields are correct
      */
     @Override
@@ -56,7 +55,6 @@ public class RadiologyReportValidator implements Validator {
         } else {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "principalResultsInterpreter", "error.null",
                 "Provider cannot be null");
-            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "body", "error.null", "Diagnosis cannot be null");
         }
     }
 }

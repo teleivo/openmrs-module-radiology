@@ -200,15 +200,11 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
         
         RadiologyReport existingRadiologyReport = radiologyReportService.getRadiologyReport(EXISTING_RADIOLOGY_REPORT_ID);
         existingRadiologyReport.setStatus(RadiologyReportStatus.DRAFT);
-        existingRadiologyReport.setBody("test - text");
         
         assertNotNull(radiologyReportService.saveRadiologyReportDraft(existingRadiologyReport));
         assertThat(radiologyReportService.saveRadiologyReportDraft(existingRadiologyReport)
                 .getId(),
             is(EXISTING_RADIOLOGY_REPORT_ID));
-        assertThat(radiologyReportService.saveRadiologyReportDraft(existingRadiologyReport)
-                .getBody(),
-            is("test - text"));
     }
     
     /**
@@ -279,7 +275,6 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
                 radiologyOrderService.getRadiologyOrder(RADIOLOGY_ORDER_WITH_STUDY_AND_COMPLETED_RADIOLOGY_REPORT);
         RadiologyReport radiologyReport = new RadiologyReport(radiologyOrder);
         radiologyReport.setId(1000);
-        radiologyReport.setBody("fracture somewhere; not done still draft.");
         
         expectedException.expect(APIException.class);
         expectedException.expectMessage("radiology.RadiologyReport.cannot.saveDraft.already.reported");
@@ -490,7 +485,7 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
         radiologyReportService.saveRadiologyReport(radiologyReport);
         
         radiologyReport = radiologyReportService.getRadiologyReport(DRAFT_RADIOLOGY_REPORT);
-        radiologyReport.setBody(null);
+        radiologyReport.setObs(null);
         
         expectedException.expect(APIException.class);
         expectedException.expectMessage("failed to validate with reason:");

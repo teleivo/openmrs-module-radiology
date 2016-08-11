@@ -41,30 +41,6 @@
     $j("#voidRadiologyReportForm").submit()
   }
 
-  $j(document).ready(function() {
-    var reportBody = $j("#bodyId");
-
-    tinymce.init({
-      selector: '#bodyId',
-      setup: function(editor) {
-        if (reportBody.attr("disabled") != null) {
-          editor.settings.readonly = true;
-          editor.settings.toolbar = false;
-          editor.settings.menubar = false;
-        }
-      },
-      menubar: "edit,format",
-      elementpath: false,
-    });
-
-    $j("#voidRadiologyReportButtonId").click(function() {
-      if (tinymce.activeEditor.getContent() != "") {
-        showVoidRadiologyReportDialog();
-      } else {
-        submitVoidRadiologyReport();
-      }
-    });
-
     $j('#radiologyOrderDetailsId').hide();
     $j('#radiologyOrderDetailsAccordion > .boxHeader').click(function() {
       $j('#radiologyOrderDetailsId').slideToggle();
@@ -151,8 +127,8 @@
       <tr>
         <td><spring:message code="radiology.report.form.report.diagnosis" /></td>
         <td>
-          <form:textarea path="body" id="bodyId" disabled="${radiologyReport.status == 'COMPLETED'}" />
-          <form:errors path="body" cssClass="error" />
+          <form:input path="obs" id="obsId" />
+          <form:errors path="obs" cssClass="error" />
         </td>
       </tr>
       <tr>

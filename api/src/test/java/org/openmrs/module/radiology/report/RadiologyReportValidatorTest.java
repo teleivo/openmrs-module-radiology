@@ -44,7 +44,6 @@ public class RadiologyReportValidatorTest {
         radiologyOrder.setStudy(radiologyStudy);
         radiologyReport = new RadiologyReport(radiologyOrder);
         radiologyReport.setPrincipalResultsInterpreter(new Provider());
-        radiologyReport.setBody("Found a broken bone.");
     }
     
     /**
@@ -108,56 +107,6 @@ public class RadiologyReportValidatorTest {
                 .getCode(),
             is("error.null"));
         assertTrue(errors.hasFieldErrors("principalResultsInterpreter"));
-    }
-    
-    /**
-     * @see RadiologyReportValidator#validate(Object,Errors)
-     * @verifies fail validation if report body is null or empty or whitespaces only
-     */
-    @Test
-    public void validate_shouldFailValidationIfReportBodyIsNullOrEmptyOrWhitespacesOnly() throws Exception {
-        
-        radiologyReport.setBody(null);
-        
-        Errors errors = new BindException(radiologyReport, "radiologyReport");
-        new RadiologyReportValidator().validate(radiologyReport, errors);
-        
-        assertTrue(errors.hasErrors());
-        assertThat(errors.getAllErrors()
-                .size(),
-            is(1));
-        assertThat((errors.getAllErrors()).get(0)
-                .getCode(),
-            is("error.null"));
-        assertTrue(errors.hasFieldErrors("body"));
-        
-        radiologyReport.setBody("");
-        
-        errors = new BindException(radiologyReport, "radiologyReport");
-        new RadiologyReportValidator().validate(radiologyReport, errors);
-        
-        assertTrue(errors.hasErrors());
-        assertThat(errors.getAllErrors()
-                .size(),
-            is(1));
-        assertThat((errors.getAllErrors()).get(0)
-                .getCode(),
-            is("error.null"));
-        assertTrue(errors.hasFieldErrors("body"));
-        
-        radiologyReport.setBody("  ");
-        
-        errors = new BindException(radiologyReport, "radiologyReport");
-        new RadiologyReportValidator().validate(radiologyReport, errors);
-        
-        assertTrue(errors.hasErrors());
-        assertThat(errors.getAllErrors()
-                .size(),
-            is(1));
-        assertThat((errors.getAllErrors()).get(0)
-                .getCode(),
-            is("error.null"));
-        assertTrue(errors.hasFieldErrors("body"));
     }
     
     /**

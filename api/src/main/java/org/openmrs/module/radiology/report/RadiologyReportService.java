@@ -27,7 +27,7 @@ import org.openmrs.module.radiology.order.RadiologyOrder;
  * RadiologyReport radiologyReport = RadiologyReportService.createRadiologyReport(RadiologyOrder);
  * }</pre>
  * </li>
- * <li>Set fields like for example {@code radiologyReport.setBody("Fracture of around 5mm visible in right tibia.")} through the setters of {@link RadiologyReport}.</li>
+ * <li>Set fields like for example {@code radiologyReport.setObs("Fracture of around 5mm visible in right tibia.")} through the setters of {@link RadiologyReport}.</li>
  * <li>Optionally, save the {@code RadiologyReport} as a draft via {@link #saveRadiologyReportDraft(RadiologyReport)}.</li>
  * <li>Optionally, void the {@code RadiologyReport} via {@link #voidRadiologyReport(RadiologyReport, String)}.</li>
  * <li>Finally, complete the {@code RadiologyReport} via {@link #saveRadiologyReport(RadiologyReport)}.</li>

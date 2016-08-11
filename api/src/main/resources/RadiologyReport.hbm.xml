@@ -33,7 +33,7 @@
 		<many-to-one name="principalResultsInterpreter" column="principal_results_interpreter"
 					 unique="false" not-null="false"/>
 		<property name="date" column="report_date"/>
-		<property name="body" column="report_body" not-null="false"/>
+		<property name="obs" column="obs" type="org.openmrs.Obs" not-null="false"/>
 		<many-to-one name="creator" class="org.openmrs.User" unique="false" not-null="true"/>
 		<property name="dateCreated" type="java.util.Date"
 				  length="19" column="date_created" not-null="true"/>

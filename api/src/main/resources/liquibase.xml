@@ -490,4 +490,17 @@
 								 baseTableName="radiology_report" baseColumnNames="changed_by"
 								 referencedTableName="users" referencedColumnNames="user_id"/>
 	</changeSet>
+	<changeSet id="radiology-41" author="teleivo">
+		<comment>Remove radiology_report obs column</comment>
+		<dropColumn columnName="report_body" tableName="radiology_report" />
+	</changeSet>
+	<changeSet id="radiology-42" author="teleivo">
+		<comment>Add changed_by column to radiology_report</comment>
+		<addColumn tableName="radiology_report">
+			<column name="obs" type="int"/>
+		</addColumn>
+		<addForeignKeyConstraint constraintName="radiology_report_observation_fk"
+								 baseTableName="radiology_report" baseColumnNames="obs"
+								 referencedTableName="obs" referencedColumnNames="obs_id"/>
+	</changeSet>
 </databaseChangeLog>

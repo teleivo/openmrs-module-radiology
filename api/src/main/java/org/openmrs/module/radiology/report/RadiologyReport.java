@@ -12,6 +12,7 @@ package org.openmrs.module.radiology.report;
 import java.util.Date;
 
 import org.openmrs.BaseOpenmrsData;
+import org.openmrs.Obs;
 import org.openmrs.Provider;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 
@@ -32,7 +33,7 @@ public class RadiologyReport extends BaseOpenmrsData {
     
     private RadiologyReportStatus status;
     
-    private String body;
+    private Obs obs;
     
     /**
      * Creates a new instance of {@link RadiologyReport}.
@@ -176,20 +177,20 @@ public class RadiologyReport extends BaseOpenmrsData {
     }
     
     /**
-     * Get body of RadiologyReport.
+     * Get obs of RadiologyReport.
      * 
-     * @return body of RadiologyReport
+     * @return obs of RadiologyReport
      */
-    public String getBody() {
-        return body;
+    public Obs getObs() {
+        return obs;
     }
     
     /**
-     * Set body of RadiologyReport.
-     * 
-     * @param body body of RadiologyReport
+     * Set obs of RadiologyReport.
+     *
+     * @param obs obs of RadiologyReport
      */
-    public void setBody(String body) {
-        this.body = body;
+    public void setObs(Obs obs) {
+        this.obs = obs;
     }
 }
