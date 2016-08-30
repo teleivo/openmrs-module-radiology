@@ -189,6 +189,16 @@
 			parent directories are created if they do not exist.
 		</description>
 	</globalProperty>
+	<globalProperty>
+		<property>@MODULE_ID@.reportsHome</property>
+		<defaultValue>radiologyreports</defaultValue>
+		<description>
+			Directory where radiology reports are stored. Absolute and
+			relative paths are valid.
+			Relative paths are appended to the application data directory; necessary
+			parent directories are created if they do not exist.
+		</description>
+	</globalProperty>
 	<!--Required Global Properties -->
 
 	<!-- Internationalization -->
