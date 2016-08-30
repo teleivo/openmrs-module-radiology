@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +41,14 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
     
     private RadiologyReportDAO radiologyReportDAO;
     
+    private RadiologyProperties radiologyProperties;
+    
     public void setRadiologyReportDAO(RadiologyReportDAO radiologyReportDAO) {
         this.radiologyReportDAO = radiologyReportDAO;
+    }
+    
+    public void setRadiologyProperties(RadiologyProperties radiologyProperties) {
+        this.radiologyProperties = radiologyProperties;
     }
     
     /**
@@ -100,7 +107,7 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         // save report body to filesystem
         File file;
         if (StringUtils.isBlank(radiologyReport.getFilename())) {
-            file = new File(UUID.randomUUID()
+            file = new File(radiologyProperties.getReportHome(), UUID.randomUUID()
                     .toString());
             try {
                 file.createNewFile();

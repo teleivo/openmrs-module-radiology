@@ -319,7 +319,7 @@ public class RadiologyProperties {
         
         return templatesPath.toFile();
     }
-
+    
     /**
      * Gets folder to store {@code RadiologyReport's}.
      *
@@ -330,9 +330,9 @@ public class RadiologyProperties {
      * @should throw illegal state exception if global property cannot be found
      */
     public File getReportHome() {
-
+        
         Path reportsPath = Paths.get(getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_REPORTS_DIR, true));
-
+        
         if (!reportsPath.isAbsolute()) {
             reportsPath = Paths.get(OpenmrsUtil.getApplicationDataDirectory(), reportsPath.toString());
         }
@@ -341,7 +341,7 @@ public class RadiologyProperties {
             reportsPath.toFile()
                     .mkdirs();
         }
-
+        
         return reportsPath.toFile();
     }
 }

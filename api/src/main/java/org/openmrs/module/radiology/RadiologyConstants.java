@@ -98,7 +98,7 @@ public class RadiologyConstants {
      * Allowable values are absolute and relative paths.
      */
     public static final String GP_MRRT_REPORT_TEMPLATE_DIR = "radiology.reportTemplatesHome";
-
+    
     /**
      * {@code GlobalProperty} property for the directory where radiology reports are stored.
      * Allowable values are absolute and relative paths.
