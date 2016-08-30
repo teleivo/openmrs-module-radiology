@@ -319,4 +319,29 @@ public class RadiologyProperties {
         
         return templatesPath.toFile();
     }
+    
+    /**
+     * Gets folder to store {@code RadiologyReport's}.
+     *
+     * @return reports folder
+     * @throws IllegalStateException if global property cannot be found
+     * @should create a directory under the openmrs application data directory if GP value is relative
+     * @should creates a directory at GP value if it is an absolute path
+     * @should throw illegal state exception if global property cannot be found
+     */
+    public File getReportHome() {
+        
+        Path reportsPath = Paths.get(getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_REPORTS_DIR, true));
+        
+        if (!reportsPath.isAbsolute()) {
+            reportsPath = Paths.get(OpenmrsUtil.getApplicationDataDirectory(), reportsPath.toString());
+        }
+        if (!reportsPath.toFile()
+                .exists()) {
+            reportsPath.toFile()
+                    .mkdirs();
+        }
+        
+        return reportsPath.toFile();
+    }
 }

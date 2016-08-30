@@ -54,30 +54,30 @@ public class RadiologyReportFormControllerTest extends BaseContextMockTest {
     @InjectMocks
     private RadiologyReportFormController radiologyReportFormController = new RadiologyReportFormController();
     
-    /**
-     * @see RadiologyReportFormController#createRadiologyReport(RadiologyOrder)
-     * @verifies create a new radiology report for given radiology order and redirect to its radiology report form
-     */
-    @Test
-    public void
-            createRadiologyReport_shouldCreateANewRadiologyReportForGivenRadiologyOrderAndRedirectToItsRadiologyReportForm() {
-        
-        // given
-        RadiologyReport mockRadiologyReport = RadiologyTestData.getMockRadiologyReport1();
-        RadiologyOrder mockRadiologyOrder = mockRadiologyReport.getRadiologyOrder();
-        
-        when(radiologyReportService.createRadiologyReport(mockRadiologyOrder)).thenReturn(mockRadiologyReport);
-        
-        ModelAndView modelAndView = radiologyReportFormController.createRadiologyReport(mockRadiologyOrder);
-        
-        verify(radiologyReportService, times(1)).createRadiologyReport(mockRadiologyOrder);
-        verifyNoMoreInteractions(radiologyReportService);
-        
-        assertNotNull(modelAndView);
-        assertThat(modelAndView.getViewName(),
-            is("redirect:/module/radiology/radiologyReport.form?reportId=" + mockRadiologyReport.getId()));
-    }
-    
+//    /**
+//     * @see RadiologyReportFormController#createRadiologyReport(RadiologyOrder)
+//     * @verifies create a new radiology report for given radiology order and redirect to its radiology report form
+//     */
+//    @Test
+//    public void
+//            createRadiologyReport_shouldCreateANewRadiologyReportForGivenRadiologyOrderAndRedirectToItsRadiologyReportForm() {
+//
+//        // given
+//        RadiologyReport mockRadiologyReport = RadiologyTestData.getMockRadiologyReport1();
+//        RadiologyOrder mockRadiologyOrder = mockRadiologyReport.getRadiologyOrder();
+//
+//        when(radiologyReportService.createRadiologyReport(mockRadiologyOrder)).thenReturn(mockRadiologyReport);
+//
+//        ModelAndView modelAndView = radiologyReportFormController.createRadiologyReport(mockRadiologyOrder);
+//
+//        verify(radiologyReportService, times(1)).createRadiologyReport(mockRadiologyOrder);
+//        verifyNoMoreInteractions(radiologyReportService);
+//
+//        assertNotNull(modelAndView);
+//        assertThat(modelAndView.getViewName(),
+//            is("redirect:/module/radiology/radiologyReport.form?reportId=" + mockRadiologyReport.getId()));
+//    }
+
     /**
      * @see RadiologyReportFormController#getRadiologyReportFormWithExistingRadiologyReport(RadiologyReport)
      * @verifies populate model and view with given radiology report

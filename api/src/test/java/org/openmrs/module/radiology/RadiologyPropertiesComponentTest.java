@@ -697,4 +697,55 @@ public class RadiologyPropertiesComponentTest extends BaseModuleContextSensitive
         expectedException.expect(IllegalStateException.class);
         radiologyProperties.getReportTemplateHome();
     }
+    
+    /**
+     * @see RadiologyProperties#getReportHome()
+     * @verifies create a directory under the openmrs application data directory if GP value is relative
+     */
+    @Test
+    public void getReportHome_shouldCreateADirectoryUnderTheOpenmrsApplicationDataDirectoryIfGPValueIsRelative()
+            throws Exception {
+        File openmrsApplicationDataDirectory = temporaryFolder.newFolder("openmrs_home");
+        OpenmrsUtil.setApplicationDataDirectory(openmrsApplicationDataDirectory.getAbsolutePath());
+        administrationService.setGlobalProperty(RadiologyConstants.GP_RADIOLOGY_REPORTS_DIR, "radiology_reports");
+        File reportHome = radiologyProperties.getReportHome();
+        File reportHomeFromGP =
+                new File(administrationService.getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_REPORTS_DIR));
+        
+        assertNotNull(reportHome);
+        assertThat(reportHome.exists(), is(true));
+        assertThat(reportHome.getName(), is(reportHomeFromGP.getName()));
+        assertThat(reportHome.getParentFile()
+                .getName(),
+            is(openmrsApplicationDataDirectory.getName()));
+    }
+    
+    /**
+     * @see RadiologyProperties#getReportHome()
+     * @verifies creates a directory at GP value if it is an absolute path
+     */
+    @Test
+    public void getReportHome_shouldCreatesADirectoryAtGPValueIfItIsAnAbsolutePath() throws Exception {
+        File tempFolder = temporaryFolder.newFolder("/radiology_reports");
+        administrationService.setGlobalProperty(RadiologyConstants.GP_RADIOLOGY_REPORTS_DIR, tempFolder.getAbsolutePath());
+        File reportHome = radiologyProperties.getReportHome();
+        File reportHomeFromGP =
+                new File(administrationService.getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_REPORTS_DIR));
+        
+        assertNotNull(reportHome);
+        assertThat(reportHome.exists(), is(true));
+        assertThat(reportHome.getName(), is(reportHomeFromGP.getName()));
+        assertThat(reportHome.getName(), is(tempFolder.getName()));
+        assertThat(reportHome.isAbsolute(), is(true));
+    }
+    
+    /**
+     * @see RadiologyProperties#getReportHome()
+     * @verifies throw illegal state exception if global property cannot be found
+     */
+    @Test
+    public void getReportHome_shouldThrowIllegalStateExceptionIfGlobalPropertyCannotBeFound() throws Exception {
+        expectedException.expect(IllegalStateException.class);
+        radiologyProperties.getReportHome();
+    }
 }

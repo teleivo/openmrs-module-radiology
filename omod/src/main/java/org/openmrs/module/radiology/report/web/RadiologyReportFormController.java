@@ -12,11 +12,15 @@ package org.openmrs.module.radiology.report.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.RadiologyReport;
+import org.openmrs.module.radiology.report.RadiologyReportClaim;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.report.RadiologyReportValidator;
+import org.openmrs.module.radiology.report.template.MrrtRadiologyReport;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +44,10 @@ public class RadiologyReportFormController {
     protected static final String RADIOLOGY_REPORT_FORM_REQUEST_MAPPING = "/module/radiology/radiologyReport.form";
     
     static final String RADIOLOGY_REPORT_FORM_VIEW = "/module/radiology/reports/radiologyReportForm";
+    
+    static final String RADIOLOGY_REPORT_CREATION_FORM_VIEW = "/module/radiology/reports/radiologyReportCreationForm";
+    
+    private Log log = LogFactory.getLog(RadiologyReportFormController.class);
     
     @Autowired
     private RadiologyReportService radiologyReportService;
@@ -70,9 +78,45 @@ public class RadiologyReportFormController {
     @RequestMapping(method = RequestMethod.GET, params = "orderId")
     protected ModelAndView createRadiologyReport(@RequestParam("orderId") RadiologyOrder radiologyOrder) {
         
-        final RadiologyReport radiologyReport = radiologyReportService.createRadiologyReport(radiologyOrder);
-        return new ModelAndView(
-                "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + radiologyReport.getId());
+        final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_CREATION_FORM_VIEW);
+        
+        final RadiologyReportClaim radiologyReportClaim = new RadiologyReportClaim();
+        radiologyReportClaim.setRadiologyOrder(radiologyOrder);
+        RadiologyReport radiologyReport = new RadiologyReport();
+        radiologyReport.setRadiologyOrder(radiologyOrder);
+        radiologyReportClaim.setRadiologyReport(radiologyReport);
+        modelAndView.addObject("radiologyReportClaim", radiologyReportClaim);
+        
+        final MrrtRadiologyReport mrrtRadiologyReport = new MrrtRadiologyReport();
+        mrrtRadiologyReport.setRadiologyOrder(radiologyOrder);
+        modelAndView.addObject("mrrtRadiologyReport", mrrtRadiologyReport);
+        
+        return modelAndView;
+    }
+    
+    /**
+     * Handles requests for creating a new {@code RadiologyReport} for a {@code RadiologyOrder}.
+     *
+     * @param radiologyReportClaim the radiology order for which a radiology report will be created
+     * @return the model and view redirecting to the newly created radiology report
+     * @should create a new radiology report for given radiology order and redirect to its radiology report form
+     */
+    @RequestMapping(method = RequestMethod.POST, params = "createRadiologyReport")
+    protected ModelAndView createRadiologyReport(HttpServletRequest request,
+            @ModelAttribute RadiologyReportClaim radiologyReportClaim) {
+        
+        try {
+            final RadiologyReport createdRadiologyReport =
+                    radiologyReportService.createRadiologyReport(radiologyReportClaim);
+            return new ModelAndView(
+                    "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + createdRadiologyReport.getId());
+        }
+        catch (APIException apiException) {
+            request.getSession()
+                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, apiException.getMessage());
+        }
+        
+        return new ModelAndView(RADIOLOGY_REPORT_CREATION_FORM_VIEW);
     }
     
     /**
@@ -87,6 +131,7 @@ public class RadiologyReportFormController {
             getRadiologyReportFormWithExistingRadiologyReport(@RequestParam("reportId") RadiologyReport radiologyReport) {
         
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
+        radiologyReportService.getRadiologyReportWithBody(radiologyReport);
         addObjectsToModelAndView(modelAndView, radiologyReport);
         modelAndView.addObject(new VoidRadiologyReportRequest());
         return modelAndView;
@@ -150,6 +195,7 @@ public class RadiologyReportFormController {
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
         
         if (bindingResult.hasErrors()) {
+            radiologyReportService.getRadiologyReportWithBody(radiologyReport);
             addObjectsToModelAndView(modelAndView, radiologyReport);
             return modelAndView;
         }
@@ -167,6 +213,7 @@ public class RadiologyReportFormController {
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, apiException.getMessage());
         }
         
+        radiologyReportService.getRadiologyReportWithBody(radiologyReport);
         addObjectsToModelAndView(modelAndView, radiologyReport);
         return modelAndView;
     }
@@ -225,6 +272,12 @@ public class RadiologyReportFormController {
     private void addObjectsToModelAndView(ModelAndView modelAndView, RadiologyReport radiologyReport) {
         
         modelAndView.addObject("radiologyReport", radiologyReport);
+        if (radiologyReport instanceof MrrtRadiologyReport) {
+            modelAndView.addObject("mrrtRadiologyReport", (MrrtRadiologyReport) radiologyReport);
+            log.info("is an mrrt rad report instance");
+        } else {
+            log.info("is not an mrrt rad report instance");
+        }
         modelAndView.addObject("radiologyOrder", radiologyReport.getRadiologyOrder());
     }
 }

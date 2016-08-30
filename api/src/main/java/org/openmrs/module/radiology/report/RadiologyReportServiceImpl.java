@@ -9,15 +9,22 @@
  */
 package org.openmrs.module.radiology.report;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
@@ -28,31 +35,44 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
     
     private RadiologyReportDAO radiologyReportDAO;
     
+    private RadiologyProperties radiologyProperties;
+    
     public void setRadiologyReportDAO(RadiologyReportDAO radiologyReportDAO) {
         this.radiologyReportDAO = radiologyReportDAO;
     }
     
+    public void setRadiologyProperties(RadiologyProperties radiologyProperties) {
+        this.radiologyProperties = radiologyProperties;
+    }
+    
     /**
-     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder)
+     * @see RadiologyReportService#createRadiologyReport(RadiologyReportClaim)
+     * @param radiologyReportClaim
      */
     @Override
     @Transactional
-    public synchronized RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder) {
+    public synchronized RadiologyReport createRadiologyReport(RadiologyReportClaim radiologyReportClaim) {
         
-        if (radiologyOrder == null) {
-            throw new IllegalArgumentException("radiologyOrder cannot be null");
+        if (radiologyReportClaim == null) {
+            throw new IllegalArgumentException("radiologyReportClaim cannot be null");
         }
-        if (radiologyOrder.isNotCompleted()) {
+        if (radiologyReportClaim.getRadiologyReport() == null) {
+            throw new IllegalArgumentException("radiologyReportClaim.radiologyReport cannot be null");
+        }
+        if (radiologyReportClaim.getRadiologyOrder() == null) {
+            throw new IllegalArgumentException("radiologyReport.radiologyOrder cannot be null");
+        }
+        if (radiologyReportClaim.getRadiologyOrder()
+                .isNotCompleted()) {
             throw new APIException("radiology.RadiologyReport.cannot.create.for.not.completed.order");
         }
-        if (radiologyReportDAO.hasRadiologyOrderClaimedRadiologyReport(radiologyOrder)) {
+        if (radiologyReportDAO.hasRadiologyOrderClaimedRadiologyReport(radiologyReportClaim.getRadiologyOrder())) {
             throw new APIException("radiology.RadiologyReport.cannot.create.already.claimed");
         }
-        if (radiologyReportDAO.hasRadiologyOrderCompletedRadiologyReport(radiologyOrder)) {
+        if (radiologyReportDAO.hasRadiologyOrderCompletedRadiologyReport(radiologyReportClaim.getRadiologyOrder())) {
             throw new APIException("radiology.RadiologyReport.cannot.create.already.completed");
         }
-        final RadiologyReport radiologyReport = new RadiologyReport(radiologyOrder);
-        return radiologyReportDAO.saveRadiologyReport(radiologyReport);
+        return radiologyReportDAO.saveRadiologyReport(radiologyReportClaim.getRadiologyReport());
     }
     
     /**
@@ -77,7 +97,72 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         if (radiologyReportDAO.hasRadiologyOrderCompletedRadiologyReport(radiologyReport.getRadiologyOrder())) {
             throw new APIException("radiology.RadiologyReport.cannot.saveDraft.already.reported");
         }
+        
+        File file = saveRadiologyReportFile(radiologyReport);
+        radiologyReport.setFilename(file.getAbsolutePath());
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
+    }
+    
+    private File saveRadiologyReportFile(RadiologyReport radiologyReport) {
+        
+        // save report body to filesystem
+        File file;
+        if (StringUtils.isBlank(radiologyReport.getFilename())) {
+            file = new File(radiologyProperties.getReportHome(), UUID.randomUUID()
+                    .toString());
+            try {
+                file.createNewFile();
+            }
+            catch (Exception exception) {
+                throw new APIException(exception);
+            }
+        } else {
+            file = new File(radiologyReport.getFilename());
+        }
+        
+        InputStream inputStream = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            inputStream = IOUtils.toInputStream(radiologyReport.getBody(), "UTF-8");
+            fileOutputStream = new FileOutputStream(file);
+            OpenmrsUtil.copyFile(inputStream, fileOutputStream);
+            inputStream.close();
+            fileOutputStream.close();
+            radiologyReport.setBody(null);
+        }
+        catch (Exception exception) {
+            throw new APIException(exception);
+        }
+        finally {
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(fileOutputStream);
+        }
+        
+        return file;
+    }
+    
+    /**
+     * @see RadiologyReportService#getRadiologyReportWithBody(RadiologyReport)
+     */
+    public RadiologyReport getRadiologyReportWithBody(RadiologyReport radiologyReport) {
+        
+        if (radiologyReport == null) {
+            throw new IllegalArgumentException("radiologyReport cannot be null.");
+        }
+        // right after createRadiologyReport the RadiologyReport.filename is null since in this stage only a shell is created to block anyone else but the creator from reporting the order
+        if (StringUtils.isBlank(radiologyReport.getFilename())) {
+            return radiologyReport;
+        }
+        
+        File file = new File(radiologyReport.getFilename());
+        try {
+            radiologyReport.setBody(OpenmrsUtil.getFileAsString(file));
+        }
+        catch (Exception exception) {
+            throw new APIException(exception);
+        }
+        
+        return radiologyReport;
     }
     
     /**
@@ -126,6 +211,9 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         }
         radiologyReport.setDate(new Date());
         radiologyReport.setStatus(RadiologyReportStatus.COMPLETED);
+        
+        File file = saveRadiologyReportFile(radiologyReport);
+        radiologyReport.setFilename(file.getAbsolutePath());
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
     }
     

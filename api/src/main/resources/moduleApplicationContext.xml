@@ -158,6 +158,7 @@
 						</property>
 					</bean>
 				</property>
+				<property name="radiologyProperties" ref="radiologyProperties"></property>
 			</bean>
 		</property>
 		<property name="preInterceptors">

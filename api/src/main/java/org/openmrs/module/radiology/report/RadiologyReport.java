@@ -30,15 +30,17 @@ public class RadiologyReport extends BaseOpenmrsData {
     
     private Provider principalResultsInterpreter;
     
-    private RadiologyReportStatus status;
+    private RadiologyReportStatus status = RadiologyReportStatus.DRAFT;
     
+    private String filename;
+    
+    // transient
     private String body;
     
     /**
      * Creates a new instance of {@link RadiologyReport}.
      */
-    private RadiologyReport() {
-        // needed by hibernate to instantiate a bean
+    public RadiologyReport() {
     }
     
     /**
@@ -51,6 +53,9 @@ public class RadiologyReport extends BaseOpenmrsData {
      * @should throw an illegal argument exception if given radiology order is null
      * @should throw an illegal argument exception if given radiology order is not completed
      */
+    //TODO rethink this constructor. We are enforcing this in our API, right? If so we do not need this.
+    // we should have a not-null constraint on the DB level and add enforce this through the API.
+    // So it has to be taken care of by any other implementation of a RadiologyReportService
     public RadiologyReport(RadiologyOrder radiologyOrder) {
         
         if (radiologyOrder == null) {
@@ -62,7 +67,6 @@ public class RadiologyReport extends BaseOpenmrsData {
         }
         
         this.radiologyOrder = radiologyOrder;
-        this.status = RadiologyReportStatus.DRAFT;
     }
     
     /**
@@ -192,4 +196,13 @@ public class RadiologyReport extends BaseOpenmrsData {
     public void setBody(String body) {
         this.body = body;
     }
+    
+    public String getFilename() {
+        return filename;
+    }
+    
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+    
 }
