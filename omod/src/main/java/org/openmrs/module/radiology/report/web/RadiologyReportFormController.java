@@ -151,6 +151,7 @@ public class RadiologyReportFormController {
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
         
         if (bindingResult.hasErrors()) {
+            radiologyReportService.getRadiologyReportWithBody(radiologyReport);
             addObjectsToModelAndView(modelAndView, radiologyReport);
             return modelAndView;
         }
@@ -168,6 +169,7 @@ public class RadiologyReportFormController {
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, apiException.getMessage());
         }
         
+        radiologyReportService.getRadiologyReportWithBody(radiologyReport);
         addObjectsToModelAndView(modelAndView, radiologyReport);
         return modelAndView;
     }
