@@ -32,6 +32,9 @@ public class RadiologyReport extends BaseOpenmrsData {
     
     private RadiologyReportStatus status;
     
+    private String filename;
+    
+    // transient
     private String body;
     
     /**
@@ -192,4 +195,13 @@ public class RadiologyReport extends BaseOpenmrsData {
     public void setBody(String body) {
         this.body = body;
     }
+    
+    public String getFilename() {
+        return filename;
+    }
+    
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+    
 }

@@ -490,4 +490,9 @@
 								 baseTableName="radiology_report" baseColumnNames="changed_by"
 								 referencedTableName="users" referencedColumnNames="user_id"/>
 	</changeSet>
+	<changeSet id="radiology-41" author="teleivo">
+		<comment>rename radiology_report column 'report_body' to 'report_filename'</comment>
+		<renameColumn columnDataType="longtext"
+					  newColumnName="report_filename" oldColumnName="report_body" tableName="radiology_report" />
+	</changeSet>
 </databaseChangeLog>

@@ -9,16 +9,28 @@
  */
 package org.openmrs.module.radiology.report;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.radiology.order.RadiologyOrder;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.apache.commons.io.IOUtils.toInputStream;
+import static org.hibernate.metamodel.relational.Size.LobMultiplier.M;
 
 @Transactional(readOnly = true)
 class RadiologyReportServiceImpl extends BaseOpenmrsService implements RadiologyReportService {
@@ -77,7 +89,50 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         if (radiologyReportDAO.hasRadiologyOrderCompletedRadiologyReport(radiologyReport.getRadiologyOrder())) {
             throw new APIException("radiology.RadiologyReport.cannot.saveDraft.already.reported");
         }
+        
+        File file = saveRadiologyReportFile(radiologyReport);
+        radiologyReport.setFilename(file.getAbsolutePath());
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
+    }
+    
+    private File saveRadiologyReportFile(RadiologyReport radiologyReport) {
+        
+        // save report body to filesystem
+        File file;
+        if (StringUtils.isBlank(radiologyReport.getFilename())) {
+            file = new File(UUID.randomUUID()
+                    .toString());
+            try {
+                file.createNewFile();
+            }
+            catch (Exception exception) {
+                throw new APIException(exception);
+            }
+        } else {
+            file = new File(radiologyReport.getFilename());
+        }
+        
+        //InputStream inputStream = new ByteArrayInputStream(radiologyReport.getBody()
+        // .getBytes(StandardCharsets.UTF_8));
+        InputStream inputStream = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            inputStream = IOUtils.toInputStream(radiologyReport.getBody(), "UTF-8");
+            fileOutputStream = new FileOutputStream(file);
+            OpenmrsUtil.copyFile(inputStream, fileOutputStream);
+            inputStream.close();
+            fileOutputStream.close();
+            radiologyReport.setBody(null);
+        }
+        catch (Exception exception) {
+            throw new APIException(exception);
+        }
+        finally {
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(fileOutputStream);
+        }
+        
+        return file;
     }
     
     /**
@@ -126,6 +181,9 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         }
         radiologyReport.setDate(new Date());
         radiologyReport.setStatus(RadiologyReportStatus.COMPLETED);
+        
+        File file = saveRadiologyReportFile(radiologyReport);
+        radiologyReport.setFilename(file.getAbsolutePath());
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
     }
     
