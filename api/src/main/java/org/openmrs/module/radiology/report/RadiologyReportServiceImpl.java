@@ -12,8 +12,11 @@ package org.openmrs.module.radiology.report;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.hibernate.metamodel.relational.Size.LobMultiplier.M;
+import static org.openmrs.util.OpenmrsUtil.getFileAsString;
 
 @Transactional(readOnly = true)
 class RadiologyReportServiceImpl extends BaseOpenmrsService implements RadiologyReportService {
@@ -138,6 +142,30 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
         }
         
         return file;
+    }
+    
+    /**
+     * @see RadiologyReportService#getRadiologyReportWithBody(RadiologyReport)
+     */
+    public RadiologyReport getRadiologyReportWithBody(RadiologyReport radiologyReport) {
+        
+        if (radiologyReport == null) {
+            throw new IllegalArgumentException("radiologyReport cannot be null.");
+        }
+        // right after createRadiologyReport the RadiologyReport.filename is null since in this stage only a shell is created to block anyone else but the creator from reporting the order
+        if (StringUtils.isBlank(radiologyReport.getFilename())) {
+            return radiologyReport;
+        }
+        
+        File file = new File(radiologyReport.getFilename());
+        try {
+            radiologyReport.setBody(OpenmrsUtil.getFileAsString(file));
+        }
+        catch (Exception exception) {
+            throw new APIException(exception);
+        }
+        
+        return radiologyReport;
     }
     
     /**

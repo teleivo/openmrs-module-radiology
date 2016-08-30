@@ -134,6 +134,15 @@ public interface RadiologyReportService extends OpenmrsService {
     public RadiologyReport getRadiologyReport(Integer reportId);
     
     /**
+     * Get the {@code RadiologyReport} with its body from the file stored on the filesystem.
+     *
+     * @param radiologyReport the radiology report to get the body content
+     * @return the radiology report with populated body
+     */
+    @Authorized(RadiologyPrivileges.GET_RADIOLOGY_REPORTS)
+    public RadiologyReport getRadiologyReportWithBody(RadiologyReport radiologyReport);
+    
+    /**
      * Get the {@code RadiologyReport} by its {@code UUID}.
      *
      * @param uuid the uuid of the radiology report

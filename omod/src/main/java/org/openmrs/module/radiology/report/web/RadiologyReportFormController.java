@@ -87,6 +87,7 @@ public class RadiologyReportFormController {
             getRadiologyReportFormWithExistingRadiologyReport(@RequestParam("reportId") RadiologyReport radiologyReport) {
         
         final ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_FORM_VIEW);
+        radiologyReportService.getRadiologyReportWithBody(radiologyReport);
         addObjectsToModelAndView(modelAndView, radiologyReport);
         modelAndView.addObject(new VoidRadiologyReportRequest());
         return modelAndView;
