@@ -119,8 +119,6 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
             file = new File(radiologyReport.getFilename());
         }
         
-        //InputStream inputStream = new ByteArrayInputStream(radiologyReport.getBody()
-        // .getBytes(StandardCharsets.UTF_8));
         InputStream inputStream = null;
         FileOutputStream fileOutputStream = null;
         try {

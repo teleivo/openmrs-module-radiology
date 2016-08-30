@@ -101,6 +101,7 @@
         <%-- following properties are bound to the form as hidden since they should be or since we show them only in a readonly manner. --%>
         <%-- if you delete for example the dateCreated it will change on every update of the RadiologyReport  --%>
         <form:hidden path="radiologyOrder" />
+        <form:hidden path="filename" />
         <form:hidden path="uuid" />
         <form:hidden path="date" />
         <form:hidden path="status" />
