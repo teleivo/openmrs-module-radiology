@@ -495,4 +495,21 @@
 		<renameColumn columnDataType="longtext"
 					  newColumnName="report_filename" oldColumnName="report_body" tableName="radiology_report" />
 	</changeSet>
+	<changeSet id="radiology-42" author="teleivo">
+		<comment>create radiology_mrrt_report table</comment>
+		<createTable tableName="radiology_mrrt_report">
+			<column name="report_id" type="int" autoIncrement="false">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="report_template" type="int" >
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="radiology_mrrt_report_report_id_fk"
+								 baseTableName="radiology_mrrt_report" baseColumnNames="report_id"
+								 referencedTableName="radiology_report" referencedColumnNames="report_id" />
+		<addForeignKeyConstraint constraintName="radiology_mrrt_report_report_template_fk"
+								 baseTableName="radiology_mrrt_report" baseColumnNames="report_template"
+								 referencedTableName="radiology_report_template" referencedColumnNames="template_id" />
+	</changeSet>
 </databaseChangeLog>

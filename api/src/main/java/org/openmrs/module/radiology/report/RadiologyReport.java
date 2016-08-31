@@ -42,7 +42,7 @@ public class RadiologyReport extends BaseOpenmrsData {
      */
     public RadiologyReport() {
     }
-
+    
     /**
      * Creates a new instance of {@link RadiologyReport} for given RadiologyOrder.
      * 
