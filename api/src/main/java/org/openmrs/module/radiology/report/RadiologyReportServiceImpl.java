@@ -9,15 +9,9 @@
  */
 package org.openmrs.module.radiology.report;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -32,10 +26,6 @@ import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.apache.commons.io.IOUtils.toInputStream;
-import static org.hibernate.metamodel.relational.Size.LobMultiplier.M;
-import static org.openmrs.util.OpenmrsUtil.getFileAsString;
 
 @Transactional(readOnly = true)
 class RadiologyReportServiceImpl extends BaseOpenmrsService implements RadiologyReportService {
@@ -56,25 +46,29 @@ class RadiologyReportServiceImpl extends BaseOpenmrsService implements Radiology
     }
     
     /**
-     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder)
+     * @see RadiologyReportService#createRadiologyReport(RadiologyReport)
+     * @param radiologyReport
      */
     @Override
     @Transactional
-    public synchronized RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder) {
+    public synchronized RadiologyReport createRadiologyReport(RadiologyReport radiologyReport) {
         
-        if (radiologyOrder == null) {
-            throw new IllegalArgumentException("radiologyOrder cannot be null");
+        if (radiologyReport == null) {
+            throw new IllegalArgumentException("radiologyReport cannot be null");
         }
-        if (radiologyOrder.isNotCompleted()) {
+        if (radiologyReport.getRadiologyOrder() == null) {
+            throw new IllegalArgumentException("radiologyReport.radiologyOrder cannot be null");
+        }
+        if (radiologyReport.getRadiologyOrder()
+                .isNotCompleted()) {
             throw new APIException("radiology.RadiologyReport.cannot.create.for.not.completed.order");
         }
-        if (radiologyReportDAO.hasRadiologyOrderClaimedRadiologyReport(radiologyOrder)) {
+        if (radiologyReportDAO.hasRadiologyOrderClaimedRadiologyReport(radiologyReport.getRadiologyOrder())) {
             throw new APIException("radiology.RadiologyReport.cannot.create.already.claimed");
         }
-        if (radiologyReportDAO.hasRadiologyOrderCompletedRadiologyReport(radiologyOrder)) {
+        if (radiologyReportDAO.hasRadiologyOrderCompletedRadiologyReport(radiologyReport.getRadiologyOrder())) {
             throw new APIException("radiology.RadiologyReport.cannot.create.already.completed");
         }
-        final RadiologyReport radiologyReport = new RadiologyReport(radiologyOrder);
         return radiologyReportDAO.saveRadiologyReport(radiologyReport);
     }
     

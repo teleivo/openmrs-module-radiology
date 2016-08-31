@@ -200,6 +200,124 @@
     </c:if>
   </div>
 </form:form>
+<c:if test="${not empty mrrtRadiologyReport}" >
+    <span class="boxHeader"> <b>Mrrt Radiology Report</b>
+    </span>
+    <form:form id="mrrtRadiologyReportFormId" modelAttribute="mrrtRadiologyReport" method="post">
+      <div class="box">
+        <table>
+          <tr>
+            <td><spring:message code="radiology.report.form.report.id" /></td>
+            <td>${mrrtRadiologyReport.id}</td>
+            <form:hidden path="id" />
+          </tr>
+          <tr>
+            <form:input path="mrrtReportTemplate" />
+          </tr>
+          <tr>
+            <%-- following properties are bound to the form as hidden since they should be or since we show them only in a readonly manner. --%>
+            <%-- if you delete for example the dateCreated it will change on every update of the RadiologyReport  --%>
+            <form:hidden path="radiologyOrder" />
+            <form:hidden path="filename" />
+            <form:hidden path="uuid" />
+            <form:hidden path="date" />
+            <form:hidden path="status" />
+            <form:hidden path="creator" />
+            <form:hidden path="dateCreated" />
+            <form:hidden path="voided" />
+            <form:hidden path="voidedBy" />
+            <form:hidden path="dateVoided" />
+            <%-- dateChanged and changedBy do not need to be bound  --%>
+          </tr>
+          <tr>
+            <td><spring:message code="radiology.report.form.report.status" /></td>
+            <td><spring:message code="radiology.report.status.${mrrtRadiologyReport.status}" text="${mrrtRadiologyReport.status}" />
+              <c:choose>
+                <c:when test="${mrrtRadiologyReport.status == 'COMPLETED'}">
+                  <i class="fa fa-check-circle fa-lg" />
+                </c:when>
+                <c:when test="${mrrtRadiologyReport.status == 'DRAFT'}">
+                  <c:choose>
+                    <c:when test="${mrrtRadiologyReport.voided}">
+                      <i class="fa fa-times-circle fa-lg" />
+                    </c:when>
+                    <c:otherwise>
+                      <i class="fa fa-circle fa-lg" />
+                    </c:otherwise>
+                  </c:choose>
+                </c:when>
+              </c:choose></td>
+            </td>
+          </tr>
+          <c:if test="${mrrtRadiologyReport.status == 'COMPLETED'}">
+            <tr>
+              <td><spring:message code="radiology.report.form.report.date" /></td>
+              <td id="reportDateId"><spring:bind path="date">${status.value}</spring:bind></td>
+            </tr>
+          </c:if>
+          <tr>
+            <td>
+              <spring:message code="radiology.report.form.report.diagnosis" />
+              <c:if test="${mrrtRadiologyReport.status != 'COMPLETED' && not mrrtRadiologyReport.voided}">
+                <span class="required">*</span>
+              </c:if>
+            </td>
+            <td>
+              <form:textarea path="body" id="bodyId" disabled="${mrrtRadiologyReport.status == 'COMPLETED' || mrrtRadiologyReport.voided}" />
+              <form:errors path="body" cssClass="error" />
+            </td>
+          </tr>
+          <tr>
+            <td><spring:message code="radiology.report.form.report.principalResultsInterpreter" />
+              <c:choose>
+                <c:when test="${mrrtRadiologyReport.voided || not empty mrrtRadiologyReport.principalResultsInterpreter.id}">
+                  </td><td>
+                    ${mrrtRadiologyReport.principalResultsInterpreter.name}
+                    <form:hidden path="principalResultsInterpreter" />
+                </c:when>
+                <c:otherwise>
+                  <span class="required">*</span></td><td>
+                  <spring:bind path="principalResultsInterpreter">
+                    <openmrs:fieldGen type="org.openmrs.Provider" formFieldName="${status.expression}"
+                      val="${status.editor.value}" />
+                  </spring:bind>
+                  <form:errors path="principalResultsInterpreter" cssClass="error" />
+                </c:otherwise>
+              </c:choose></td>
+          </tr>
+          <tr>
+            <td><spring:message code="general.createdBy" /></td>
+            <td><spring:bind path="creator.personName">
+                        ${status.value}
+              </spring:bind> - <span class="datetime"><spring:bind path="dateCreated">
+                        ${status.value}
+                </spring:bind></span></td>
+          </tr>
+          <c:if test="${mrrtRadiologyReport.voided}">
+            <tr>
+              <td><spring:message code="general.voidedBy" /></td>
+              <td><spring:bind path="voidedBy.personName">
+                            ${status.value}
+                  </spring:bind> - <span class="datetime"><spring:bind path="dateVoided">
+                            ${status.value}
+                    </spring:bind></span></td>
+            </tr>
+            <tr>
+              <td><spring:message code="general.voidReason" /></td>
+              <td><spring:bind path="voidReason">${status.value}</spring:bind></td>
+            </tr>
+          </c:if>
+        </table>
+        <br>
+        <c:if test="${(mrrtRadiologyReport.status == 'DRAFT') && (not mrrtRadiologyReport.voided)}">
+          <input type="submit" value="<spring:message code="radiology.report.form.button.saveDraft"/>"
+            name="saveRadiologyReportDraft" />
+          <input type="submit" value="<spring:message code="radiology.report.form.button.complete"/>"
+            name="completeRadiologyReport" />
+        </c:if>
+      </div>
+    </form:form>
+</c:if>
 <c:if test="${(radiologyReport.status == 'DRAFT') && (not radiologyReport.voided)}">
   </br>
   <form:form method="post" id="voidRadiologyReportForm" modelAttribute="voidRadiologyReportRequest" cssClass="box">

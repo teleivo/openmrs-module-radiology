@@ -114,7 +114,7 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
     }
     
     /**
-     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder)
+     * @see RadiologyReportService#createRadiologyReport(RadiologyReport)
      * @verifies create a radiology order with report status claimed given a completed radiology
      *           order
      */
@@ -125,15 +125,17 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
         RadiologyOrder radiologyOrder = radiologyOrderService.getRadiologyOrder(EXISTING_RADIOLOGY_ORDER_ID);
         radiologyOrder.getStudy()
                 .setPerformedStatus(PerformedProcedureStepStatus.COMPLETED);
+        RadiologyReport radiologyReport = new RadiologyReport();
+        radiologyReport.setRadiologyOrder(radiologyOrder);
         
-        RadiologyReport radiologyReport = radiologyReportService.createRadiologyReport(radiologyOrder);
+        radiologyReport = radiologyReportService.createRadiologyReport(radiologyReport);
         assertNotNull(radiologyReport);
         assertThat(radiologyReport.getRadiologyOrder(), is(radiologyOrder));
         assertThat(radiologyReport.getStatus(), is(RadiologyReportStatus.DRAFT));
     }
     
     /**
-     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder)
+     * @see RadiologyReportService#createRadiologyReport(RadiologyReport)
      * @verifies throw illegal argument exception given null
      */
     @Test
@@ -145,7 +147,7 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
     }
     
     /**
-     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder)
+     * @see RadiologyReportService#createRadiologyReport(RadiologyReport)
      * @verifies throw api exception if given radiology order is not completed
      */
     @Test
@@ -155,14 +157,16 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
                 radiologyOrderService.getRadiologyOrder(RADIOLOGY_ORDER_WITH_STUDY_WITHOUT_RADIOLOGY_REPORT);
         existingRadiologyOrder.getStudy()
                 .setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
+        RadiologyReport radiologyReport = new RadiologyReport();
+        radiologyReport.setRadiologyOrder(existingRadiologyOrder);
         
         expectedException.expect(APIException.class);
         expectedException.expectMessage("radiology.RadiologyReport.cannot.create.for.not.completed.order");
-        radiologyReportService.createRadiologyReport(existingRadiologyOrder);
+        radiologyReportService.createRadiologyReport(radiologyReport);
     }
     
     /**
-     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder)
+     * @see RadiologyReportService#createRadiologyReport(RadiologyReport)
      * @verifies throw api exception if given order has a claimed radiology report
      */
     @Test
@@ -170,14 +174,16 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
         
         RadiologyOrder radiologyOrder =
                 radiologyOrderService.getRadiologyOrder(RADIOLOGY_ORDER_WITH_STUDY_AND_DRAFT_RADIOLOGY_REPORT);
+        RadiologyReport radiologyReport = new RadiologyReport();
+        radiologyReport.setRadiologyOrder(radiologyOrder);
         
         expectedException.expect(APIException.class);
         expectedException.expectMessage("radiology.RadiologyReport.cannot.create.already.claimed");
-        radiologyReportService.createRadiologyReport(radiologyOrder);
+        radiologyReportService.createRadiologyReport(radiologyReport);
     }
     
     /**
-     * @see RadiologyReportService#createRadiologyReport(RadiologyOrder)
+     * @see RadiologyReportService#createRadiologyReport(RadiologyReport)
      * @verifies throw api exception if given order has a completed radiology report
      */
     @Test
@@ -185,10 +191,12 @@ public class RadiologyReportServiceComponentTest extends BaseModuleContextSensit
         
         RadiologyOrder radiologyOrder =
                 radiologyOrderService.getRadiologyOrder(RADIOLOGY_ORDER_WITH_STUDY_AND_COMPLETED_RADIOLOGY_REPORT);
+        RadiologyReport radiologyReport = new RadiologyReport();
+        radiologyReport.setRadiologyOrder(radiologyOrder);
         
         expectedException.expect(APIException.class);
         expectedException.expectMessage("radiology.RadiologyReport.cannot.create.already.completed");
-        radiologyReportService.createRadiologyReport(radiologyOrder);
+        radiologyReportService.createRadiologyReport(radiologyReport);
     }
     
     /**

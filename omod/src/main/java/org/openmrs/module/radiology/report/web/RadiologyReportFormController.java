@@ -12,11 +12,14 @@ package org.openmrs.module.radiology.report.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.APIException;
 import org.openmrs.module.radiology.order.RadiologyOrder;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.report.RadiologyReportValidator;
+import org.openmrs.module.radiology.report.template.MrrtRadiologyReport;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +43,8 @@ public class RadiologyReportFormController {
     protected static final String RADIOLOGY_REPORT_FORM_REQUEST_MAPPING = "/module/radiology/radiologyReport.form";
     
     static final String RADIOLOGY_REPORT_FORM_VIEW = "/module/radiology/reports/radiologyReportForm";
+    
+    private Log log = LogFactory.getLog(RadiologyReportFormController.class);
     
     @Autowired
     private RadiologyReportService radiologyReportService;
@@ -68,11 +73,12 @@ public class RadiologyReportFormController {
      * @should create a new radiology report for given radiology order and redirect to its radiology report form
      */
     @RequestMapping(method = RequestMethod.GET, params = "orderId")
-    protected ModelAndView createRadiologyReport(@RequestParam("orderId") RadiologyOrder radiologyOrder) {
+    protected ModelAndView createRadiologyReport(@RequestParam("orderId") RadiologyOrder radiologyOrder,
+            @ModelAttribute RadiologyReport radiologyReport) {
         
-        final RadiologyReport radiologyReport = radiologyReportService.createRadiologyReport(radiologyOrder);
+        final RadiologyReport createdRadiologyReport = radiologyReportService.createRadiologyReport(radiologyReport);
         return new ModelAndView(
-                "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + radiologyReport.getId());
+                "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + createdRadiologyReport.getId());
     }
     
     /**
@@ -228,6 +234,12 @@ public class RadiologyReportFormController {
     private void addObjectsToModelAndView(ModelAndView modelAndView, RadiologyReport radiologyReport) {
         
         modelAndView.addObject("radiologyReport", radiologyReport);
+        if (radiologyReport instanceof MrrtRadiologyReport) {
+            modelAndView.addObject("mrrtRadiologyReport", (MrrtRadiologyReport) radiologyReport);
+            log.info("is an mrrt rad report instance");
+        } else {
+            log.info("is not an mrrt rad report instance");
+        }
         modelAndView.addObject("radiologyOrder", radiologyReport.getRadiologyOrder());
     }
 }

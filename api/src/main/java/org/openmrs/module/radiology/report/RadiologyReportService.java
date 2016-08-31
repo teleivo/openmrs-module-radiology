@@ -41,7 +41,7 @@ public interface RadiologyReportService extends OpenmrsService {
     /**
      * Saves a new {@code RadiologyReport} to the database and sets its status to claimed.
      *
-     * @param radiologyOrder the radiology order for which a radiology report will be created
+     * @param radiologyReport the radiology order for which a radiology report will be created
      * @return the created radiology report
      * @throws IllegalArgumentException if given null
      * @throws APIException if RadiologyStudy of given radiologyOrder is not completed
@@ -54,7 +54,7 @@ public interface RadiologyReportService extends OpenmrsService {
      * @should throw api exception if given order has a completed radiology report
      */
     @Authorized(RadiologyPrivileges.ADD_RADIOLOGY_REPORTS)
-    public RadiologyReport createRadiologyReport(RadiologyOrder radiologyOrder);
+    public RadiologyReport createRadiologyReport(RadiologyReport radiologyReport);
     
     /**
      * Saves an existing {@code RadiologyReport} which is in a draft state to the database.

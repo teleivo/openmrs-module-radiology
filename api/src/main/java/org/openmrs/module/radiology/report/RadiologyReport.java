@@ -30,7 +30,7 @@ public class RadiologyReport extends BaseOpenmrsData {
     
     private Provider principalResultsInterpreter;
     
-    private RadiologyReportStatus status;
+    private RadiologyReportStatus status = RadiologyReportStatus.DRAFT;
     
     private String filename;
     
@@ -67,7 +67,6 @@ public class RadiologyReport extends BaseOpenmrsData {
         }
         
         this.radiologyOrder = radiologyOrder;
-        this.status = RadiologyReportStatus.DRAFT;
     }
     
     /**
