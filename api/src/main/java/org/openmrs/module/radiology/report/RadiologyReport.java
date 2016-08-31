@@ -40,10 +40,9 @@ public class RadiologyReport extends BaseOpenmrsData {
     /**
      * Creates a new instance of {@link RadiologyReport}.
      */
-    private RadiologyReport() {
-        // needed by hibernate to instantiate a bean
+    public RadiologyReport() {
     }
-    
+
     /**
      * Creates a new instance of {@link RadiologyReport} for given RadiologyOrder.
      * 
@@ -54,6 +53,9 @@ public class RadiologyReport extends BaseOpenmrsData {
      * @should throw an illegal argument exception if given radiology order is null
      * @should throw an illegal argument exception if given radiology order is not completed
      */
+    //TODO rethink this constructor. We are enforcing this in our API, right? If so we do not need this.
+    // we should have a not-null constraint on the DB level and add enforce this through the API.
+    // So it has to be taken care of by any other implementation of a RadiologyReportService
     public RadiologyReport(RadiologyOrder radiologyOrder) {
         
         if (radiologyOrder == null) {
