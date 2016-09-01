@@ -45,6 +45,7 @@
             <openmrs:hasPrivilege privilege="Delete Radiology Reports">
               <openmrs:hasPrivilege privilege="Edit Radiology Reports">
                 <openmrs:hasPrivilege privilege="Get Radiology Reports">
+                    </br>
                     <openmrs:portlet url="createRadiologyReport" moduleId="radiology" parameters="orderUuid=${radiologyOrder.uuid}" />
                 </openmrs:hasPrivilege>
               </openmrs:hasPrivilege>

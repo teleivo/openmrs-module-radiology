@@ -49,17 +49,17 @@ public class CreateRadiologyReportPortletController extends PortletController {
         if (StringUtils.isBlank(orderUuid)) {
             return;
         }
-        RadiologyOrder radiologyOrder = radiologyOrderService.getRadiologyOrderByUuid(orderUuid);
+        final RadiologyOrder radiologyOrder = radiologyOrderService.getRadiologyOrderByUuid(orderUuid);
         if (radiologyOrder == null) {
             return;
         }
         model.put("radiologyOrder", radiologyOrder);
         
-        RadiologyReport radiologyReport = new RadiologyReport();
+        final RadiologyReport radiologyReport = new RadiologyReport();
         radiologyReport.setRadiologyOrder(radiologyOrder);
         model.put("radiologyReport", radiologyReport);
         
-        MrrtRadiologyReport mrrtRadiologyReport = new MrrtRadiologyReport();
+        final MrrtRadiologyReport mrrtRadiologyReport = new MrrtRadiologyReport();
         mrrtRadiologyReport.setRadiologyOrder(radiologyOrder);
         model.put("mrrtRadiologyReport", mrrtRadiologyReport);
     }

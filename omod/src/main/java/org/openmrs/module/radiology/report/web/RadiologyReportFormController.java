@@ -72,7 +72,7 @@ public class RadiologyReportFormController {
      * @return the model and view redirecting to the newly created radiology report
      * @should create a new radiology report for given radiology order and redirect to its radiology report form
      */
-    @RequestMapping(method = RequestMethod.GET, params = "orderId")
+    @RequestMapping(method = RequestMethod.POST, params = "orderId")
     protected ModelAndView createRadiologyReport(@RequestParam("orderId") RadiologyOrder radiologyOrder,
             @ModelAttribute RadiologyReport radiologyReport) {
         
