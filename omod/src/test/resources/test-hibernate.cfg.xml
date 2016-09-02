@@ -21,5 +21,6 @@
 		<mapping resource="RadiologyStudy.hbm.xml" />
 		<mapping resource="RadiologyReport.hbm.xml" />
 		<mapping resource="MrrtReportTemplate.hbm.xml"/>
+		<mapping resource="MrrtRadiologyReport.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

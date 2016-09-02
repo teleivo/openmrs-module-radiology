@@ -12,13 +12,12 @@
 -->
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package="org.openmrs.module.radiology.template">
+<hibernate-mapping package="org.openmrs.module.radiology.report.template">
 
 	<joined-subclass name="org.openmrs.module.radiology.report.template.MrrtRadiologyReport"
 					 extends="org.openmrs.module.radiology.report.RadiologyReport" table="radiology_mrrt_report">
 		<key column="report_id" not-null="true" on-delete="cascade" />
 
-		<many-to-one name="mrrtReportTemplate" class="MrrtReportTemplate" column="report_template" />
+		<many-to-one name="mrrtReportTemplate" class="org.openmrs.module.radiology.report.template.MrrtReportTemplate" column="report_template" />
 	</joined-subclass>
-
 </hibernate-mapping>
