@@ -19,7 +19,7 @@ Create a report
 </form:form>
 <form:form method="post" modelAttribute="mrrtRadiologyReport" cssClass="box">
     <form:hidden path="radiologyOrder" />
-    <spring:bind path="mrrtReportTemplate" />
+    <spring:bind path="mrrtReportTemplate">
       <radiology:mrrtReportTemplateField formFieldName="mrrtReportTemplate" formFieldId="mrrtReportTemplateId" />
     </spring:bind>
     <input type="submit" name="createRadiologyReportTemplate" value="Create report from template" />
