@@ -24,7 +24,7 @@
           dataType: "json",
           url: "${pageContext.request.contextPath}/ws/rest/v1/mrrtreporttemplate/",
           data: {
-            q: request.term
+            title: request.term
           },
           success: function(data) {
             var datalist = [];
