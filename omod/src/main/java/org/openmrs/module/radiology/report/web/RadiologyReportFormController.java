@@ -87,12 +87,9 @@ public class RadiologyReportFormController {
         radiologyReportClaim.setRadiologyReport(radiologyReport);
         modelAndView.addObject("radiologyReportClaim", radiologyReportClaim);
         
-        final RadiologyReportClaim templateRadiologyReportClaim = new RadiologyReportClaim();
-        templateRadiologyReportClaim.setRadiologyOrder(radiologyOrder);
         final MrrtRadiologyReport mrrtRadiologyReport = new MrrtRadiologyReport();
         mrrtRadiologyReport.setRadiologyOrder(radiologyOrder);
-        templateRadiologyReportClaim.setRadiologyReport(radiologyReport);
-        modelAndView.addObject("mrrtRadiologyReportClaim", templateRadiologyReportClaim);
+        modelAndView.addObject("mrrtRadiologyReport", mrrtRadiologyReport);
         
         return modelAndView;
     }
@@ -131,7 +128,13 @@ public class RadiologyReportFormController {
      */
     @RequestMapping(method = RequestMethod.POST, params = "createRadiologyReportTemplate")
     protected ModelAndView createRadiologyReportFromTemplate(HttpServletRequest request,
-            @ModelAttribute("mrrtRadiologyReportClaim") RadiologyReportClaim radiologyReportClaim) {
+            @ModelAttribute MrrtRadiologyReport mrrtRadiologyReport) {
+        
+        RadiologyReportClaim radiologyReportClaim = new RadiologyReportClaim();
+        radiologyReportClaim.setRadiologyOrder(mrrtRadiologyReport.getRadiologyOrder());
+        radiologyReportClaim.setRadiologyReport(mrrtRadiologyReport);
+        log.info("mrrt template chosen: " + mrrtRadiologyReport.getMrrtReportTemplate()
+                .getDcTermsTitle());
         
         try {
             final RadiologyReport createdRadiologyReport =

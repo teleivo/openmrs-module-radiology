@@ -17,10 +17,11 @@ Create a report
     <form:hidden path="radiologyReport.radiologyOrder" />
     <input type="submit" name="createRadiologyReport" value="Create report from free text" />
 </form:form>
-<form:form method="post" modelAttribute="mrrtRadiologyReportClaim" cssClass="box">
+<form:form method="post" modelAttribute="mrrtRadiologyReport" cssClass="box">
     <form:hidden path="radiologyOrder" />
-    <form:hidden path="radiologyReport.radiologyOrder" />
-    <radiology:mrrtReportTemplateField formFieldName="mrrtReportTemplate" formFieldId="mrrtReportTemplateSearch" />
+    <spring:bind path="mrrtReportTemplate" />
+      <radiology:mrrtReportTemplateField formFieldName="mrrtReportTemplate" formFieldId="mrrtReportTemplateId" />
+    </spring:bind>
     <input type="submit" name="createRadiologyReportTemplate" value="Create report from template" />
 </form:form>
 
