@@ -19,6 +19,7 @@ Create a report
 </form:form>
 <form:form method="post" modelAttribute="mrrtRadiologyReportClaim" cssClass="box">
     <form:hidden path="radiologyOrder" />
+    <form:hidden path="radiologyReport.radiologyOrder" />
     <radiology:mrrtReportTemplateField formFieldName="mrrtReportTemplate" formFieldId="mrrtReportTemplateSearch" />
     <input type="submit" name="createRadiologyReportTemplate" value="Create report from template" />
 </form:form>
