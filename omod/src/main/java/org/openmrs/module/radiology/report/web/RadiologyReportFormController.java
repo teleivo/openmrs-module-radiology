@@ -82,14 +82,17 @@ public class RadiologyReportFormController {
         
         final RadiologyReportClaim radiologyReportClaim = new RadiologyReportClaim();
         radiologyReportClaim.setRadiologyOrder(radiologyOrder);
-        RadiologyReport radiologyReport = new RadiologyReport();
+        final RadiologyReport radiologyReport = new RadiologyReport();
         radiologyReport.setRadiologyOrder(radiologyOrder);
         radiologyReportClaim.setRadiologyReport(radiologyReport);
         modelAndView.addObject("radiologyReportClaim", radiologyReportClaim);
         
+        final RadiologyReportClaim templateRadiologyReportClaim = new RadiologyReportClaim();
+        templateRadiologyReportClaim.setRadiologyOrder(radiologyOrder);
         final MrrtRadiologyReport mrrtRadiologyReport = new MrrtRadiologyReport();
         mrrtRadiologyReport.setRadiologyOrder(radiologyOrder);
-        modelAndView.addObject("mrrtRadiologyReport", mrrtRadiologyReport);
+        templateRadiologyReportClaim.setRadiologyReport(radiologyReport);
+        modelAndView.addObject("mrrtRadiologyReportClaim", templateRadiologyReportClaim);
         
         return modelAndView;
     }
@@ -104,6 +107,31 @@ public class RadiologyReportFormController {
     @RequestMapping(method = RequestMethod.POST, params = "createRadiologyReport")
     protected ModelAndView createRadiologyReport(HttpServletRequest request,
             @ModelAttribute RadiologyReportClaim radiologyReportClaim) {
+        
+        try {
+            final RadiologyReport createdRadiologyReport =
+                    radiologyReportService.createRadiologyReport(radiologyReportClaim);
+            return new ModelAndView(
+                    "redirect:" + RADIOLOGY_REPORT_FORM_REQUEST_MAPPING + "?reportId=" + createdRadiologyReport.getId());
+        }
+        catch (APIException apiException) {
+            request.getSession()
+                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, apiException.getMessage());
+        }
+        
+        return new ModelAndView(RADIOLOGY_REPORT_CREATION_FORM_VIEW);
+    }
+    
+    /**
+     * Handles requests for creating a new {@code RadiologyReport} for a {@code RadiologyOrder}.
+     *
+     * @param radiologyReportClaim the radiology order for which a radiology report will be created
+     * @return the model and view redirecting to the newly created radiology report
+     * @should create a new radiology report for given radiology order and redirect to its radiology report form
+     */
+    @RequestMapping(method = RequestMethod.POST, params = "createRadiologyReportTemplate")
+    protected ModelAndView createRadiologyReportFromTemplate(HttpServletRequest request,
+            @ModelAttribute("mrrtRadiologyReportClaim") RadiologyReportClaim radiologyReportClaim) {
         
         try {
             final RadiologyReport createdRadiologyReport =

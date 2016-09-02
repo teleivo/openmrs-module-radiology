@@ -56,5 +56,5 @@
 	})
 </script>
 
-<input type="text" id="${displayNameInputId}" placeholder='<openmrs:message code="Patient.searchBox.placeholder"/>' style="width: 15em"/>
+<input type="text" id="${displayNameInputId}" placeholder='"Patient.searchBox.placeholder"/>' style="width: 15em"/>
 <input type="hidden" name="${formFieldName}" id="${formFieldId}" />
