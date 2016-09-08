@@ -19,9 +19,16 @@ import org.openmrs.module.radiology.modality.RadiologyModalityService;
 import org.openmrs.module.radiology.modality.RadiologyModalityValidator;
 import org.openmrs.test.BaseContextMockTest;
 import org.openmrs.web.WebConstants;
+import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.hamcrest.collection.IsMapContaining.hasKey;
@@ -35,30 +42,49 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 /**
  * Tests {@link RadiologyModalityFormController}.
  */
-public class RadiologyModalityFormControllerTest extends BaseContextMockTest {
+@WebAppConfiguration
+public class RadiologyModalityFormControllerTest extends BaseModuleWebContextSensitiveTest {
+
+    @Autowired WebApplicationContext wac;
+    @Autowired MockHttpSession session;
+    @Autowired MockHttpServletRequest request;
     
-    
-    @Mock
+    @Autowired
     private RadiologyModalityService radiologyModalityService;
     
-    @Mock
+    @Autowired
     private RadiologyModalityValidator radiologyModalityValidator;
     
-    @InjectMocks
     private RadiologyModalityFormController radiologyModalityFormController = new RadiologyModalityFormController();
     
     RadiologyModality radiologyModality;
+
+
+    private MockMvc mockMvc;
+
     
     @Before
     public void setUp() {
-        
         radiologyModality = new RadiologyModality();
         radiologyModality.setModalityId(1);
         radiologyModality.setAeTitle("CT01");
+    }
+
+    @Test
+    public void testme() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+        this.mockMvc.perform(get("/mysessiontest").session(session)
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(view().name("test"));
     }
     
     /**
