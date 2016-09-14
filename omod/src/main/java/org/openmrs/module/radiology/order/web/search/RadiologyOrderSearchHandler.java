@@ -34,6 +34,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.EmptySearchResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs1_9.PatientResource1_9;
+import org.openmrs.module.webservices.rest.web.v1_0.resource.openmrs2_0.RestConstants2_0;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,7 +70,7 @@ public class RadiologyOrderSearchHandler implements SearchHandler {
             .build();
     
     private final SearchConfig searchConfig =
-            new SearchConfig("default", RestConstants.VERSION_1 + "/order", Arrays.asList("2.0.*"), searchQuery);
+            new SearchConfig("default", RestConstants2_0.RESOURCE_VERSION + "/order", Arrays.asList("2.0.*"), searchQuery);
     
     /**
      * @see org.openmrs.module.webservices.rest.web.resource.api.SearchHandler#getSearchConfig()
