@@ -61,10 +61,11 @@ public class RadiologyOrderSearchHandler implements SearchHandler {
             .withOptionalParameters(REQUEST_PARAM_ACCESSION_NUMBER, REQUEST_PARAM_PATIENT,
                 REQUEST_PARAM_EFFECTIVE_START_DATE_FROM, REQUEST_PARAM_EFFECTIVE_START_DATE_TO, REQUEST_PARAM_URGENCY,
                 REQUEST_PARAM_TOTAL_COUNT)
+            .withRequiredParameters(RestConstants.REQUEST_PROPERTY_FOR_TYPE)
             .build();
     
     private final SearchConfig searchConfig =
-            new SearchConfig("default", RestConstants.VERSION_1 + "/radiologyorder", Arrays.asList("2.0.*"), searchQuery);
+            new SearchConfig("default", RestConstants.VERSION_1 + "/order", Arrays.asList("2.0.*"), searchQuery);
     
     /**
      * @see org.openmrs.module.webservices.rest.web.resource.api.SearchHandler#getSearchConfig()
@@ -94,6 +95,12 @@ public class RadiologyOrderSearchHandler implements SearchHandler {
      */
     @Override
     public PageableResult search(RequestContext context) throws ResponseException {
+        
+        final String resourceType = context.getRequest()
+                .getParameter(RestConstants.REQUEST_PROPERTY_FOR_TYPE);
+        if (StringUtils.isBlank(resourceType) || resourceType != "radiologyorder") {
+            return new EmptySearchResult();
+        }
         
         final String patientUuid = context.getRequest()
                 .getParameter(REQUEST_PARAM_PATIENT);
