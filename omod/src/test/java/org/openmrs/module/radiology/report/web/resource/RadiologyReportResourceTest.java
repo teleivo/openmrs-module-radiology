@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.order.RadiologyOrder;
-import org.openmrs.module.radiology.order.web.resource.RadiologyOrderResource;
 import org.openmrs.module.radiology.report.RadiologyReport;
 import org.openmrs.module.radiology.report.RadiologyReportService;
 import org.openmrs.module.radiology.report.RadiologyReportStatus;
@@ -46,7 +45,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
- * Tests {@link RadiologyOrderResource}.
+ * Tests {@link }.
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Context.class, RestUtil.class, LocaleUtility.class })
