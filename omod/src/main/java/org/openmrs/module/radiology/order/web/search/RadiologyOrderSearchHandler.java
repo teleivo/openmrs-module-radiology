@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Order.Urgency;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -41,6 +43,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RadiologyOrderSearchHandler implements SearchHandler {
     
+    
+    public static Log log = LogFactory.getLog(RadiologyOrderSearchHandler.class);
     
     public static final String REQUEST_PARAM_ACCESSION_NUMBER = "accessionNumber";
     
@@ -96,11 +100,14 @@ public class RadiologyOrderSearchHandler implements SearchHandler {
     @Override
     public PageableResult search(RequestContext context) throws ResponseException {
         
-        final String resourceType = context.getRequest()
-                .getParameter(RestConstants.REQUEST_PROPERTY_FOR_TYPE);
-        if (StringUtils.isBlank(resourceType) || resourceType != "radiologyorder") {
-            return new EmptySearchResult();
-        }
+        //        final String resourceType = context.getRequest()
+        //                .getParameter(RestConstants.REQUEST_PROPERTY_FOR_TYPE);
+        //        if (StringUtils.isBlank(resourceType) || resourceType != "radiologyorder") {
+        //            return new EmptySearchResult();
+        //        }
+        log.info("reached");
+        log.info(context.getRequest()
+                .getParameterNames());
         
         final String patientUuid = context.getRequest()
                 .getParameter(REQUEST_PARAM_PATIENT);
