@@ -12,6 +12,10 @@ package org.openmrs.module.radiology.report.template;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Container for violations of a MRRT validation.
+ *
+ */
 public class ValidationResult {
     
     
@@ -31,8 +35,8 @@ public class ValidationResult {
         violations.add(ruleViolation);
     }
     
-    public void addViolation(MrrtReportTemplateStructureViolation mrrtRuleViolation) {
-        violations.add(mrrtRuleViolation);
+    public void addViolation(MrrtReportTemplateStructureViolation violation) {
+        violations.add(violation);
     }
     
     public boolean isNotEmpty() {

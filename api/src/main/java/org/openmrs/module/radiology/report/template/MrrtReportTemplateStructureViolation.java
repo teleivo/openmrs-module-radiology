@@ -19,10 +19,6 @@ public class MrrtReportTemplateStructureViolation {
     
     private final String messageCode;
     
-    private final int columnNumber;
-    
-    private final int lineNumber;
-    
     public String getDescription() {
         return description;
     }
@@ -31,28 +27,13 @@ public class MrrtReportTemplateStructureViolation {
         return messageCode;
     }
     
-    public int getColumnNumber() {
-        return columnNumber;
-    }
-    
-    public int getLineNumber() {
-        return lineNumber;
-    }
-    
     public MrrtReportTemplateStructureViolation(String description, String messageCode) {
-        this(description, messageCode, 0, 0);
-    }
-    
-    public MrrtReportTemplateStructureViolation(String description, String messageCode, int columnNumber, int lineNumber) {
         this.description = description;
         this.messageCode = messageCode;
-        this.columnNumber = columnNumber;
-        this.lineNumber = lineNumber;
     }
     
     @Override
     public String toString() {
-        final String result = "L: " + lineNumber + "C: " + columnNumber + ", description: " + description;
-        return result;
+        return description;
     }
 }
