@@ -67,6 +67,7 @@ public class RadiologyDashboardReportTemplatesTabController {
      *         attribute
      * @throws IOException when templateFile could not be read or is invalid
      * @should give error message when template file is empty
+     * @should set error message in session when mrrt report template validation exception is thrown
      * @should set error message in session when api exception is thrown
      * @should set error message in session when io exception is thrown
      * @should give success message when import was successful
@@ -94,11 +95,10 @@ public class RadiologyDashboardReportTemplatesTabController {
                         "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
         }
         catch (MrrtReportTemplateValidationException exception) {
-            modelAndView.addObject("mrrtRuleViolations", exception.getValidationResult()
+            modelAndView.addObject("mrrtReportTemplateStructureViolation", exception.getValidationResult()
                     .getViolations());
             request.getSession()
-                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
-                        "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
+                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "Failed to import " + templateFile.getOriginalFilename());
         }
         catch (APIException exception) {
             request.getSession()

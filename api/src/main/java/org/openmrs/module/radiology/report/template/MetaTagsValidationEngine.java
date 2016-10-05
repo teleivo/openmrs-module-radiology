@@ -28,10 +28,13 @@ public class MetaTagsValidationEngine implements ValidationEngine<Elements> {
     
     public MetaTagsValidationEngine() {
         rules = new ArrayList<>();
-        rules.add(new ElementsExpressionValidationRule("One 'meta' element with attribute 'charset' expected", "radiology.report.template.validation.error.meta.charset",
-                META_ATTRIBUTE_CHARSET, subject -> subject.isEmpty() || subject.size() > 1));
-        rules.add(new ElementsExpressionValidationRule("At least one 'meta' element encoding dublin core attributes expected", "radiology.report.template.validation.error.meta.dublinCore",
-                META_ATTRIBUTE_NAME, subject -> subject.isEmpty()));
+        rules.add(new ElementsExpressionValidationRule("One 'meta' element with attribute 'charset' expected",
+                "radiology.report.template.validation.error.meta.charset", META_ATTRIBUTE_CHARSET,
+                subject -> subject.isEmpty() || subject.size() > 1));
+        rules.add(
+            new ElementsExpressionValidationRule("At least one 'meta' element encoding dublin core attributes expected",
+                    "radiology.report.template.validation.error.meta.dublinCore", META_ATTRIBUTE_NAME,
+                    subject -> subject.isEmpty()));
     }
     
     /**

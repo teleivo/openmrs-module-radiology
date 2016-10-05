@@ -18,15 +18,17 @@ import java.util.function.Predicate;
  */
 public class ElementsExpressionValidationRule implements ValidationRule<Elements> {
     
+    
     private final String description;
-
+    
     private final String messageCode;
-
+    
     private final String elementsSelector;
     
     private final Predicate<Elements> condition;
     
-    public ElementsExpressionValidationRule(String description, String messageCode, String elementsSelector, Predicate<Elements> condition) {
+    public ElementsExpressionValidationRule(String description, String messageCode, String elementsSelector,
+        Predicate<Elements> condition) {
         this.description = description;
         this.messageCode = messageCode;
         this.elementsSelector = elementsSelector;

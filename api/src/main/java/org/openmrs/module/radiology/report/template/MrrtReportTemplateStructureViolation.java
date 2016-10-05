@@ -9,28 +9,47 @@
  */
 package org.openmrs.module.radiology.report.template;
 
-public class MrrtRuleViolation {
+/**
+ * Represents a violation of the report template structure defined by the IHE Management of Radiology Report Templates (MRRT).
+ */
+public class MrrtReportTemplateStructureViolation {
     
     
     private final String description;
-
+    
     private final String messageCode;
-
+    
     private final int columnNumber;
     
     private final int lineNumber;
-
-    public MrrtRuleViolation(String description, String messageCode) {
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public String getMessageCode() {
+        return messageCode;
+    }
+    
+    public int getColumnNumber() {
+        return columnNumber;
+    }
+    
+    public int getLineNumber() {
+        return lineNumber;
+    }
+    
+    public MrrtReportTemplateStructureViolation(String description, String messageCode) {
         this(description, messageCode, 0, 0);
     }
-
-    public MrrtRuleViolation(String description, String messageCode, int columnNumber, int lineNumber) {
+    
+    public MrrtReportTemplateStructureViolation(String description, String messageCode, int columnNumber, int lineNumber) {
         this.description = description;
         this.messageCode = messageCode;
         this.columnNumber = columnNumber;
         this.lineNumber = lineNumber;
     }
-
+    
     @Override
     public String toString() {
         final String result = "L: " + lineNumber + "C: " + columnNumber + ", description: " + description;

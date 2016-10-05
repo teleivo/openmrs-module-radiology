@@ -15,9 +15,9 @@ import java.util.List;
 public class ValidationResult {
     
     
-    private List<MrrtRuleViolation> violations;
+    private List<MrrtReportTemplateStructureViolation> violations;
     
-    public List<MrrtRuleViolation> getViolations() {
+    public List<MrrtReportTemplateStructureViolation> getViolations() {
         return violations;
     }
     
@@ -26,14 +26,15 @@ public class ValidationResult {
     }
     
     public void addViolation(String description, String messageCode) {
-        MrrtRuleViolation ruleViolation = new MrrtRuleViolation(description, messageCode);
+        MrrtReportTemplateStructureViolation ruleViolation =
+                new MrrtReportTemplateStructureViolation(description, messageCode);
         violations.add(ruleViolation);
     }
-
-    public void addViolation(MrrtRuleViolation mrrtRuleViolation) {
+    
+    public void addViolation(MrrtReportTemplateStructureViolation mrrtRuleViolation) {
         violations.add(mrrtRuleViolation);
     }
-
+    
     public boolean isNotEmpty() {
         return !violations.isEmpty();
     }

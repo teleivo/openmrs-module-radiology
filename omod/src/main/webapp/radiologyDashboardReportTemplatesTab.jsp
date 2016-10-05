@@ -184,11 +184,17 @@
 
                   });
 </script>
-<c:forEach var="violation" items="${mrrtRuleViolations}">
- <ul>
-    <li>"${violation}"</li>
- </ul>
-</c:forEach>
+<c:if test="${not empty mrrtReportTemplateStructureViolation}" >
+    </br>
+    <div class="error">
+        <spring:message code="radiology.report.template.validation.error.list.header" />
+        <ul>
+        <c:forEach items="${mrrtReportTemplateStructureViolation}" var="violation">
+            <li><spring:message code="${violation.messageCode}" text="${violation.description}" /></li>
+        </c:forEach>
+        </ul>
+    </div>
+</c:if>
 
 <openmrs:hasPrivilege privilege="View Radiology Report Templates">
   <div id="radiologyReportTemplates">
