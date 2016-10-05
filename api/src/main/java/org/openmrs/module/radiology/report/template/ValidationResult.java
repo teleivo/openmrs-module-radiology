@@ -21,6 +21,10 @@ public class ValidationResult {
         violations = new ArrayList<>();
     }
     
+    public void addViolation(String description) {
+        this.addViolation(description, 0, 0);
+    }
+    
     public void addViolation(String description, int columNumber, int lineNumber) {
         MrrtRuleViolation ruleViolation = new MrrtRuleViolation(description, columNumber, lineNumber);
         violations.add(ruleViolation);

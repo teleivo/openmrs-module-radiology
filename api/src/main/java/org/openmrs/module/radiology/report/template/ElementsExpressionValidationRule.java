@@ -38,7 +38,7 @@ public class ElementsExpressionValidationRule implements ValidationRule<Elements
     public void check(ValidationResult validationResult, Elements subject) {
         Elements elements = subject.select(elementsSelector);
         if (condition.test(elements)) {
-            validationResult.addViolation(description, 0, 0);
+            validationResult.addViolation(description);
         }
     }
 }
