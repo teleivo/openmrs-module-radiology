@@ -12,10 +12,13 @@ package org.openmrs.module.radiology.report.template;
 import org.openmrs.api.APIException;
 
 public class MrrtReportTemplateValidationException extends APIException {
-    
-    
-    ValidationResult validationResult;
-    
+
+    private final ValidationResult validationResult;
+
+    public ValidationResult getValidationResult() {
+        return validationResult;
+    }
+
     public MrrtReportTemplateValidationException(ValidationResult validationResult) {
         this.validationResult = validationResult;
     }

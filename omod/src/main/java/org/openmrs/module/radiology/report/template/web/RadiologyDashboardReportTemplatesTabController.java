@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.api.APIException;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
+import org.openmrs.module.radiology.report.template.MrrtReportTemplateValidationException;
 import org.openmrs.module.radiology.web.RadiologyWebConstants;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,11 +74,13 @@ public class RadiologyDashboardReportTemplatesTabController {
     @RequestMapping(method = RequestMethod.POST, params = "uploadReportTemplate")
     protected ModelAndView uploadReportTemplate(HttpServletRequest request, @RequestParam MultipartFile templateFile)
             throws IOException {
-        
+
+        ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_TEMPLATES_TAB_VIEW);
+
         if (templateFile.isEmpty()) {
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "radiology.MrrtReportTemplate.not.imported.empty");
-            return new ModelAndView(RADIOLOGY_REPORT_TEMPLATES_TAB_VIEW);
+            return modelAndView;
         }
         
         try {
@@ -90,11 +93,18 @@ public class RadiologyDashboardReportTemplatesTabController {
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
                         "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
         }
+        catch (MrrtReportTemplateValidationException exception) {
+            modelAndView.addObject(exception.getValidationResult());
+            request.getSession()
+                    .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
+                            "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
+        }
         catch (APIException exception) {
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
                         "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
         }
-        return new ModelAndView(RADIOLOGY_REPORT_TEMPLATES_TAB_VIEW);
+
+        return modelAndView;
     }
 }
