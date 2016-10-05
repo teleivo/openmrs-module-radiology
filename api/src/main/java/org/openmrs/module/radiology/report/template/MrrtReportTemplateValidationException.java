@@ -9,24 +9,14 @@
  */
 package org.openmrs.module.radiology.report.template;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.openmrs.api.APIException;
 
-public class ValidationResult {
+public class MrrtReportTemplateValidationException extends APIException {
     
     
-    List<MrrtRuleViolation> violations;
+    ValidationResult validationResult;
     
-    public ValidationResult() {
-        violations = new ArrayList<>();
-    }
-    
-    public void addViolation(String description, int columNumber, int lineNumber) {
-        MrrtRuleViolation ruleViolation = new MrrtRuleViolation(description, columNumber, lineNumber);
-        violations.add(ruleViolation);
-    }
-    
-    public boolean isNotEmpty() {
-        return !violations.isEmpty();
+    public MrrtReportTemplateValidationException(ValidationResult validationResult) {
+        this.validationResult = validationResult;
     }
 }

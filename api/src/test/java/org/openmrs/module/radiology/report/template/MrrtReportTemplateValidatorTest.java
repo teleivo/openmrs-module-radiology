@@ -14,15 +14,22 @@ import java.io.File;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.openmrs.api.APIException;
+import org.openmrs.test.BaseContextMockTest;
+import org.openmrs.test.BaseContextSensitiveTest;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Tests {@code MrrtReportTemplateValidator}
  */
-public class MrrtReportTemplateValidatorTest {
+public class MrrtReportTemplateValidatorTest extends BaseModuleContextSensitiveTest {
     
     
-    MrrtReportTemplateValidator validator = new XsdMrrtReportTemplateValidator();
+    @Autowired
+    MrrtReportTemplateValidator validator;
     
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
