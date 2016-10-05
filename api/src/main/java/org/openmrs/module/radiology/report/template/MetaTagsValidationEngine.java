@@ -38,7 +38,7 @@ public class MetaTagsValidationEngine implements ValidationEngine<Elements> {
     }
     
     /**
-     * @see org.openmrs.module.radiology.report.template.MetaTagsValidationEngine#run(Elements)
+     * @see org.openmrs.module.radiology.report.template.ValidationEngine#run(Object)
      */
     @Override
     public ValidationResult run(Elements subject) {

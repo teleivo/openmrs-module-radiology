@@ -19,19 +19,38 @@ public class MrrtReportTemplateStructureViolation {
     
     private final String messageCode;
     
+    /**
+     * Get this description.
+     *
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
     
+    /**
+     * Get this message code.
+     *
+     * @return the message code
+     */
     public String getMessageCode() {
         return messageCode;
     }
     
+    /**
+     * Creates a new instance of {@link MrrtReportTemplateStructureViolation}.
+     *
+     * @param description the description of the violation
+     * @param messageCode the message code of the violation
+     */
     public MrrtReportTemplateStructureViolation(String description, String messageCode) {
         this.description = description;
         this.messageCode = messageCode;
     }
     
+    /**
+     * @see Class#toString()
+     */
     @Override
     public String toString() {
         return description;

@@ -23,7 +23,7 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Tests {@code MrrtReportTemplateValidator}
+ * Tests {@link MrrtReportTemplateValidator}.
  */
 public class MrrtReportTemplateValidatorTest extends BaseModuleContextSensitiveTest {
     

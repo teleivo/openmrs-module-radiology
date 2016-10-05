@@ -21,13 +21,11 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.openmrs.api.APIException;
-import org.openmrs.module.radiology.order.web.RadiologyDashboardOrdersTabController;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateService;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateStructureViolation;
 import org.openmrs.module.radiology.report.template.MrrtReportTemplateValidationException;
