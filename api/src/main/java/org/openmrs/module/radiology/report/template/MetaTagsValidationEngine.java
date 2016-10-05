@@ -11,11 +11,28 @@ package org.openmrs.module.radiology.report.template;
 
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Validates <meta> tags of an Mrrt Report Template.
  */
 public class MetaTagsValidationEngine implements ValidationEngine<Elements> {
     
+    
+    public static String META_CHARSET = "meta[charset]";
+    
+    public static String META_NAME = "meta[name]";
+    
+    List<ValidationRule<Elements>> rules;
+    
+    public MetaTagsValidationEngine() {
+        rules = new ArrayList<>();
+        rules.add(new ElementsExpressionValidationRule("radiology.report.template.validation.error.meta.charset",
+                META_CHARSET, subject -> subject.isEmpty() || subject.size() > 1));
+        rules.add(new ElementsExpressionValidationRule("radiology.report.template.validation.error.meta.dublinCore",
+                META_NAME, subject -> subject.isEmpty()));
+    }
     
     /**
      * @see org.openmrs.module.radiology.report.template.MetaTagsValidationEngine#run(Elements)
@@ -24,17 +41,9 @@ public class MetaTagsValidationEngine implements ValidationEngine<Elements> {
     public ValidationResult run(Elements subject) {
         
         final ValidationResult validationResult = new ValidationResult();
-        
-        final Elements metatagsWithCharsetAttribute = subject.select("meta[charset]");
-        if (metatagsWithCharsetAttribute.isEmpty() || metatagsWithCharsetAttribute.size() > 1) {
-            validationResult.addViolation("radiology.report.template.validation.error.meta.charset", 0, 0);
+        for (ValidationRule rule : rules) {
+            rule.check(validationResult, subject);
         }
-        
-        final Elements dublinAttributes = subject.select("meta[name]");
-        if (dublinAttributes.isEmpty()) {
-            validationResult.addViolation("radiology.report.template.validation.error.meta.dublinCore", 0, 0);
-        }
-        
         return validationResult;
     }
 }
