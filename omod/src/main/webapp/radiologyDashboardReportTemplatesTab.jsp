@@ -184,6 +184,11 @@
 
                   });
 </script>
+<c:forEach var="violation" items="${mrrtRuleViolations}">
+ <ul>
+    <li>"${violation}"</li>
+ </ul>
+</c:forEach>
 
 <openmrs:hasPrivilege privilege="View Radiology Report Templates">
   <div id="radiologyReportTemplates">

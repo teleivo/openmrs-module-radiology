@@ -15,21 +15,25 @@ import java.util.List;
 public class ValidationResult {
     
     
-    List<MrrtRuleViolation> violations;
+    private List<MrrtRuleViolation> violations;
+    
+    public List<MrrtRuleViolation> getViolations() {
+        return violations;
+    }
     
     public ValidationResult() {
         violations = new ArrayList<>();
     }
     
-    public void addViolation(String description) {
-        this.addViolation(description, 0, 0);
-    }
-    
-    public void addViolation(String description, int columNumber, int lineNumber) {
-        MrrtRuleViolation ruleViolation = new MrrtRuleViolation(description, columNumber, lineNumber);
+    public void addViolation(String description, String messageCode) {
+        MrrtRuleViolation ruleViolation = new MrrtRuleViolation(description, messageCode);
         violations.add(ruleViolation);
     }
-    
+
+    public void addViolation(MrrtRuleViolation mrrtRuleViolation) {
+        violations.add(mrrtRuleViolation);
+    }
+
     public boolean isNotEmpty() {
         return !violations.isEmpty();
     }

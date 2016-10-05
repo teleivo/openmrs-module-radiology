@@ -74,9 +74,9 @@ public class RadiologyDashboardReportTemplatesTabController {
     @RequestMapping(method = RequestMethod.POST, params = "uploadReportTemplate")
     protected ModelAndView uploadReportTemplate(HttpServletRequest request, @RequestParam MultipartFile templateFile)
             throws IOException {
-
+        
         ModelAndView modelAndView = new ModelAndView(RADIOLOGY_REPORT_TEMPLATES_TAB_VIEW);
-
+        
         if (templateFile.isEmpty()) {
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR, "radiology.MrrtReportTemplate.not.imported.empty");
@@ -94,17 +94,18 @@ public class RadiologyDashboardReportTemplatesTabController {
                         "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
         }
         catch (MrrtReportTemplateValidationException exception) {
-            modelAndView.addObject(exception.getValidationResult());
+            modelAndView.addObject("mrrtRuleViolations", exception.getValidationResult()
+                    .getViolations());
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
-                            "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
+                        "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
         }
         catch (APIException exception) {
             request.getSession()
                     .setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
                         "Failed to import " + templateFile.getOriginalFilename() + " => " + exception.getMessage());
         }
-
+        
         return modelAndView;
     }
 }

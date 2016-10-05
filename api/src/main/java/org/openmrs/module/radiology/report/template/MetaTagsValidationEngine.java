@@ -20,18 +20,18 @@ import java.util.List;
 public class MetaTagsValidationEngine implements ValidationEngine<Elements> {
     
     
-    public static String META_CHARSET = "meta[charset]";
+    public static String META_ATTRIBUTE_CHARSET = "meta[charset]";
     
-    public static String META_NAME = "meta[name]";
+    public static String META_ATTRIBUTE_NAME = "meta[name]";
     
-    List<ValidationRule<Elements>> rules;
+    private List<ValidationRule<Elements>> rules;
     
     public MetaTagsValidationEngine() {
         rules = new ArrayList<>();
-        rules.add(new ElementsExpressionValidationRule("radiology.report.template.validation.error.meta.charset",
-                META_CHARSET, subject -> subject.isEmpty() || subject.size() > 1));
-        rules.add(new ElementsExpressionValidationRule("radiology.report.template.validation.error.meta.dublinCore",
-                META_NAME, subject -> subject.isEmpty()));
+        rules.add(new ElementsExpressionValidationRule("One 'meta' element with attribute 'charset' expected", "radiology.report.template.validation.error.meta.charset",
+                META_ATTRIBUTE_CHARSET, subject -> subject.isEmpty() || subject.size() > 1));
+        rules.add(new ElementsExpressionValidationRule("At least one 'meta' element encoding dublin core attributes expected", "radiology.report.template.validation.error.meta.dublinCore",
+                META_ATTRIBUTE_NAME, subject -> subject.isEmpty()));
     }
     
     /**

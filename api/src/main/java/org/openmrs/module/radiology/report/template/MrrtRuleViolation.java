@@ -13,17 +13,24 @@ public class MrrtRuleViolation {
     
     
     private final String description;
-    
+
+    private final String messageCode;
+
     private final int columnNumber;
     
     private final int lineNumber;
-    
-    public MrrtRuleViolation(String description, int columnNumber, int lineNumber) {
+
+    public MrrtRuleViolation(String description, String messageCode) {
+        this(description, messageCode, 0, 0);
+    }
+
+    public MrrtRuleViolation(String description, String messageCode, int columnNumber, int lineNumber) {
         this.description = description;
+        this.messageCode = messageCode;
         this.columnNumber = columnNumber;
         this.lineNumber = lineNumber;
     }
-    
+
     @Override
     public String toString() {
         final String result = "L: " + lineNumber + "C: " + columnNumber + ", description: " + description;

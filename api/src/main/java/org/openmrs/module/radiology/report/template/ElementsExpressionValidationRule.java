@@ -18,15 +18,17 @@ import java.util.function.Predicate;
  */
 public class ElementsExpressionValidationRule implements ValidationRule<Elements> {
     
-    
     private final String description;
-    
+
+    private final String messageCode;
+
     private final String elementsSelector;
     
     private final Predicate<Elements> condition;
     
-    public ElementsExpressionValidationRule(String description, String elementsSelector, Predicate<Elements> condition) {
+    public ElementsExpressionValidationRule(String description, String messageCode, String elementsSelector, Predicate<Elements> condition) {
         this.description = description;
+        this.messageCode = messageCode;
         this.elementsSelector = elementsSelector;
         this.condition = condition;
     }
@@ -38,7 +40,7 @@ public class ElementsExpressionValidationRule implements ValidationRule<Elements
     public void check(ValidationResult validationResult, Elements subject) {
         Elements elements = subject.select(elementsSelector);
         if (condition.test(elements)) {
-            validationResult.addViolation(description);
+            validationResult.addViolation(description, messageCode);
         }
     }
 }
