@@ -33,6 +33,7 @@
 		<mysql.user>openmrs</mysql.user>
 		<mysql.password>openmrs</mysql.password>
 		<mysql.database>openmrs</mysql.database>
+		<mysql.port>3306</mysql.port>
 		<radiology.image.alias>radiology</radiology.image.alias>
 		<tomcat.port>8080</tomcat.port>
 		<tomcat.env.java_opts>-Dfile.encoding=UTF-8 -server -Xms256m -Xmx768m</tomcat.env.java_opts>
@@ -328,7 +329,7 @@
 									<color>yellow</color>
 								</log>
 								<ports>
-									<port>3306:3306</port>
+									<port>${mysql.port}:3306</port>
 								</ports>
 								<env>
 									<MYSQL_ROOT_PASSWORD>${mysql.root.password}</MYSQL_ROOT_PASSWORD>
