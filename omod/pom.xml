@@ -34,6 +34,7 @@
 		<mysql.password>openmrs</mysql.password>
 		<mysql.database>openmrs</mysql.database>
 		<mysql.port>3306</mysql.port>
+		<mysql.timeout>30</mysql.timeout>
 		<radiology.image.alias>radiology</radiology.image.alias>
 		<tomcat.port>8080</tomcat.port>
 		<tomcat.env.java_opts>-Dfile.encoding=UTF-8 -server -Xms256m -Xmx768m</tomcat.env.java_opts>
@@ -364,12 +365,17 @@
 								<links>
 									<link>${mysql.image.alias}</link>
 								</links>
+								<!-- env vars are used to populate openmrs-runtime.properties and tomcat's bin/setenv.sh -->
+								<!-- via dockerize templates -->
+								<!-- note: radiology and db container are connected via docker link -->
+								<!-- therefore host equals alias name and port is not equal to the externally exposed port -->
 								<env>
 									<MYSQL_USER>${mysql.user}</MYSQL_USER>
 									<MYSQL_PASSWORD>${mysql.password}</MYSQL_PASSWORD>
 									<MYSQL_DATABASE>${mysql.database}</MYSQL_DATABASE>
 									<MYSQL_HOST>${mysql.image.alias}</MYSQL_HOST>
 									<MYSQL_PORT>3306</MYSQL_PORT>
+									<WAIT_SECONDS_FOR_MYSQL>${mysql.timeout}</WAIT_SECONDS_FOR_MYSQL>
 									<JAVA_OPTS>${tomcat.env.java_opts}</JAVA_OPTS>
 								</env>
 								<wait>

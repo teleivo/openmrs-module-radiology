@@ -98,16 +98,32 @@ Check out the `properties` secion in the `omod/pom.xml`. There you can find
 maven properties that are exposed. The properties values can be overriden on
 the command line. This enables you to change for example the
 
-* MySQL database name, user, password
+* MySQL database name, user, password, port, timeout to wait for the db to be
+  ready
 * Tomcat port and its `JAVA_OPTS`
 
 So lets says you want to override all of these mentioned properties, then just
 execute:
 
 ```bash
-mvn docker:start -Dmysql.user=ris -Dmysql.database=ris -Dmysql.password=ris \
-  -Dtomcat.port=8082 -Dtomcat.env.java_opts="-Dfile.encoding=UTF-8 -server -Xms256m -Xmx1024m"
+mvn docker:start \
+  -Dmysql.user=ris \
+  -Dmysql.database=ris \
+  -Dmysql.password=ris \
+  -Dmysql.port=3307 \
+  -Dmysql.timeout=100 \
+  -Dtomcat.port=8082 \
+  -Dtomcat.env.java_opts="-Dfile.encoding=UTF-8 -server -Xms256m -Xmx1024m"
 ```
+
+#### mysql.port
+
+Defines the port exposed by the mysql docker container.
+
+#### mysql.timeout
+
+Defines the maximum amount of time that the maven docker plugin waits for the
+db to accept connections before it fails. It is defined in seconds.
 
 ## Stop and Remove Container
 
