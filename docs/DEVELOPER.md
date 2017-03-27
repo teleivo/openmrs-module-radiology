@@ -55,7 +55,7 @@ mvn license:check
 We use https://github.com/velo/maven-formatter-plugin as source code formatter.
 
 This plugin is automatically run on `mvn clean package/install` (not on travis
-CI) and formats java, javascript files only. JSPs and xmls have to be formatted
+CI) and formats java files only. xmls have to be formatted
 by you, so please configure your IDE formatter correctly.
 
 Refer to [formatter guide](FORMATTER.md) on how to configure your

@@ -69,7 +69,7 @@ To help developers understand the problem, please include as much information as
  * follow the OpenMRS formatting/code style
     * you will need to configure Eclipse to use the [OpenMRSFormatter.xml](tools/src/main/resources/eclipse/OpenMRSFormatter.xml) provided by this module.
     * when you build this module *.java files will automatically be formatted by a formatter plugin. You can manually run the formatter plugin with ```mvn java-formatter:format```
-    * for xml and javascript files use **control-shift-f** in Eclipse.
+    * for xml files use **control-shift-f** in Eclipse.
     * remove unused imports by using **control-shift-o** in Eclipse.
 
 

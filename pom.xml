@@ -48,11 +48,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<javaCompilerVersion>1.8</javaCompilerVersion>
 		<openMRSVersion>2.0.0</openMRSVersion>
-		<openmrs-legacyui-version>1.2</openmrs-legacyui-version>
 		<openmrs-webservicesrest-version>2.16</openmrs-webservicesrest-version>
 		<maven-formatter-plugin-version>1.6.0</maven-formatter-plugin-version>
 		<maven-formatter-plugin-style-java>${project.parent.basedir}/tools/formatter/java.xml</maven-formatter-plugin-style-java>
-		<maven-formatter-plugin-style-javascript>${project.parent.basedir}/tools/formatter/javascript.xml</maven-formatter-plugin-style-javascript>
 		<docker.maven.plugin.fabric8.version>0.16.7</docker.maven.plugin.fabric8.version>
 	</properties>
 
@@ -173,7 +171,7 @@
 						<compilerTargetPlatform>${javaCompilerVersion}</compilerTargetPlatform>
 						<overrideConfigCompilerVersion>true</overrideConfigCompilerVersion>
 						<configFile>${maven-formatter-plugin-style-java}</configFile>
-						<configJsFile>${maven-formatter-plugin-style-javascript}</configJsFile>
+						<configJsFile></configJsFile>
 						<includes>
 							<include>**/*.java</include>
 						</includes>

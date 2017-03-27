@@ -31,29 +31,17 @@
 	<require_database_version>1.0.0</require_database_version>
 	<!-- Required Modules -->
 	<require_modules>
-		<require_module version="${openmrs-legacyui-version}">org.openmrs.module.legacyui
-		</require_module>
 		<require_module version="${openmrs-webservicesrest-version}">org.openmrs.module.webservices.rest
 		</require_module>
 	</require_modules>
 	<!-- / Required Modules -->
 
 	<!-- Extensions -->
-	<extension>
+<!-- 	<extension>
 		<point>org.openmrs.admin.list</point>
 		<class>@MODULE_PACKAGE@.web.extension.html.AdminList</class>
 	</extension>
-
-	<extension>
-		<point>org.openmrs.patientDashboardTab</point>
-		<class>@MODULE_PACKAGE@.web.extension.html.PatientDashboardRadiologyTabExt
-		</class>
-	</extension>
-	<extension>
-		<point>org.openmrs.gutter.tools</point>
-		<class>@MODULE_PACKAGE@.web.extension.html.GutterListExt</class>
-	</extension>
-
+ -->
 	<!-- /Extensions -->
 
 	<!--Required Global Properties -->
@@ -207,9 +195,4 @@
 	<mappingFiles>RadiologyModality.hbm.xml RadiologyStudy.hbm.xml RadiologyOrder.hbm.xml
 		RadiologyReport.hbm.xml MrrtReportTemplate.hbm.xml
 	</mappingFiles>
-
-	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->
-	<!-- <servlet> <servlet-name>viewer.jnlp</servlet-name> <servlet-class>org.weasis.servlet.Weasis_Launcher</servlet-class> 
-		</servlet> <servlet> <servlet-name>wadoRequest</servlet-name> <servlet-class>com.hxti.xebra.com.wado.WADORequestServlet</servlet-class> 
-		</servlet> -->
 </module>

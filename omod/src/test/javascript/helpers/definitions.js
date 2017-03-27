@@ -1,1 +1,0 @@
-var openmrsContextPath = '/openmrs';

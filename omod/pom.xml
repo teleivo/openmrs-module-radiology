@@ -46,13 +46,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>legacyui-omod</artifactId>
-			<version>${openmrs-legacyui-version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
 			<type>jar</type>
@@ -217,13 +210,7 @@
 					</directories>
 					<includes>
 						<include>**/*.java</include>
-						<include>**/*.js</include>
 					</includes>
-					<excludes>
-						<exclude>**/datatables/*.*</exclude>
-						<exclude>**/tinymce/*.*</exclude>
-						<exclude>**/tinymce/**/*.*</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -275,39 +262,6 @@
 						<include>org/openmrs/module/radiology/web/**</include>
 						<include>org/openmrs/module/radiology/**/web/**</include>
 					</includes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.github.searls</groupId>
-				<artifactId>jasmine-maven-plugin</artifactId>
-				<version>2.1</version>
-				<configuration>
-					<phantomjs>
-						<version>2.1.1</version>
-						<checkSystemPath>true</checkSystemPath>
-						<enforceVersion>true</enforceVersion>
-						<source>REPOSITORY</source>
-						<baseUrl />
-						<outputDirectory>target/phantomjs</outputDirectory>
-					</phantomjs>
-					<jsSrcDir>${project.basedir}/src/main/webapp/resources/scripts</jsSrcDir>
-					<preloadSources>
-						<source>helpers/jquery-1.8.1.js</source>
-						<source>helpers/jasmine-jquery.js</source>
-						<source>helpers/definitions.js</source>
-					</preloadSources>
-					<sourceIncludes>
-						<include>radiology.js</include>
-					</sourceIncludes>
-					<sourceExcludes>
-						<exclude>**/jquery/*.*</exclude>
-						<exclude>**/tinymce/*.*</exclude>
-						<exclude>**/moment/*.*</exclude>
-					</sourceExcludes>
-					<jsTestSrcDir>${project.basedir}/src/test/javascript</jsTestSrcDir>
-					<specIncludes>
-						<include>**/*Spec.js</include>
-					</specIncludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -384,64 +338,6 @@
 					</images>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<id>install node and npm</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-						<phase>generate-resources</phase>
-						<configuration>
-							<nodeVersion>v4.6.0</nodeVersion>
-							<npmVersion>3.10.8</npmVersion>
-						</configuration>
-					</execution>
-					<execution>
-						<id>npm install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<phase>generate-resources</phase>
-					</execution>
-					<execution>
-						<id>bower install</id>
-						<goals>
-							<goal>bower</goal>
-						</goals>
-						<configuration>
-							<arguments>install</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>gulp build</id>
-						<goals>
-							<goal>gulp</goal>
-						</goals>
-						<configuration>
-							<arguments>${gulp.task}</arguments>
-						</configuration>
-						<phase>generate-resources</phase>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>development</id>
-			<activation>
-				<property>
-					<name>dev</name>
-				</property>
-			</activation>
-			<properties>
-				<gulp.task>dev</gulp.task>
-			</properties>
-		</profile>
-	</profiles>
 </project>
